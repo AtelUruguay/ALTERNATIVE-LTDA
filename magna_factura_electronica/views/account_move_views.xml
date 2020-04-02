@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<data>
+
+    <record id="magna_fe_view_move_form" model="ir.ui.view">
+        <field name="name">magna_fe_account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account_voucher.view_invoice_supplier"/>
+        <field name="arch" type="xml">
+
+            <!--<xpath expr="//group//field[@name='payment_term']" position="attributes">-->
+                <!--<attribute name="required">True</attribute>-->
+            <!--</xpath>-->
+
+            <xpath expr="//sheet[@string='Invoice']//group" position="attributes">
+                <attribute name="col">5</attribute>
+            </xpath>
+            <xpath expr="//sheet[@string='Invoice']//group" position="inside">
+                <group attrs="{'invisible':[('state','==','draft')]}">
+                    <field name="fe_qr_img" widget="image" nolabel="1" attrs="{'invisible': [('fe_URLParaVerificarQR', '=', False)]}"/>
+                </group>
+            </xpath>
+
+            <!--<xpath expr="//field[@name='fiscal_position']" position="after">-->
+                <!--<field name="is_debit_note" invisible="1"/>-->
+                <!--<field name="invoice_id" attrs="{'invisible': [('is_debit_note','=',False)], 'required':  [('is_debit_note','=',True)]}" domain="[('partner_id', '=', partner_id)]"/>-->
+                <!--<field name="for_export"/>-->
+            <!--</xpath>-->
+
+            <!--<xpath expr="//field[@name='payment_term']" position="after">-->
+                <!--<field name="nro_compra" style="width: 60%" attrs="{'readonly':[('state', 'not in', 'draft')]}"/>-->
+            <!--</xpath>-->
+
+            <!--<xpath expr="//h1" position="replace">-->
+                <!--<h1>-->
+                <!--<span attrs="{'invisible': [('is_debit_note','=', True)]}" class="oe_inline">-->
+                    <!--<label string="Draft Invoice" attrs="{'invisible': ['|',('state','not in',('draft',)), ('type','!=','out_invoice')]}"/>-->
+                    <!--<label string="Draft Refund" attrs="{'invisible': ['|',('state','not in',('draft',)), ('type','!=','out_refund')]}"/>-->
+                    <!--<label string="Pro Forma Invoice" attrs="{'invisible': [('state','not in',('proforma','proforma2'))]}"/>-->
+                    <!--<label string="Invoice" attrs="{'invisible': ['|',('state','in',('draft','proforma','proforma2')), ('type','!=','out_invoice')]}"/>-->
+                    <!--<label string="Refund" attrs="{'invisible': ['|',('state','in',('draft','proforma','proforma2')), ('type','!=','out_refund')]}"/>-->
+                <!--</span>-->
+                <!--<span attrs="{'invisible': [('is_debit_note','!=', True)]}" class="oe_inline">-->
+                    <!--<label string="Nota de Débito borrador" attrs="{'invisible': ['|',('state','not in',('draft',)), ('is_debit_note','!=',True)]}"/>-->
+                    <!--<label string="Nota de Débito" attrs="{'invisible': ['|',('state','in',('draft','proforma','proforma2')), ('is_debit_note','!=',True)]}"/>-->
+                <!--</span>-->
+                <!--<field name="number" readonly="1" class="oe_inline"/>-->
+                <!--</h1>-->
+            <!--</xpath>-->
+
+            <xpath expr="//h1//field[@name='name']" position="after">
+                <div class="oe_right oe_button_box" style="width: 350px; margin-top: -17px; margin-right: -14px;" name="buttons">
+                    <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', False)]}" icon="fa-bolt" string="CFE Activa"></button>-->
+                    <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', True)]}" icon="fa fa-exclamation-triangle" string="CFE Desactivada"></button>-->
+                    <group col="5" attrs="{'invisible':[('state','==','draft')]}">
+                        <div/>
+                        <group col="3" colspan="1">
+                            <div/>
+                            <field name="fe_Serie" nolabel="1" attrs="{'invisible': [('fe_Serie', '=', False)]}"/>
+                            <field name="fe_DocNro" nolabel="1" attrs="{'invisible': [('fe_DocNro', '=', False)]}"/>
+                        </group>
+                        <div/>
+                    </group>
+                    <!--<field name="fe_activa" invisible="1" nolabel="1"/>-->
+                </div>
+            </xpath>
+
+            <notebook position="inside">
+                <page string="Factura Electrónica" attrs="{'invisible':[('state','==','draft')]}">
+                    <group>
+                        <field name="fe_Contingencia"/>
+                        <field name="fe_SerieContingencia" attrs="{'invisible': [('fe_Contingencia','!=',True)]}"/>
+                        <field name="fe_DocNroContingencia" attrs="{'invisible': [('fe_Contingencia','!=',True)]}"/>
+                        <field name="fe_FechaHoraFirma"/>
+                        <field name="fe_URLParaVerificarQR" widget="url"/>
+                        <field name="fe_URLParaVerificarTexto" widget="url"/>
+                        <field name="fe_CAEDNro"/>
+                        <field name="fe_CAEHNro"/>
+                        <field name="fe_CAENA"/>
+                        <field name="fe_CAEFA"/>
+                        <field name="fe_CAEFVD"/>
+                        <field name="fe_Estado" attrs="{'invisible': True}"/>
+                        <!--<button name="resend_einvoice" type="object" string="Volver a enviar" attrs="{'invisible': [('fe_URLParaVerificarQR','=',False)]}"/>-->
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</data>
+

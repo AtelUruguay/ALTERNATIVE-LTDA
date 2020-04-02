@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="magna_fe_url_ws" model="ir.parameter">
+            <field name="key">magna_fe_url_ws</field>
+            <field name="value"></field>
+        </record>
+
+    </data>
+</odoo>
