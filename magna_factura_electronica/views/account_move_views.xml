@@ -68,8 +68,10 @@
                 <page string="Factura Electrónica" attrs="{'invisible':[('state','==','draft')]}">
                     <group>
                         <field name="fe_Contingencia"/>
-                        <field name="fe_SerieContingencia" attrs="{'invisible': [('fe_Contingencia','!=',True)]}"/>
-                        <field name="fe_DocNroContingencia" attrs="{'invisible': [('fe_Contingencia','!=',True)]}"/>
+                        <!--<field name="fe_SerieContingencia" attrs="{'invisible': [('fe_Contingencia','!=',True)]}"/>-->
+                        <!--<field name="fe_DocNroContingencia" attrs="{'invisible': [('fe_Contingencia','!=',True)]}"/>-->
+                        <field name="fe_Serie"/>
+                        <field name="fe_DocNro"/>
                         <field name="fe_FechaHoraFirma"/>
                         <field name="fe_URLParaVerificarQR" widget="url"/>
                         <field name="fe_URLParaVerificarTexto" widget="url"/>
