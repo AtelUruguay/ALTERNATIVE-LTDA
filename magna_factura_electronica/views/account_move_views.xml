@@ -81,7 +81,7 @@
                         <field name="fe_CAEFVD" readonly="1"/>
                         <field name="fe_Estado" attrs="{'invisible': True}"/>
                         <!--<button name="resend_einvoice" type="object" string="Volver a enviar" attrs="{'invisible': [('fe_URLParaVerificarQR','=',False)]}"/>-->
-                        <button name="invoice_send_fe_data" type="object" string="Probar FE" />
+                        <button name="invoice_send_fe_proinfo" type="object" string="Probar FE" />
 
                     </group>
                 </page>
