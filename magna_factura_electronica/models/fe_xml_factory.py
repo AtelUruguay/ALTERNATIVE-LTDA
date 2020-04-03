@@ -206,7 +206,7 @@ class cfeFactory():
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETNroLinDet', str(nroSecuencial))
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETIndFact', linea._indicadorFacturacion)
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETNomItem', linea._nombreItem)
-            self._set_fe_node_data(doc, SubZonaItem, 'FEDETCantidad', linea._cantidad)
+            self._set_fe_node_data(doc, SubZonaItem, 'FEDETCantidad', str(linea._cantidad))
             if linea._unidadMedidad:
                 self._set_fe_node_data(doc, SubZonaItem, 'FEDETUniMed', linea._unidadMedidad)
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETPrecioUnitario', "{0:.6f}".format(linea._precioUnitario).replace(".", "."))
@@ -255,7 +255,7 @@ class cfeFactory():
         # Obtener la URL de parámetros del sistema
         fe_url_ws = self.env['ir.config_parameter'].get_param('magna_fe_url_ws', '')
         if not fe_url_ws or fe_url_ws == '0':
-            _logger.info('Servicio Web FE: No se pudo conectar con el servicio.')
+            logging.info('Servicio Web FE: No se pudo conectar con el servicio.')
             return False, 'Error!\n %s' % (
             'No se encuentra configurada la ruta del WSDL para consumir los servicios del proveedor de FE',)
         # Establecer la conexión
