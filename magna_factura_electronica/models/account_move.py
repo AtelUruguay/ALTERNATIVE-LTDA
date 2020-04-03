@@ -64,6 +64,7 @@ class AccountMove(models.Model):
             # todo arreglar esto
             tipoCFE = 111
             str_xml_cfe = rec.invoice_factura_electronica()
+            logging.info(str_xml_cfe)
             str_xml_sobre = fe_xml_factory.cfeFactory.invoice_ensobrar(str_xml_cfe, tipoCFE=tipoCFE)
 
             # client = fe_xml_factory.cfeFactory._get_client_conn()

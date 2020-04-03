@@ -100,7 +100,7 @@ class cfeFactory():
         self.opt = options
 
 
-    def invoice_ensobrar(self, str_xml_cfe, tipoCFE):
+    def invoice_ensobrar(self, str_xml_cfe='', tipoCFE=0):
         loteID = 0
 
         # Creo Documento Sobre
@@ -121,7 +121,7 @@ class cfeFactory():
         self._set_fe_node_data(doc, Execute, 'com:Tipocfe', tipoCFE)
         self._set_fe_node_data(doc, Execute, 'com:Fefacturaimportadaloteid', loteID)
 
-        str_xml_sobre = doc.toxml(encoding="utf-8")
+        str_xml_sobre = doc.toprettyxml(encoding="utf-8")
         logging.info(str_xml_sobre)
 
         return str_xml_sobre
@@ -130,10 +130,10 @@ class cfeFactory():
     def getXML(self):
         doc = Document()
 
-        CFEEntrada = doc.createElement("<CFEEntrada>")
+        CFEEntrada = doc.createElement("CFEEntrada")
         CFEEntrada.setAttribute("xmlns", 'com.esignit.fe')
         doc.appendChild(CFEEntrada)
-        XMLEntradaNodoCFE = doc.createElement("<XMLEntradaNodoCFE>")
+        XMLEntradaNodoCFE = doc.createElement("XMLEntradaNodoCFE")
         CFEEntrada.appendChild(XMLEntradaNodoCFE)
 
         # *** 1.1 - INICIO IDENTIFICADOR DEL COMPROBANTE ***
@@ -215,7 +215,7 @@ class cfeFactory():
 
 
         # INICIO NODO ADICIONAL
-        XMLEntradaNodoAdicional = doc.createElement("<XMLEntradaNodoAdicional>")
+        XMLEntradaNodoAdicional = doc.createElement("XMLEntradaNodoAdicional")
         CFEEntrada.appendChild(XMLEntradaNodoAdicional)
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'TipoDocumentoId', str(self.opt._adicionalTipoDocumentoId))
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'DocComCodigo', str(self.opt._adicionalDocComCodigo))
@@ -232,7 +232,7 @@ class cfeFactory():
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'EsReceptor', str(self.opt._adicionalEsReceptor))
         # FIN NODO ADICIONAL---------------------------------------#
         
-        return doc.toxml(encoding="utf-8")
+        return doc.toprettyxml(encoding="utf-8")
 
 
     def _set_fe_node_data(self, documento, area, elemento, dato):
