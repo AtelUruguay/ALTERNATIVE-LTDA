@@ -11,7 +11,7 @@ from suds.cache import NoCache
 # from suds.plugin import MessagePlugin
 # import ssl
 # from functools import wraps
-# from openerp import models, api
+from odoo import api
 # from openerp.exceptions import ValidationError
 from xml.dom.minidom import Document, parse
 import time
@@ -234,7 +234,7 @@ class cfeFactory():
         
         return doc.toprettyxml(encoding="utf-8")
 
-
+    @api.model
     def _set_fe_node_data(self, documento, area, elemento, dato):
         if not dato:
             dato = ''
