@@ -55,8 +55,8 @@
                         <div/>
                         <group col="3" colspan="1">
                             <div/>
-                            <field name="fe_Serie" nolabel="1" attrs="{'invisible': [('fe_Serie', '=', False)]}"/>
-                            <field name="fe_DocNro" nolabel="1" attrs="{'invisible': [('fe_DocNro', '=', False)]}"/>
+                            <field name="fe_Serie" nolabel="1" readonly="1" attrs="{'invisible': [('fe_Serie', '=', False)]}"/>
+                            <field name="fe_DocNro" nolabel="1" readonly="1" attrs="{'invisible': [('fe_DocNro', '=', False)]}"/>
                         </group>
                         <div/>
                     </group>
