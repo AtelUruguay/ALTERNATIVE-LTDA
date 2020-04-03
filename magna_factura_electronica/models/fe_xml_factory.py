@@ -231,8 +231,10 @@ class cfeFactory():
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'CorreoReceptor', str(self.opt._adicionalCorreoReceptor))
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'EsReceptor', str(self.opt._adicionalEsReceptor))
         # FIN NODO ADICIONAL---------------------------------------#
-        
-        return doc.toprettyxml(encoding="utf-8")
+
+        XML = doc.toprettyxml(encoding="utf-8")
+        logging.info(XML)
+        return XML
 
     @api.model
     def _set_fe_node_data(self, documento, area, elemento, dato):
