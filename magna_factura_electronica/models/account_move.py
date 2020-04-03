@@ -24,26 +24,26 @@ class AccountMove(models.Model):
     fe_CAENA = fields.Char('CAE Autorización')
     fe_CAEFA = fields.Char('CAE Fecha de autorización')
     fe_CAEFVD = fields.Char('CAE vencimiento')
-    fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code')
+    # fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code')
 
 
-    @api.depends('fe_URLParaVerificarQR')
-    def _generate_qr_code(self):
-        a=1
-        # qr = qrcode.QRCode(
-        #     version=1,
-        #     error_correction=qrcode.constants.ERROR_CORRECT_L,
-        #     box_size=10,
-        #     border=4,
-        # )
-        # for rec in self:
-        #     qr.add_data(rec.fe_URLParaVerificarQR)
-        #     qr.make(fit=True)
-        #     img = qr.make_image()
-        #     temp = BytesIO()
-        #     img.save(temp, format="PNG")
-        #     qr_image = base64.b64encode(temp.getvalue())
-        #     rec.fe_qr_img = qr_image
+    # @api.depends('fe_URLParaVerificarQR')
+    # def _generate_qr_code(self):
+    #     a=1
+    #     qr = qrcode.QRCode(
+    #         version=1,
+    #         error_correction=qrcode.constants.ERROR_CORRECT_L,
+    #         box_size=10,
+    #         border=4,
+    #     )
+    #     for rec in self:
+    #         qr.add_data(rec.fe_URLParaVerificarQR)
+    #         qr.make(fit=True)
+    #         img = qr.make_image()
+    #         temp = BytesIO()
+    #         img.save(temp, format="PNG")
+    #         qr_image = base64.b64encode(temp.getvalue())
+    #         rec.fe_qr_img = qr_image
 
 
     #
