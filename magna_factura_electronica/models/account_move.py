@@ -5,7 +5,8 @@
 import base64
 from io import BytesIO
 from odoo import api, fields, models
-
+from .fe_xml_factory import cfeFactory
+import logging
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -13,16 +14,16 @@ class AccountMove(models.Model):
     fe_Contingencia = fields.Boolean('Es Contingencia')
     fe_SerieContingencia = fields.Char('Serie')
     fe_DocNroContingencia = fields.Char(u'Número')
-    fe_Serie = fields.Char('Serie')
-    fe_DocNro = fields.Char(u'Número')
+    fe_Serie = fields.Char('Serie Factura')
+    fe_DocNro = fields.Char(u'Número Factura')
     fe_FechaHoraFirma = fields.Char('Fecha/Hora de firma')
     fe_Estado = fields.Char('Estado')
-    fe_URLParaVerificarQR = fields.Char('Código QR')
-    fe_URLParaVerificarTexto = fields.Char('Verificación')
+    fe_URLParaVerificarQR = fields.Char(u'Código QR')
+    fe_URLParaVerificarTexto = fields.Char(u'Verificación')
     fe_CAEDNro = fields.Integer('CAE Desde')
     fe_CAEHNro = fields.Integer('CAE Hasta')
-    fe_CAENA = fields.Char('CAE Autorización')
-    fe_CAEFA = fields.Char('CAE Fecha de autorización')
+    fe_CAENA = fields.Char(u'CAE Autorización')
+    fe_CAEFA = fields.Char(u'CAE Fecha de autorización')
     fe_CAEFVD = fields.Char('CAE vencimiento')
     # fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code')
 
@@ -46,26 +47,82 @@ class AccountMove(models.Model):
     #         rec.fe_qr_img = qr_image
 
 
-    #
-    # def invoice_send_fe_data(self):
-    #     for rec in self:
-    #
-    #         options = cfeFactory.cfeFactoryOptions()
-    #         options._fechaComprobanteYYYYMMDD = rec.date_order.strftime('%Y%m%d')
-    #         options._companiaId=rec.company_id.id
-    #         options._tipoMonedaTransaccion=rec.currency_id.name
-    #         if options._tipoMonedaTransaccion == 'UYU' and rec.currency_id.rate_silent > 0:
-    #             #Si la compania esta en pesos, se convierte a pesos segun el cambio
-    #             options._tipoCambio = round(1/rec.currency_id.rate_silent,3)
-    #         else:
-    #             #hardcode debo hacer triangulación de la moneda a pesos
-    #             options._tipoCambio = round(28881/1000,3)
-    #
-    #         options._montoTotalAPagar = rec.amount_total
-    #         options._emisorPartnerId = rec.company_id.partner_id
-    #         options._montoSubtotal = rec.amount_total-rec.amount_tax
-    #
-    #     return True
+
+    def invoice_send_fe_data(self):
+        XML = ''
+        for rec in self:
+            options = cfeFactory.cfeFactoryOptions()
+            options._lineasDetalle = []
+
+            options._fechaComprobanteYYYYMMDD = rec.date_order.strftime('%Y%m%d')
+            options._tipoMonedaTransaccion=rec.currency_id.name
+            options._fechaVencimientoYYYYMMDD = rec.date_order.strftime('%Y%m%d')
+            options._montoTotalAPagar = rec.amount_total
+            # options._tipoComprobante = rec.
+            # options._serieComprobante = rec.
+            # options._numeroComprobante = rec.
+
+            options._emisorRuc = rec.company_id.partner_id.city.numero_doc
+            options._emisorNombre = rec.company_id.partner_id.name
+            options._emisorDomicilioFiscal = rec.company_id.partner_id.street
+            options._emisorNombreComercial = rec.company_id.partner_id.name[:150]
+            options._emisorCodigoCasaPrincipal = rec.company_id.codigo_casa_principal_sucursal
+            options._emisorCiudad = rec.company_id.partner_id.city
+            options._emisorDepartamento = rec.company_id.partner_id.state_id.name
+
+            options._receptorTipoDocumento = rec.partner_id.tipo_documento
+            options._receptorCodigoPais = 'UY'
+            if rec.partner_id.pais_documento.code:
+                options._receptorCodigoPais = rec.partner_id.pais_documento.code
+            options._receptorDocumento = rec.partner_id.numero_doc
+            options._receptorRazonSocial = rec.partner_id.name #invoice.partner_id.razon_social
+            options._receptorDireccion = rec.partner_id.direccion_f[:70]
+            options._receptorCiudad = rec.partner_id.city
+            options._receptorDepartamento = rec.partner_id.state_id.name
+
+            options._formaPago = 1
+            options._montoTotalNoGravado = 0
+            options._montoNetoIVATasaMinima=0
+            options._montoNetoIVATasaBasica=0
+            options._IVATasaMinima=0
+            options._IVATasaBasica=0
+            options._montoIVATasaBasica = 0
+            options._montoTotal = 0
+
+            options._adicionalTipoDocumentoId = 0
+            options._adicionalDocComCodigo = ''
+            options._adicionalDocComSerie = ''
+            options._adicionalSucursalId = 0
+            options._adicionalAdenda = ''
+            options._adicionalCAEDnro = 0
+            options._adicionalCAEHnro = 0
+            options._adicionalCAENA = ''
+            options._adicionalCAEFA = ''
+            options._adicionalCAEFVD = ''
+            options._adicionalLoteId = 0
+            options._adicionalCorreoReceptor = ''
+            options._adicionalEsReceptor = 'false'
+
+            for line in rec.invoice_line_ids:
+                line_aux = cfeFactory.cfeFactoryOptionsProductLineDetail()
+                line_aux._cantidad = line.qty
+                line_aux._nombreItem = line.product_id.name
+                line_aux._unidadMedidad = 'Unit'
+                line_aux._precioUnitario = line.price_unit
+                line_aux._montoItem = line.price_unit
+                if line_aux.product_id.taxes_id:
+                    line_aux._indicadorFacturacion = line_aux.product_id.taxes_id[0].codigo_dgi
+                options._lineasDetalle.append(line_aux)
+
+            xml_factory = cfeFactory.cfeFactory(options=options)
+            XML = xml_factory.getXML()
+
+            logging.info(XML)
+
+        return XML
+
+
+
 
 
 
