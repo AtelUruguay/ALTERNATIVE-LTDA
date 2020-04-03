@@ -77,29 +77,37 @@ class AccountMove(models.Model):
             options = fe_xml_factory.cfeFactoryOptions()
             options._lineasDetalle = []
 
-            options._fechaComprobanteYYYYMMDD = rec.date_order.strftime('%Y%m%d')
+            options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y%m%d')
             options._tipoMonedaTransaccion=rec.currency_id.name
-            options._fechaVencimientoYYYYMMDD = rec.date_order.strftime('%Y%m%d')
+            options._fechaVencimientoYYYYMMDD = rec.invoice_date.strftime('%Y%m%d')
             options._montoTotalAPagar = rec.amount_total
             # options._tipoComprobante = rec.
             # options._serieComprobante = rec.
             # options._numeroComprobante = rec.
 
-            options._emisorRuc = rec.company_id.partner_id.city.numero_doc
+            # options._emisorRuc = rec.company_id.partner_id.city.numero_doc
             options._emisorNombre = rec.company_id.partner_id.name
             options._emisorDomicilioFiscal = rec.company_id.partner_id.street
             options._emisorNombreComercial = rec.company_id.partner_id.name[:150]
-            options._emisorCodigoCasaPrincipal = rec.company_id.codigo_casa_principal_sucursal
+
+            # todo arreglar
+            # options._emisorCodigoCasaPrincipal = rec.company_id.codigo_casa_principal_sucursal
+            options._emisorCodigoCasaPrincipal= 1
+
             options._emisorCiudad = rec.company_id.partner_id.city
             options._emisorDepartamento = rec.company_id.partner_id.state_id.name
+            # todo arreglar
+            # options._receptorTipoDocumento = rec.partner_id.tipo_documento
+            options._receptorTipoDocumento = 'RUT'
 
-            options._receptorTipoDocumento = rec.partner_id.tipo_documento
+
             options._receptorCodigoPais = 'UY'
-            if rec.partner_id.pais_documento.code:
-                options._receptorCodigoPais = rec.partner_id.pais_documento.code
-            options._receptorDocumento = rec.partner_id.numero_doc
+            # todo arreglar
+            # if rec.partner_id.pais_documento.code:
+            #     options._receptorCodigoPais = rec.partner_id.pais_documento.code
+            # options._receptorDocumento = rec.partner_id.numero_doc
             options._receptorRazonSocial = rec.partner_id.name #invoice.partner_id.razon_social
-            options._receptorDireccion = rec.partner_id.direccion_f[:70]
+            # options._receptorDireccion = rec.partner_id.direccion_f[:70]
             options._receptorCiudad = rec.partner_id.city
             options._receptorDepartamento = rec.partner_id.state_id.name
 
@@ -128,13 +136,13 @@ class AccountMove(models.Model):
 
             for line in rec.invoice_line_ids:
                 line_aux = fe_xml_factory.cfeFactoryOptionsProductLineDetail()
-                line_aux._cantidad = line.qty
+                line_aux._cantidad = line.quantity
                 line_aux._nombreItem = line.product_id.name
                 line_aux._unidadMedidad = 'Unit'
                 line_aux._precioUnitario = line.price_unit
                 line_aux._montoItem = line.price_unit
-                if line.product_id.taxes_id:
-                    line_aux._indicadorFacturacion = line.product_id.taxes_id[0].codigo_dgi
+                # if line.product_id.taxes_id:
+                #     line_aux._indicadorFacturacion = line.product_id.taxes_id[0].codigo_dgi
                 options._lineasDetalle.append(line_aux)
 
             xml_factory = fe_xml_factory.cfeFactory(options=options)
