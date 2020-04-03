@@ -11,8 +11,8 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     fe_Contingencia = fields.Boolean('Es Contingencia')
-    fe_Serie = fields.Char('Serie')
-    fe_DocNro = fields.Char('Documento')
+    fe_SerieContingencia = fields.Char('Serie')
+    fe_DocNroContingencia = fields.Char('Documento')
     fe_FechaHoraFirma = fields.Char('Fecha/Hora de firma')
     fe_Estado = fields.Char('Estado')
     fe_URLParaVerificarQR = fields.Char('Código QR')
