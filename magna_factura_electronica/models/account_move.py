@@ -72,76 +72,75 @@ class AccountMove(models.Model):
         return True
 
 
-    @api.one
     def invoice_factura_electronica(self):
+        for rec in self:
+            options = fe_xml_factory.cfeFactoryOptions()
+            options._lineasDetalle = []
 
-        options = fe_xml_factory.cfeFactoryOptions()
-        options._lineasDetalle = []
+            options._fechaComprobanteYYYYMMDD = rec.date_order.strftime('%Y%m%d')
+            options._tipoMonedaTransaccion=rec.currency_id.name
+            options._fechaVencimientoYYYYMMDD = rec.date_order.strftime('%Y%m%d')
+            options._montoTotalAPagar = rec.amount_total
+            # options._tipoComprobante = rec.
+            # options._serieComprobante = rec.
+            # options._numeroComprobante = rec.
 
-        options._fechaComprobanteYYYYMMDD = self.date_order.strftime('%Y%m%d')
-        options._tipoMonedaTransaccion=self.currency_id.name
-        options._fechaVencimientoYYYYMMDD = self.date_order.strftime('%Y%m%d')
-        options._montoTotalAPagar = self.amount_total
-        # options._tipoComprobante = self.
-        # options._serieComprobante = self.
-        # options._numeroComprobante = self.
+            options._emisorRuc = rec.company_id.partner_id.city.numero_doc
+            options._emisorNombre = rec.company_id.partner_id.name
+            options._emisorDomicilioFiscal = rec.company_id.partner_id.street
+            options._emisorNombreComercial = rec.company_id.partner_id.name[:150]
+            options._emisorCodigoCasaPrincipal = rec.company_id.codigo_casa_principal_sucursal
+            options._emisorCiudad = rec.company_id.partner_id.city
+            options._emisorDepartamento = rec.company_id.partner_id.state_id.name
 
-        options._emisorRuc = self.company_id.partner_id.city.numero_doc
-        options._emisorNombre = self.company_id.partner_id.name
-        options._emisorDomicilioFiscal = self.company_id.partner_id.street
-        options._emisorNombreComercial = self.company_id.partner_id.name[:150]
-        options._emisorCodigoCasaPrincipal = self.company_id.codigo_casa_principal_sucursal
-        options._emisorCiudad = self.company_id.partner_id.city
-        options._emisorDepartamento = self.company_id.partner_id.state_id.name
+            options._receptorTipoDocumento = rec.partner_id.tipo_documento
+            options._receptorCodigoPais = 'UY'
+            if rec.partner_id.pais_documento.code:
+                options._receptorCodigoPais = rec.partner_id.pais_documento.code
+            options._receptorDocumento = rec.partner_id.numero_doc
+            options._receptorRazonSocial = rec.partner_id.name #invoice.partner_id.razon_social
+            options._receptorDireccion = rec.partner_id.direccion_f[:70]
+            options._receptorCiudad = rec.partner_id.city
+            options._receptorDepartamento = rec.partner_id.state_id.name
 
-        options._receptorTipoDocumento = self.partner_id.tipo_documento
-        options._receptorCodigoPais = 'UY'
-        if self.partner_id.pais_documento.code:
-            options._receptorCodigoPais = self.partner_id.pais_documento.code
-        options._receptorDocumento = self.partner_id.numero_doc
-        options._receptorRazonSocial = self.partner_id.name #invoice.partner_id.razon_social
-        options._receptorDireccion = self.partner_id.direccion_f[:70]
-        options._receptorCiudad = self.partner_id.city
-        options._receptorDepartamento = self.partner_id.state_id.name
+            options._formaPago = 1
+            options._montoTotalNoGravado = 0
+            options._montoNetoIVATasaMinima=0
+            options._montoNetoIVATasaBasica=0
+            options._IVATasaMinima=0
+            options._IVATasaBasica=0
+            options._montoIVATasaBasica = 0
+            options._montoTotal = 0
 
-        options._formaPago = 1
-        options._montoTotalNoGravado = 0
-        options._montoNetoIVATasaMinima=0
-        options._montoNetoIVATasaBasica=0
-        options._IVATasaMinima=0
-        options._IVATasaBasica=0
-        options._montoIVATasaBasica = 0
-        options._montoTotal = 0
+            options._adicionalTipoDocumentoId = 0
+            options._adicionalDocComCodigo = ''
+            options._adicionalDocComSerie = ''
+            options._adicionalSucursalId = 0
+            options._adicionalAdenda = ''
+            options._adicionalCAEDnro = 0
+            options._adicionalCAEHnro = 0
+            options._adicionalCAENA = ''
+            options._adicionalCAEFA = ''
+            options._adicionalCAEFVD = ''
+            options._adicionalLoteId = 0
+            options._adicionalCorreoReceptor = ''
+            options._adicionalEsReceptor = 'false'
 
-        options._adicionalTipoDocumentoId = 0
-        options._adicionalDocComCodigo = ''
-        options._adicionalDocComSerie = ''
-        options._adicionalSucursalId = 0
-        options._adicionalAdenda = ''
-        options._adicionalCAEDnro = 0
-        options._adicionalCAEHnro = 0
-        options._adicionalCAENA = ''
-        options._adicionalCAEFA = ''
-        options._adicionalCAEFVD = ''
-        options._adicionalLoteId = 0
-        options._adicionalCorreoReceptor = ''
-        options._adicionalEsReceptor = 'false'
+            for line in rec.invoice_line_ids:
+                line_aux = fe_xml_factory.cfeFactoryOptionsProductLineDetail()
+                line_aux._cantidad = line.qty
+                line_aux._nombreItem = line.product_id.name
+                line_aux._unidadMedidad = 'Unit'
+                line_aux._precioUnitario = line.price_unit
+                line_aux._montoItem = line.price_unit
+                if line.product_id.taxes_id:
+                    line_aux._indicadorFacturacion = line.product_id.taxes_id[0].codigo_dgi
+                options._lineasDetalle.append(line_aux)
 
-        for line in self.invoice_line_ids:
-            line_aux = fe_xml_factory.cfeFactoryOptionsProductLineDetail()
-            line_aux._cantidad = line.qty
-            line_aux._nombreItem = line.product_id.name
-            line_aux._unidadMedidad = 'Unit'
-            line_aux._precioUnitario = line.price_unit
-            line_aux._montoItem = line.price_unit
-            if line.product_id.taxes_id:
-                line_aux._indicadorFacturacion = line.product_id.taxes_id[0].codigo_dgi
-            options._lineasDetalle.append(line_aux)
+            xml_factory = fe_xml_factory.cfeFactory(options=options)
+            XML = xml_factory.getXML()
 
-        xml_factory = fe_xml_factory.cfeFactory(options=options)
-        XML = xml_factory.getXML()
-
-        logging.info(XML)
+            logging.info(XML)
 
         return XML
 

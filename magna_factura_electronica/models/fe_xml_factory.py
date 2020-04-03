@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import string
 from xml.dom.minidom import Document, parse
 import time
@@ -11,111 +13,12 @@ from suds.cache import NoCache
 # from functools import wraps
 # from openerp import models, api
 # from openerp.exceptions import ValidationError
-import logging
-_logger = logging.getLogger(__name__)
-
-# Request
-# <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="com.esignit.fe">
-#    <soapenv:Header/>
-#    <soapenv:Body>
-#       <com:FEGeneraryFirmarDocumento.Execute>
-#          <com:Inxmlentrada>?</com:Inxmlentrada>
-#          <com:Tipocfe>?</com:Tipocfe>
-#          <com:Fefacturaimportadaloteid>?</com:Fefacturaimportadaloteid>
-#       </com:FEGeneraryFirmarDocumento.Execute>
-#    </soapenv:Body>
-# </soapenv:Envelope>
-
-# <CFEEntrada xmlns="com.esignit.fe">
-# 	<XMLEntradaNodoCFE>
-# 		<FEIDDocTipoCFE>111</FEIDDocTipoCFE>
-# 		<FEIDDocSerie>A</FEIDDocSerie>
-# 		<FEIDDocNro>1</FEIDDocNro>
-# 		<FEIDDocFchEmis>2016-04-18</FEIDDocFchEmis>
-# 		<FEIDDocFmaPago>1</FEIDDocFmaPago>
-# 		<FEIDDocFchVenc>2016-12-31</FEIDDocFchVenc>
-# 		<FEEMIRUCEmisor>216224460012</FEEMIRUCEmisor>
-# 		<FEEMIRznSoc>MENDIOROZ Y POSADA S.R.L.</FEEMIRznSoc>
-# 		<FEEMINomComercial/>
-# 		<FEEMICdgDGISucur>1</FEEMICdgDGISucur>
-# 		<FEEMIDomFiscal/>
-# 		<FEEMICiudad>MONTEVIDEO</FEEMICiudad>
-# 		<FEEMIDepartamento>Montevideo</FEEMIDepartamento>
-# 		<FERECTipoDocRecep>2</FERECTipoDocRecep>
-# 		<FERECCodPaisRecep>UY</FERECCodPaisRecep>
-# 		<FERECDocRecep>214844360018</FERECDocRecep>
-# 		<FERECRznSocRecep>DGI</FERECRznSocRecep>
-# 		<FERECDirRecep>FERNANDEZ CRESPO 1534</FERECDirRecep>
-# 		<FERECCiudadRecep>MONTEVIDEO</FERECCiudadRecep>
-# 		<FERECDeptoRecep/>
-# 		<FETOTTpoMoneda>UYU</FETOTTpoMoneda>
-# 		<FETOTMntNoGrv>0.00</FETOTMntNoGrv>
-# 		<FETOTMntNetoIvaTasaMin>0.00</FETOTMntNetoIvaTasaMin>
-# 		<FETOTMntNetoIVATasaBasica>20000.00</FETOTMntNetoIVATasaBasica>
-# 		<FETOTIVATasaBasica>22.000</FETOTIVATasaBasica>
-# 		<FETOTMntIVATasaMin>0.00</FETOTMntIVATasaMin>
-# 		<FETOTMntIVATasaBasica>4400.00</FETOTMntIVATasaBasica>
-# 		<FETOTMntTotal>24400.00</FETOTMntTotal>
-# 		<FETOTCantLinDet>3</FETOTCantLinDet>
-# 		<FETOTMontoNF>5000.00</FETOTMontoNF>
-# 		<FETOTMntPagar>29400.00</FETOTMntPagar>
-# 		<FEDetalles>
-# 			<FEDetalle>
-# 				<FEDETNroLinDet>1</FEDETNroLinDet>
-# 				<FEDETIndFact>3</FEDETIndFact>
-# 				<FEDETNomItem>aaa</FEDETNomItem>
-# 				<FEDETCantidad>10.000</FEDETCantidad>
-# 				<FEDETUniMed>kg</FEDETUniMed>
-# 				<FEDETPrecioUnitario>1000.000000</FEDETPrecioUnitario>
-# 				<FEDETMontoItem>10000.00</FEDETMontoItem>
-# 			</FEDetalle>
-# 			<FEDetalle>
-# 				<FEDETNroLinDet>2</FEDETNroLinDet>
-# 				<FEDETIndFact>3</FEDETIndFact>
-# 				<FEDETNomItem>bbb</FEDETNomItem>
-# 				<FEDETCantidad>5.000</FEDETCantidad>
-# 				<FEDETUniMed>kg</FEDETUniMed>
-# 				<FEDETPrecioUnitario>2000.000000</FEDETPrecioUnitario>
-# 				<FEDETMontoItem>10000.00</FEDETMontoItem>
-# 			</FEDetalle>
-# 			<FEDetalle>
-# 				<FEDETNroLinDet>3</FEDETNroLinDet>
-# 				<FEDETIndFact>6</FEDETIndFact>
-# 				<FEDETNomItem>ccc</FEDETNomItem>
-# 				<FEDETCantidad>1.000</FEDETCantidad>
-# 				<FEDETUniMed>N/A</FEDETUniMed>
-# 				<FEDETPrecioUnitario>5000.000000</FEDETPrecioUnitario>
-# 				<FEDETMontoItem>5000.00</FEDETMontoItem>
-# 			</FEDetalle>
-# 		</FEDetalles>
-# 	</XMLEntradaNodoCFE>
-# 	<XMLEntradaNodoAdicional>
-# 		<TipoDocumentoId>111</TipoDocumentoId>
-# 		<DocComCodigo>1</DocComCodigo>
-# 		<DocComSerie>A</DocComSerie>
-# 		<SucursalId>1</SucursalId>
-# 		<Adenda/>
-# 		<CAEDnro>1</CAEDnro>
-# 		<CAEHnro>100</CAEHnro>
-# 		<CAENA>20160001110</CAENA>
-# 		<CAEFA>2016-01-01</CAEFA>
-# 		<CAEFVD>2017-12-31</CAEFVD>
-# 		<LoteId>0</LoteId>
-# 		<CorreoReceptor/>
-# 		<EsReceptor>false</EsReceptor>
-# 	</XMLEntradaNodoAdicional>
-# </CFEEntrada>
-
-
-# -*- coding: utf-8 -*-
 from xml.dom.minidom import Document, parse
 import time
 import base64
 import logging
 
-
-
-debug=True
+debug = True
 
 def loguear(text):
     if debug:
