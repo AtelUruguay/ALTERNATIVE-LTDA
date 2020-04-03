@@ -65,21 +65,20 @@
             </xpath>
 
             <notebook position="inside">
-                <page string="Factura Electrónica" attrs="{'invisible':[('state','==','draft')]}">
+                <!--<page string="Factura Electrónica" attrs="{'invisible':[('state','==','draft')]}">-->
+                <page string="Factura Electrónica">
                     <group>
                         <field name="fe_Contingencia"/>
-                        <!--<field name="fe_SerieContingencia" attrs="{'invisible': [('fe_Contingencia','!=',True)]}"/>-->
-                        <!--<field name="fe_DocNroContingencia" attrs="{'invisible': [('fe_Contingencia','!=',True)]}"/>-->
-                        <field name="fe_Serie"/>
-                        <field name="fe_DocNro"/>
-                        <field name="fe_FechaHoraFirma"/>
-                        <field name="fe_URLParaVerificarQR" widget="url"/>
-                        <field name="fe_URLParaVerificarTexto" widget="url"/>
-                        <field name="fe_CAEDNro"/>
-                        <field name="fe_CAEHNro"/>
-                        <field name="fe_CAENA"/>
-                        <field name="fe_CAEFA"/>
-                        <field name="fe_CAEFVD"/>
+                        <field name="fe_SerieContingencia" attrs="{'invisible': [('fe_Contingencia','!=',True)]}"/>
+                        <field name="fe_DocNroContingencia" attrs="{'invisible': [('fe_Contingencia','!=',True)]}"/>
+                        <field name="fe_FechaHoraFirma" readonly="1"/>
+                        <field name="fe_URLParaVerificarQR" widget="url" readonly="1"/>
+                        <field name="fe_URLParaVerificarTexto" widget="url" readonly="1"/>
+                        <field name="fe_CAEDNro" readonly="1"/>
+                        <field name="fe_CAEHNro" readonly="1"/>
+                        <field name="fe_CAENA" readonly="1"/>
+                        <field name="fe_CAEFA" readonly="1"/>
+                        <field name="fe_CAEFVD" readonly="1"/>
                         <field name="fe_Estado" attrs="{'invisible': True}"/>
                         <!--<button name="resend_einvoice" type="object" string="Volver a enviar" attrs="{'invisible': [('fe_URLParaVerificarQR','=',False)]}"/>-->
                     </group>
