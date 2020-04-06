@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data noupdate="1">
         <!--Parametro con ruta al WSDL del WS de cotizacion-->
         <record id="sequence_obl_code" model="ir.config_parameter">
@@ -7,4 +7,4 @@
             <field name="value">https://cotizaciones.bcu.gub.uy/wscotizaciones/servlet/awsbcucotizaciones?wsdl</field>
         </record>
     </data>
-</openerp>
+</odoo>

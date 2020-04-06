@@ -85,7 +85,7 @@ class cotizaciones_wizard(models.TransientModel):
             for cursor_date in self.date_range(start_date, end_date):
                 for inter in int_conf_rows:
                     cursor_date_iter = cursor_date
-                    if inter.company_id.date_bcu == 1:
+                    if inter.company_id.date_bcu == '1':
                         cursor_date_iter = cursor_date + timedelta(days=-1)
                         cursor_date_find = cursor_date_iter
                     else:
@@ -142,7 +142,7 @@ class cotizaciones_wizard(models.TransientModel):
             for cursor_date in self.date_range(start_date, end_date):
                 for inter in int_conf_rows:
                     cursor_date_iter = cursor_date
-                    if inter.company_id.date_bcu == 1:
+                    if inter.company_id.date_bcu == '1':
                         cursor_date_iter = cursor_date + timedelta(days=-1)
                         cursor_date_find = cursor_date_iter
                     else:

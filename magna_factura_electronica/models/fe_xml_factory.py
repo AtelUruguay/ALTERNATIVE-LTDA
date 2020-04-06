@@ -20,6 +20,13 @@ import logging
 
 debug = True
 
+# try:
+#     # Python 2: "unicode" is built-in
+#     unicode
+# except NameError:
+#     unicode = str
+
+
 def loguear(text):
     if debug:
         logging.info(text)
@@ -243,7 +250,7 @@ class cfeFactory():
         logging.info(dato)
         Campo = documento.createElement(elemento)
         area.appendChild(Campo)
-        # todo poner el unicode
+        # asm todo poner el unicode?
         # ptext = documento.createTextNode(unicode(dato))
         ptext = documento.createTextNode(dato)
         Campo.appendChild(ptext)

@@ -22,9 +22,16 @@
 ##############################################################################
 from suds.client import Client
 from suds import WebFault
-from openerp.exceptions import ValidationError
+from odoo.exceptions import ValidationError
 from datetime import datetime
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+
+
+try:
+    # Python 2: "unicode" is built-in
+    unicode
+except NameError:
+    unicode = str
 
 def dt_tz(cr, date, return_str=False):
     """ Returns a datetime without timezone from param 'date'
@@ -43,6 +50,7 @@ def dt_tz(cr, date, return_str=False):
         dt.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
     return dt
 
+
 class SoapClientRequest(object):
     """ Web Service Client Request """
     _register = {}
@@ -57,6 +65,7 @@ class SoapClientRequest(object):
                 cls._register[i] = classvalue
         else:
             cls._register[key] = classvalue
+
 
 class SoapClientBase(object):
     """ Web Service Client Base """
@@ -78,12 +87,14 @@ class SoapClientBase(object):
     @property
     def client(self):
         return self._client
+
     @client.setter
     def client(self, value):
         if isinstance(value,(str, unicode)):
             self._client = Client(value)
         else:
             self._client = value
+
     @client.deleter
     def client(self):
         del self._client
@@ -129,6 +140,7 @@ class SoapClientBase(object):
                     raise ValidationError("Error: %s" % (e.message,))
             #Check response parameter
             return self.execute_response(model, cr, uid, ids, response, context=context)
+
         def _new_api(model, post_data):
             response = False
             try:
@@ -173,6 +185,7 @@ class SoapClientBase(object):
             if msg:
                 msg += "\n %s" % (msg_attr,)
             raise Exception(msg)
+
 
 class Dic2Object(dict):
     def __init__(self, *args, **kwargs):

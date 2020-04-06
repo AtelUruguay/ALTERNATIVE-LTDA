@@ -2,7 +2,8 @@
 
 from odoo import models, fields, api
 
-class interfaz_montedas(models.Model):
+
+class InterfazMonedas(models.Model):
     _name = 'interfaz.monedas'
 
     #Para esto es necesario configurar cada modena del sistema

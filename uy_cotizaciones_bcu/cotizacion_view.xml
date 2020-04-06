@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<openerp>
+<odoo>
     <data>
         <record id="cotizaciones_wizard_view" model="ir.ui.view">
             <field name="name">cotizaciones.wizard.view</field>
@@ -95,4 +95,4 @@
             </field>
         </record>
     </data>
-</openerp>
+</odoo>
