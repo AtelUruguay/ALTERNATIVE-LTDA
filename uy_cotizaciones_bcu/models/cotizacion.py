@@ -31,6 +31,7 @@ from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 class cotizaciones_wizard(models.TransientModel):
     _name = 'cotizaciones.wizard'
     _description = 'Wizard de cotizaciones'
+
     #columns
     fecha_desde = fields.Date('Fecha desde', required=True)
     fecha_hasta = fields.Date('Fecha hasta', required=True)
@@ -223,7 +224,7 @@ class cotizaciones_wizard(models.TransientModel):
             if rate:
                 start_date = rate.name
             self.with_context({
-                'items':[inter.codigo_bcu,],
+                'items': [inter.codigo_bcu,],
                 'start_date': datetime.strptime(start_date, "%Y-%m-%d") + timedelta(days=-1),
                 'end_date': datetime.strptime(end_date, "%Y-%m-%d")
             })._cron_send_date_range()

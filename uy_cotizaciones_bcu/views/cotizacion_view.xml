@@ -52,7 +52,9 @@
                                 <field name="codigo_bcu"/>
                             </group>
                             <group>
-                                <field name="currency_id"  domain="[('company_id','=',company_id)]" options="{'no_create':true}"/>
+                                <!--asm quito el domain, la moneda no tiene referencia a una compañía-->
+                                <!--<field name="currency_id"  domain="[('company_id','=',company_id)]" options="{'no_create':true}"/>-->
+                                <field name="currency_id" options="{'no_create':true}"/>
                                 <field name="company_id" options="{'no_create':true}"/>
                             </group>
                         </group>
