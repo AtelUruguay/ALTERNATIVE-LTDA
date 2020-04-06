@@ -9,8 +9,10 @@
             <field name="arch" type="xml">
                 <form string="Cotizaciones" version="7.0">
                     <group>
-                        <label string="Al hacer click en el boton 'Actualizar' se obtendrán las cotizaciones de las monedas definidas en el menu 'Monedas Interfaz' desde Banco Central del Uruguay para
-                        el rango de fechas definido"/>
+                        <!--<label string="Al hacer click en el boton 'Actualizar' se obtendrán las cotizaciones de las monedas definidas en el menu 'Monedas Interfaz' desde Banco Central del Uruguay para-->
+                        <!--el rango de fechas definido"/>-->
+                        <div>Al hacer click en el boton 'Actualizar' se obtendrán las cotizaciones de las monedas definidas en el menu 'Monedas Interfaz' desde Banco Central del Uruguay para
+                            el rango de fechas definido</div>
                     </group>
                     <group>
                         <group>

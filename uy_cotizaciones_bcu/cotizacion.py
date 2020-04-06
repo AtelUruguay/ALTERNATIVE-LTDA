@@ -30,6 +30,7 @@ from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 
 class cotizaciones_wizard(models.TransientModel):
     _name = 'cotizaciones.wizard'
+    _description = 'Wizard de cotizaciones'
     #columns
     fecha_desde = fields.Date('Fecha desde', required=True)
     fecha_hasta = fields.Date('Fecha hasta', required=True)
