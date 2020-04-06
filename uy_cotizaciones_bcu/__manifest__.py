@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Cotizaciones Banco Central del Uruguay",
-    "version": "1.0",
+    "version": "0.1",
+    'summary': 'Interfaz con BCU para obtener cotizaciones de las monedas. Ajustado para Odoo v13.',
     "description": """
 Permite establecer las cotizaciones que se quieren actualizar desde el BCU.
 
 Configurar las monedas en Contabilidad -> Cotizaciones -> Monedas Interfaz
 
 Para actualizar manualmente ir a Contabilidad -> Cotizaciones -> Actualizar Cotizaciones
-
-Ajustado para Odoo v13
     """,
     "author": "Quanam",
     'website': 'https://www.quanam.com',
