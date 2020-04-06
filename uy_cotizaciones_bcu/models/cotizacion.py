@@ -193,8 +193,6 @@ class cotizaciones_wizard(models.TransientModel):
     def action_update(self):
         self.ensure_one()
         self.with_context({
-            # 'start_date': datetime.strptime(self.fecha_desde, "%Y-%m-%d") + timedelta(days=-1),
-            # 'end_date': datetime.strptime(self.fecha_hasta, "%Y-%m-%d")
             'start_date': self.fecha_desde + timedelta(days=-1),
             'end_date': self.fecha_hasta
         })._send_date_range()
@@ -227,8 +225,6 @@ class cotizaciones_wizard(models.TransientModel):
                 start_date = rate.name
             self.with_context({
                 'items': [inter.codigo_bcu,],
-                # 'start_date': datetime.strptime(start_date, "%Y-%m-%d") + timedelta(days=-1),
-                # 'end_date': datetime.strptime(end_date, "%Y-%m-%d")
                 'start_date': start_date + timedelta(days=-1),
                 'end_date': end_date
             })._cron_send_date_range()
