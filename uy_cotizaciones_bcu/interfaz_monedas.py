@@ -10,7 +10,6 @@ class interfaz_montedas(models.Model):
     # def _default_company(self):
     #     return self.env['res.company']._company_default_get('res.partner')
 
-    @api.multi
     def name_get(self):
         res = []
         for record in self:
