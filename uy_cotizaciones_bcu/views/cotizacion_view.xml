@@ -35,7 +35,6 @@
         <record id="action_cotizaciones" model="ir.actions.act_window">
             <field name="name">Actualizar las Cotizaciones</field>
             <field name="res_model">cotizaciones.wizard</field>
-            <!--<field name="view_type">form</field>-->
             <field name="view_mode">form</field>
             <field name="view_id" ref="cotizaciones_wizard_view"/>
             <field name="target">new</field>
@@ -76,7 +75,6 @@
         <record id="action_interfaz_monedas" model="ir.actions.act_window">
             <field name="name">Monedas Interfaz</field>
             <field name="res_model">interfaz.monedas</field>
-            <!--<field name="view_type">form</field>-->
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="interfaz_monedas_tree"/>
         </record>
