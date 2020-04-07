@@ -18,7 +18,7 @@ class AccountMove(models.Model):
              "negative for credit notes.")
 
 
-    @api.depends('invoice_line_ids.price_subtotal', 'tax_line_ids.amount','currency_id', 'company_id')
+    @api.depends('invoice_line_ids.price_subtotal', 'tax_ids.amount','currency_id', 'company_id')
     def _compute_amount(self):
         super(AccountMove, self)._compute_amount()
         for inv in self:
