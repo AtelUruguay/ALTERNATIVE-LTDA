@@ -14,7 +14,7 @@
     <field name="model">account.move</field>
     <field name="inherit_id" ref="account.view_move_form"/>
     <field name="arch" type="xml">
-        <xpath expr="//field[@name='move_id']/.." position="after">
+        <xpath expr="//group[@name='payments_info_group']/.." position="after">
             <group string="Amounts in company currency">
                 <field name="amount_untaxed_signed"/>
                 <field name="amount_tax_signed"/>
@@ -55,7 +55,7 @@
     <field name="model">account.move</field>
     <field name="inherit_id" ref="account.view_move_form"/>
     <field name="arch" type="xml">
-        <xpath expr="//field[@name='move_id']/.." position="after">
+        <xpath expr="//group[@name='payments_info_group']/.." position="after">
             <group string="Amounts in company currency">
                 <field name="amount_untaxed_signed"/>
                 <field name="amount_tax_signed"/>
