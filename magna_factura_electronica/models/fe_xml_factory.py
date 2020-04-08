@@ -32,6 +32,8 @@ def loguear(text):
         logging.info(text)
 
 
+
+
 class cfeFactoryOptionsProductLineDetail():
     _cantidad = 0
     _nombreItem = ''
@@ -106,6 +108,18 @@ class cfeFactory():
     def __init__(self, options=None):
         self.opt = options
 
+    def get_tipo_cfe(invoice_type, consumidor_final):
+        if consumidor_final:  # eTicket
+            if invoice_type == 'out_invoice':  # Factura de cliente
+                return 101
+            elif invoice_type == 'out_refund':  # NC de cliente
+                return 102
+        else:  # eFactura
+            if invoice_type == 'out_invoice':  # Factura de cliente
+                return 111
+            elif invoice_type == 'out_refund':  # NC de cliente
+                return 112
+        return 0
 
     def invoice_ensobrar(self, str_xml_cfe='', tipoCFE=0):
         loteID = 0
