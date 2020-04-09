@@ -19,7 +19,7 @@ class AccountMove(models.Model):
     fe_DocNro = fields.Char(u'Número Factura')
     fe_FechaHoraFirma = fields.Char('Fecha/Hora de firma')
     fe_Estado = fields.Char('Estado')
-    fe_URLParaVerificarQR = fields.Char(u'Código QR')
+    fe_URLParaVerificarQR = fields.Char(u'Código QR', default="https://www.efactura.dgi.gub.uy/consultaQR/cfe?213738620011,111,A,3,29400.00,20200408,9roxpijcw7sgAkZsoJzWr%2Br0xhE=")
     fe_URLParaVerificarTexto = fields.Char(u'Verificación')
     fe_CAEDNro = fields.Integer('CAE Desde')
     fe_CAEHNro = fields.Integer('CAE Hasta')
@@ -37,8 +37,7 @@ class AccountMove(models.Model):
             border=4,
         )
         for rec in self:
-            # qr.add_data(rec.fe_URLParaVerificarQR)
-            qr.add_data("https://www.efactura.dgi.gub.uy/consultaQR/cfe?213738620011,111,A,3,29400.00,20200408,9roxpijcw7sgAkZsoJzWr%2Br0xhE=")
+            qr.add_data(rec.fe_URLParaVerificarQR)
             qr.make(fit=True)
             img = qr.make_image()
             temp = BytesIO()
@@ -56,12 +55,11 @@ class AccountMove(models.Model):
 
     def invoice_send_fe_proinfo(self):
         for rec in self:
-            # todo arreglar esto
-            tipoCFE = 111
+            tipo_CFE = fe_xml_factory.cfeFactory.get_tipo_cfe(rec.type, consumidor_final=not rec.partner_id.vat)
             str_xml_cfe = rec.invoice_factura_electronica()
             logging.info(str_xml_cfe)
 
-            str_xml_sobre = fe_xml_factory.cfeFactory().invoice_ensobrar(str_xml_cfe=str_xml_cfe, tipoCFE=tipoCFE)
+            str_xml_sobre = fe_xml_factory.cfeFactory().invoice_ensobrar(str_xml_cfe=str_xml_cfe, tipo_CFE=tipo_CFE)
 
             # client = fe_xml_factory.cfeFactory._get_client_conn()
             # res = client.service.Execute(str_xml_sobre)
@@ -74,14 +72,15 @@ class AccountMove(models.Model):
             options = fe_xml_factory.cfeFactoryOptions()
             options._lineasDetalle = []
 
+            options._tipoComprobante = fe_xml_factory.cfeFactory.get_tipo_cfe(rec.type, consumidor_final=not rec.partner_id.vat)
+            # options._serieComprobante = rec. #todo
+            # options._numeroComprobante = rec. #todo
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y%m%d')
-            options._tipoMonedaTransaccion=rec.currency_id.name
+            options._indicadorMontBruto = 1 #todo
+            options._formaPago = 1 #todo
             options._fechaVencimientoYYYYMMDD = rec.invoice_date.strftime('%Y%m%d')
-            options._montoTotalAPagar = rec.amount_total
-            options._tipoComprobante = fe_xml_factory.cfeFactory.get_tipo_cfe(rec.type, consumidor_final=False)
-            # options._serieComprobante = rec.
-            # options._numeroComprobante = rec.
 
+            # EMISOR
             options._emisorRuc = rec.company_id.partner_id.vat
             options._emisorNombre = rec.company_id.partner_id.name
             options._emisorDomicilioFiscal = rec.company_id.partner_id.street
@@ -92,8 +91,7 @@ class AccountMove(models.Model):
             options._emisorCiudad = rec.company_id.partner_id.city
             options._emisorDepartamento = rec.company_id.partner_id.state_id.name
 
-
-
+            # RECEPTOR
             # todo arreglar mapeo (vat_type tiene otros valores)
             options._receptorTipoDocumento = rec.partner_id.vat_type
             options._receptorCodigoPais = 'UY'
@@ -107,16 +105,28 @@ class AccountMove(models.Model):
             options._receptorDepartamento = rec.partner_id.state_id.name
 
 
+            # TOTALES
+            options._tipoMonedaTransaccion=rec.currency_id.name
+            options._montoTotalNoGravado = rec.amount_untaxed #todo
 
-            options._formaPago = 1
-            options._montoTotalNoGravado = 0
-            options._montoNetoIVATasaMinima=0
-            options._montoNetoIVATasaBasica=0
-            options._IVATasaMinima=0
-            options._IVATasaBasica=0
-            options._montoIVATasaBasica = 0
-            options._montoTotal = 0
+            group_taxes = rec.amount_by_group
+            logging(group_taxes)
 
+
+            options._montoNetoIVATasaMinima = rec.amount_tax
+            options._montoNetoIVATasaBasica = rec.amount_tax
+
+            options._IVATasaMinima=10 #todo
+            options._IVATasaBasica=22 #todo
+
+            options._montoIVATasaMinima = options._montoNetoIVATasaMinima * options._IVATasaMinima/ 100
+            options._montoIVATasaBasica = options._montoNetoIVATasaBasica * options._IVATasaBasica/ 100
+
+            options._montoTotal = rec.amount_total
+            options._montoTotalAPagar = rec.amount_total
+
+
+            # ADICIONAL
             options._adicionalTipoDocumentoId = 0
             options._adicionalDocComCodigo = ''
             options._adicionalDocComSerie = ''
@@ -131,15 +141,20 @@ class AccountMove(models.Model):
             options._adicionalCorreoReceptor = ''
             options._adicionalEsReceptor = 'false'
 
+
+            # DETALLE
             for line in rec.invoice_line_ids:
                 line_aux = fe_xml_factory.cfeFactoryOptionsProductLineDetail()
                 line_aux._cantidad = line.quantity
                 line_aux._nombreItem = line.product_id.name
                 line_aux._unidadMedidad = 'Unit'
                 line_aux._precioUnitario = line.price_unit
-                line_aux._montoItem = line.price_unit
+                line_aux._montoItem = line.quantity * line.price_unit
+
+                # todo asm ver este campo del detalle del producto, de donde lo tengo que sacar
                 # if line.product_id.taxes_id:
                 #     line_aux._indicadorFacturacion = line.product_id.taxes_id[0].codigo_dgi
+
                 options._lineasDetalle.append(line_aux)
 
             xml_factory = fe_xml_factory.cfeFactory(options=options)

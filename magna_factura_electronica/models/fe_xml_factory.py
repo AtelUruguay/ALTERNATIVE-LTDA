@@ -49,6 +49,8 @@ class cfeFactoryOptions():
     _tipoComprobante = 0
     _serieComprobante = 0
     _numeroComprobante = 0
+    _indicadorMontBruto = 0
+
     _emisorRuc = ''
     _emisorNombre = ''
     _emisorDomicilioFiscal = ''
@@ -56,6 +58,7 @@ class cfeFactoryOptions():
     _emisorCodigoCasaPrincipal = ''
     _emisorCiudad = ''
     _emisorDepartamento = ''
+
     _receptorTipoDocumento=''
     _receptorCodigoPais=''
     _receptorDocumento=''
@@ -63,10 +66,12 @@ class cfeFactoryOptions():
     _receptorDireccion=''
     _receptorCiudad=''
     _receptorDepartamento=''
+
     _formaPago = 0
     _tipoMonedaTransaccion = ''
     # _montoTotalImpuestoPercibido = 0
     _montoTotalNoGravado = 0
+    _montoTotal=0
     _montoTotalAPagar = 0
     # _montoSubtotal = 0
     # _montoTotalExportacionAsimiladas=0
@@ -77,10 +82,10 @@ class cfeFactoryOptions():
     # _montoNetoIVATasaOtra=0
     _IVATasaMinima=0
     _IVATasaBasica=0
-    # _montoIVATasaMinima=0
+    _montoIVATasaMinima=0
     _montoIVATasaBasica=0
     # _montoIVATasaOtra=0
-    _montoTotal=0
+
 
     _lineasDetalle = [] #invoice.invoice_line
 
@@ -121,8 +126,8 @@ class cfeFactory():
                 return 112
         return 0
 
-    def invoice_ensobrar(self, str_xml_cfe='', tipoCFE=0):
-        loteID = 0
+    def invoice_ensobrar(self, str_xml_cfe='', tipo_CFE=0):
+        lote_id = 0
 
         # Creo Documento Sobre
         doc = Document()
@@ -139,8 +144,8 @@ class cfeFactory():
         Body.appendChild(Execute)
 
         self._set_fe_node_data(doc, Execute, 'com:Inxmlentrada', str_xml_cfe)
-        self._set_fe_node_data(doc, Execute, 'com:Tipocfe', tipoCFE)
-        self._set_fe_node_data(doc, Execute, 'com:Fefacturaimportadaloteid', loteID)
+        self._set_fe_node_data(doc, Execute, 'com:Tipocfe', tipo_CFE)
+        self._set_fe_node_data(doc, Execute, 'com:Fefacturaimportadaloteid', lote_id)
 
         str_xml_sobre = doc.toprettyxml(encoding="utf-8")
         logging.info(str_xml_sobre)
@@ -157,11 +162,12 @@ class cfeFactory():
         XMLEntradaNodoCFE = doc.createElement("XMLEntradaNodoCFE")
         CFEEntrada.appendChild(XMLEntradaNodoCFE)
 
-        # *** 1.1 - INICIO IDENTIFICADOR DEL COMPROBANTE ***
+        # IDENTIFICADOR
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocTipoCFE', str(self.opt._tipoComprobante))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocSerie', str(self.opt._serieComprobante))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocNro', str(self.opt._numeroComprobante))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFchEmis', str(self.opt._fechaComprobanteYYYYMMDD))
+        self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocMntBruto', str(self.opt._indicadorMontBruto))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFmaPago', str(self.opt._formaPago))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFchVenc', str(self.opt._fechaVencimientoYYYYMMDD))
 
@@ -181,13 +187,10 @@ class cfeFactory():
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECCodPaisRecep', cod_pais_receptor)
         if self.opt._receptorDocumento:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDocRecep', self.opt._receptorDocumento)
-
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECRznSocRecep', str(self.opt._receptorRazonSocial))
-
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDirRecep', str(self.opt._receptorDireccion))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECCiudadRecep', str(self.opt._receptorCiudad))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDeptoRecep', str(self.opt._receptorDepartamento))
-
 
         # TOTALES DE ENCABEZADO
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTTpoMoneda', str(self.opt._tipoMonedaTransaccion))
@@ -199,22 +202,19 @@ class cfeFactory():
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntNetoIvaTasaMin', "{0:.2f}".format(self.opt._montoNetoIVATasaMinima).replace(".", "."))
         if self.opt._montoNetoIVATasaBasica:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntNetoIVATasaBasica', "{0:.2f}".format(self.opt._montoNetoIVATasaBasica).replace(".", "."))
+        if self.opt._IVATasaMinima:
+            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTIVATasaMin', "{0:.3f}".format(self.opt._IVATasaMinima).replace(".", "."))
         if self.opt._IVATasaBasica:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTIVATasaBasica', "{0:.3f}".format(self.opt._IVATasaBasica).replace(".", "."))
-        if self.opt._IVATasaMinima:
-            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntIVATasaMin', "{0:.3f}".format(self.opt._IVATasaMinima).replace(".", "."))
+        if self.opt._montoIVATasaMinima:
+            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntIVATasaMin', "{0:.2f}".format(self.opt._montoIVATasaMinima).replace(".", "."))
         if self.opt._montoIVATasaBasica:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntIVATasaBasica', "{0:.2f}".format(self.opt._montoIVATasaBasica).replace(".", "."))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntTotal',  "{0:.2f}".format(self.opt._montoTotal).replace(".", ".").replace('-',''))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTCantLinDet', str(len(self.opt._lineasDetalle)))
-        # todo poner el campo correcto
-        self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMontoNF',  "{0:.2f}".format(self.opt._montoTotal).replace(".", ".").replace('-',''))
-        
-        self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntPagar', "{0:.2f}".format(self.opt._montoTotalAPagar).replace(".", "."))
-        # FIN ENCABEZADO
+        self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntPagar',  "{0:.2f}".format(self.opt._montoTotalAPagar).replace(".", ".").replace('-',''))
 
-
-        # INICIO DETALLE
+        # DETALLE
         ZonaDetalle = doc.createElement("FEDetalles")
         XMLEntradaNodoCFE.appendChild(ZonaDetalle)
         nroSecuencial = 0
@@ -232,10 +232,8 @@ class cfeFactory():
                 self._set_fe_node_data(doc, SubZonaItem, 'FEDETUniMed', linea._unidadMedidad)
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETPrecioUnitario', "{0:.6f}".format(linea._precioUnitario).replace(".", "."))
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETMontoItem', "{0:.2f}".format(linea._montoItem).replace(".", "."))
-        # FIN DETALLE
 
-
-        # INICIO NODO ADICIONAL
+        # NODO ADICIONAL
         XMLEntradaNodoAdicional = doc.createElement("XMLEntradaNodoAdicional")
         CFEEntrada.appendChild(XMLEntradaNodoAdicional)
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'TipoDocumentoId', str(self.opt._adicionalTipoDocumentoId))
@@ -251,7 +249,6 @@ class cfeFactory():
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'LoteId', str(self.opt._adicionalLoteId))
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'CorreoReceptor', str(self.opt._adicionalCorreoReceptor))
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'EsReceptor', str(self.opt._adicionalEsReceptor))
-        # FIN NODO ADICIONAL---------------------------------------#
 
         XML = doc.toprettyxml(encoding="utf-8")
         logging.info(XML)
