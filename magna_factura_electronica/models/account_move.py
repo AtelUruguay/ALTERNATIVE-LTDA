@@ -93,7 +93,7 @@ class AccountMove(models.Model):
 
             # RECEPTOR
             # todo arreglar mapeo (vat_type tiene otros valores)
-            options._receptorTipoDocumento = rec.partner_id.vat_type
+            options._receptorTipoDocumento = 'RUT'#rec.partner_id.vat_type
             options._receptorCodigoPais = 'UY'
             # todo arreglar
             # if rec.partner_id.pais_documento.code:
