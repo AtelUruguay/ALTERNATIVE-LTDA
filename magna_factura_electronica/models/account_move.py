@@ -110,7 +110,7 @@ class AccountMove(models.Model):
             options._montoTotalNoGravado = rec.amount_untaxed #todo
 
             group_taxes = rec.amount_by_group
-            logging(group_taxes)
+            logging.info(group_taxes)
 
 
             options._montoNetoIVATasaMinima = rec.amount_tax
