@@ -3,10 +3,10 @@
 
 from suds.client import Client
 from suds.cache import NoCache
-from odoo import api
 # from openerp.exceptions import ValidationError
 from xml.dom.minidom import Document, parse
 import logging
+from odoo import api, fields, models
 
 debug = True
 
@@ -97,7 +97,8 @@ class cfeFactoryOptions():
     def __init__(self):
         pass
 
-class cfeFactory():
+
+class cfeFactory(models.Model):
     opt = cfeFactoryOptions()
 
     def __init__(self, options=None):
@@ -264,6 +265,11 @@ class cfeFactory():
         ptext = documento.createTextNode(dato)
         Campo.appendChild(ptext)
         return True
+
+
+
+class WsConnection(models.TransientModel):
+    _name = 'fe.ws_connection'
 
     @api.model
     def get_client_conn(self, retornaXML=False):
