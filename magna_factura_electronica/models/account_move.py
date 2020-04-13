@@ -111,6 +111,10 @@ class AccountMove(models.Model):
 
             group_taxes = rec.amount_by_group
             logging.info(group_taxes)
+            # [
+            #  ('Impuestos', 17.38, 79.0, '$ 17.38', '$ 79.00', 2, 1),
+            #  ('Tax 15%', 3525.0, 23500.0, '$ 3,525.00', '$ 23,500.00', 2, 2)
+            #  ]
 
 
             options._montoNetoIVATasaMinima = rec.amount_tax

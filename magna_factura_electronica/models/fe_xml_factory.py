@@ -1,21 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import string
-from xml.dom.minidom import Document, parse
-import time
-import base64
-import logging
-from math import fabs
+
 from suds.client import Client
 from suds.cache import NoCache
-# from suds.plugin import MessagePlugin
-# import ssl
-# from functools import wraps
 from odoo import api
 # from openerp.exceptions import ValidationError
 from xml.dom.minidom import Document, parse
-import time
-import base64
 import logging
 
 debug = True
@@ -250,8 +240,10 @@ class cfeFactory():
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'CorreoReceptor', str(self.opt._adicionalCorreoReceptor))
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'EsReceptor', str(self.opt._adicionalEsReceptor))
 
-        XML = doc.toprettyxml(encoding="utf-8")
+        # XML = doc.toxml(encoding="utf-8")
+        XML = doc.toprettyxml()
         logging.info(XML)
+
         return XML
 
     @api.model
