@@ -134,8 +134,8 @@ class cfeFactory():
         Body.appendChild(Execute)
 
         self._set_fe_node_data(doc, Execute, 'com:Inxmlentrada', str_xml_cfe)
-        self._set_fe_node_data(doc, Execute, 'com:Tipocfe', tipo_CFE)
-        self._set_fe_node_data(doc, Execute, 'com:Fefacturaimportadaloteid', lote_id)
+        self._set_fe_node_data(doc, Execute, 'com:Tipocfe', str(tipo_CFE))
+        self._set_fe_node_data(doc, Execute, 'com:Fefacturaimportadaloteid', str(lote_id))
 
         str_xml_sobre = doc.toprettyxml(encoding="utf-8")
         logging.info(str_xml_sobre)
