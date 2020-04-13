@@ -164,6 +164,7 @@ class AccountMove(models.Model):
             xml_factory = fe_xml_factory.cfeFactory(options=options)
             XML = xml_factory.getXML()
 
+
             logging.info(XML)
 
         return XML
