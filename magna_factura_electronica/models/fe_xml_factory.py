@@ -245,7 +245,7 @@ class cfeFactory():
         # XML = doc.toxml(encoding="utf-8")
         XML = doc.toprettyxml()
 
-        # <?xml version="1.0" encoding="utf-8"?>
+        # se quita el <?xml version="1.0" encoding="utf-8"?>
         XML = XML[XML.find("?>") + 2:]
 
         logging.info(XML)
@@ -266,7 +266,7 @@ class cfeFactory():
         return True
 
 
-    def _get_client_conn(self, retornaXML=False):
+    def get_client_conn(self, retornaXML=False):
         """
         Establece la conexión con el WS y crea el objeto SOAP cliente de dicha conexión.
         """
