@@ -265,7 +265,7 @@ class cfeFactory():
         Campo.appendChild(ptext)
         return True
 
-
+    @api.model
     def get_client_conn(self, retornaXML=False):
         """
         Establece la conexión con el WS y crea el objeto SOAP cliente de dicha conexión.
