@@ -137,7 +137,9 @@ class cfeFactory():
         self._set_fe_node_data(doc, Execute, 'com:Tipocfe', str(tipo_CFE))
         self._set_fe_node_data(doc, Execute, 'com:Fefacturaimportadaloteid', str(lote_id))
 
-        str_xml_sobre = doc.toprettyxml(encoding="utf-8")
+        str_xml_sobre = doc.toprettyxml()
+        str_xml_sobre = str_xml_sobre[str_xml_sobre.find("?>") + 2:]
+
         logging.info(str_xml_sobre)
 
         return str_xml_sobre
@@ -242,6 +244,10 @@ class cfeFactory():
 
         # XML = doc.toxml(encoding="utf-8")
         XML = doc.toprettyxml()
+
+        # <?xml version="1.0" encoding="utf-8"?>
+        XML = XML[XML.find("?>") + 2:]
+
         logging.info(XML)
 
         return XML

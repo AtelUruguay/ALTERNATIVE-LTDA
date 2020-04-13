@@ -57,7 +57,6 @@ class AccountMove(models.Model):
         for rec in self:
             tipo_CFE = fe_xml_factory.cfeFactory.get_tipo_cfe(rec.type, consumidor_final=not rec.partner_id.vat)
             str_xml_cfe = rec.invoice_factura_electronica()
-            logging.info(str_xml_cfe)
 
             str_xml_sobre = fe_xml_factory.cfeFactory().invoice_ensobrar(str_xml_cfe=str_xml_cfe, tipo_CFE=tipo_CFE)
 
@@ -163,9 +162,6 @@ class AccountMove(models.Model):
 
             xml_factory = fe_xml_factory.cfeFactory(options=options)
             XML = xml_factory.getXML()
-
-
-            logging.info(XML)
 
         return XML
 
