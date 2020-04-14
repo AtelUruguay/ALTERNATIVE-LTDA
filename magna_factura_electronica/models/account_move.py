@@ -60,8 +60,10 @@ class AccountMove(models.Model):
 
             str_xml_sobre = fe_xml_factory.cfeFactory().invoice_ensobrar(str_xml_cfe=str_xml_cfe, tipo_CFE=tipo_CFE)
 
-            client = self.env['fe.ws_connection'].get_client_conn()
-            res = client.service.Execute(str_xml_sobre)
+            ok, result = self.env['fe.ws_connection'].get_client_conn()
+            if not ok:
+                return result
+            res = result.service.Execute(str_xml_sobre)
             logging.info(res)
         return True
 
