@@ -63,6 +63,7 @@ class AccountMove(models.Model):
             ok, result = self.env['fe.ws_connection'].get_client_conn()
             if not ok:
                 return result
+            logging.info('VA A INVOCAR EL SERVICIO')
             res = result.service.Execute(str_xml_sobre)
             logging.info(str(res))
         return True
