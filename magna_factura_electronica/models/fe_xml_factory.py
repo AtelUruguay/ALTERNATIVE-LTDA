@@ -98,7 +98,7 @@ class cfeFactoryOptions():
         pass
 
 
-class cfeFactory(models.Model):
+class cfeFactory():
     opt = cfeFactoryOptions()
 
     def __init__(self, options=None):
