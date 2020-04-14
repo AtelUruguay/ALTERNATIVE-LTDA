@@ -64,7 +64,7 @@ class AccountMove(models.Model):
             if not ok:
                 return result
             res = result.service.Execute(str_xml_sobre)
-            logging.info(res)
+            logging.info(str(res))
         return True
 
 
