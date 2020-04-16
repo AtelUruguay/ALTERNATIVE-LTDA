@@ -11,12 +11,12 @@ DOCUMENT_TYPE_SELECTION = [
     ('6', 'DNI (Documento de Identidad de Argentina, Brasil, Chile o Paraguay)')
 ]
 
+
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    # Se crean los nuevos campos dentro de el cliente
     fe_consumidor_final = fields.Boolean('Consumidor final FE', default=True)
-    fe_tipo_documento = fields.Selection(DOCUMENT_TYPE_SELECTION, 'Tipo de Documento', default=4)
+    fe_tipo_documento = fields.Selection(DOCUMENT_TYPE_SELECTION, 'Tipo de Documento', default='3')
     fe_pais_documento = fields.Many2one('res.country',u'País del Documento')
     fe_numero_doc = fields.Char(u'Número de Documento', size=32)
     fe_razon_social = fields.Char(u'Razón Social', size=50)
