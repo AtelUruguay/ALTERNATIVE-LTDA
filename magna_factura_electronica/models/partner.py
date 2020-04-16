@@ -4,11 +4,11 @@ from odoo import api, fields, models
 
 
 DOCUMENT_TYPE_SELECTION = [
-    (2, 'RUT (Uruguay)'),
-    (3, 'C.I. (Uruguay)'),
-    (4, 'Otros'),
-    (5, 'Pasaporte (Todos los Países)'),
-    (6, 'DNI (Documento de Identidad de Argentina, Brasil, Chile o Paraguay)')
+    ('2', 'RUT (Uruguay)'),
+    ('3', 'C.I. (Uruguay)'),
+    ('4', 'Otros'),
+    ('5', 'Pasaporte (Todos los Países)'),
+    ('6', 'DNI (Documento de Identidad de Argentina, Brasil, Chile o Paraguay)')
 ]
 
 class ResPartner(models.Model):
