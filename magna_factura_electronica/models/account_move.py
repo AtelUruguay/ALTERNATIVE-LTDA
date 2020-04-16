@@ -113,13 +113,13 @@ class AccountMove(models.Model):
 
             account_tax_obj = self.env['account.tax']
             # account_tax_iva_exento_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
-            #                                                              ('fe_indicador_facturacion', '=', '1'),
+            #                                                              ('fe_tax_codigo_dgi', '=', '1'),
             #                                                              ('type_tax_use', '=', 'sale')], limit=1)[0]
             account_tax_iva_minima_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
-                                                                         ('fe_indicador_facturacion', '=', '2'),
+                                                                         ('fe_tax_codigo_dgi', '=', '2'),
                                                                          ('type_tax_use', '=', 'sale')], limit=1)[0]
             account_tax_iva_basica_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
-                                                                         ('fe_indicador_facturacion', '=', '3'),
+                                                                         ('fe_tax_codigo_dgi', '=', '3'),
                                                                          ('type_tax_use', '=', 'sale')], limit=1)[0]
 
             options._IVATasaMinima = account_tax_iva_minima_id.amount
@@ -164,15 +164,15 @@ class AccountMove(models.Model):
 
                 impuesto = line.price_subtotal_incl - line.price_subtotal #todo revisar si esta bien
                 if line.product_id.tax_ids:
-                    line_aux._indicadorFacturacion = line.product_id.tax_ids[0].fe_indicador_facturacion
+                    line_aux._indicadorFacturacion = line.product_id.tax_ids[0].fe_tax_codigo_dgi
                     if line.product_id.tax_ids[0].price_include:
                         options._montoBruto = True
-                    if line.product_id.tax_ids[0].fe_indicador_facturacion == '1' and line.product_id.tax_ids[0].type_tax_use == 'sale':
+                    if line.product_id.tax_ids[0].fe_tax_codigo_dgi == '1' and line.product_id.tax_ids[0].type_tax_use == 'sale':
                         monto_no_gravado += line.price_subtotal
-                    if line.product_id.tax_ids[0].fe_indicador_facturacion == '2' and line.product_id.tax_ids[0].type_tax_use == 'sale':
+                    if line.product_id.tax_ids[0].fe_tax_codigo_dgi == '2' and line.product_id.tax_ids[0].type_tax_use == 'sale':
                         monto_neto_iva_tasa_minima += line.price_subtotal
                         monto_iva_minima += impuesto
-                    if line.product_id.tax_ids[0].fe_indicador_facturacion == '3' and line.product_id.tax_ids[0].type_tax_use == 'sale':
+                    if line.product_id.tax_ids[0].fe_tax_codigo_dgi == '3' and line.product_id.tax_ids[0].type_tax_use == 'sale':
                         monto_neto_iva_tasa_basica += line.price_subtotal
                         monto_iva_basica += impuesto
                 else:
