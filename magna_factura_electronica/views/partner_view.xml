@@ -7,15 +7,17 @@
                 <field name="model">res.partner</field>
                 <field name="inherit_id" ref="account.view_partner_property_form"/>
                 <field name="arch" type="xml">
-                    <xpath expr="//page[@name='accounting']" position="inside">
-                        <group>
-                            <field name="customer_rank" invisible="1"/>
-                            <field name="fe_consumidor_final" attrs="{'invisible': ['|', ('is_company', '=', True), ('customer_rank', '=', 0)]}"/>
-                            <field name="fe_tipo_documento" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
-                            <field name="fe_pais_documento" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
-                            <field name="fe_numero_doc" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
-                            <field name="fe_razon_social" attrs="{'invisible': [('is_company', '=', False)]}"/>
-                        </group>
+                    <xpath expr="//page[@name='accounting']" position="after">
+                        <page name="fe" string="Facturación Electrónica">
+                            <groups>
+                                <field name="customer_rank" invisible="1"/>
+                                <field name="fe_consumidor_final" attrs="{'invisible': ['|', ('is_company', '=', True), ('customer_rank', '=', 0)]}"/>
+                                <field name="fe_tipo_documento" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
+                                <field name="fe_pais_documento" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
+                                <field name="fe_numero_doc" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
+                                <field name="fe_razon_social" />
+                            </groups>
+                        </page>
                     </xpath>
                 </field>
             </record>

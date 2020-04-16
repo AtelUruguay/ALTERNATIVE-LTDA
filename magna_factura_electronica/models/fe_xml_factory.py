@@ -308,6 +308,7 @@ class cfeFactory():
 
 class WsConnection(models.TransientModel):
     _name = 'fe.ws_connection'
+    _description = u'Conexión del ws'
 
     @api.model
     def get_client_conn(self, retornaXML=False):
