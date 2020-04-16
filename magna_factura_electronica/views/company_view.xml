@@ -6,16 +6,16 @@
             <record model='ir.ui.view' id='res_company_uy_FE'>
                 <field name='name'>uy.fe.form.company</field>
                 <field name='model'>res.company</field>
-                <field name='inherit_id' ref='account.view_company_inherit_form'/>
+                <field name='inherit_id' ref='base.view_company_form'/>
                 <field name='type'>form</field>
                 <field name='arch' type='xml'>
-                    <page string="Overdue Payments" position="after">
+                    <notebook position="inside">
                         <page string="Configuración FE">
                             <group>
                                 <field name="fe_codigo_principal_sucursal"/>
                             </group>
                         </page>
-                    </page>
+                    </notebook>
                 </field>
             </record>
         </data>

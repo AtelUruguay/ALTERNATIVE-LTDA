@@ -5,15 +5,17 @@
           <record model="ir.ui.view" id="res_partner_form_uy_fe">
                 <field name="name">res.partner.form</field>
                 <field name="model">res.partner</field>
-                <field name="inherit_id" ref="base.view_partner_form"/>
+                <field name="inherit_id" ref="account.view_partner_property_form"/>
                 <field name="arch" type="xml">
-                    <field name="property_account_position" position="before">
-                        <field name="fe_consumidor_final" attrs="{'invisible': ['|', ('is_company', '=', True), ('customer', '=', False)]}"/>
-                        <field name="fe_tipo_documento" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
-                        <field name="fe_pais_documento" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
-                        <field name="fe_numero_doc" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
-                        <field name="fe_razon_social" attrs="{'invisible': [('is_company', '=', False)]}"/>
-                    </field>
+                    <xpath expr="//page[@name='accounting']" position="inside">
+                        <group>
+                            <field name="fe_consumidor_final" attrs="{'invisible': ['|', ('is_company', '=', True), ('customer', '=', False)]}"/>
+                            <field name="fe_tipo_documento" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
+                            <field name="fe_pais_documento" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
+                            <field name="fe_numero_doc" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
+                            <field name="fe_razon_social" attrs="{'invisible': [('is_company', '=', False)]}"/>
+                        </group>
+                    </xpath>
                 </field>
             </record>
 
