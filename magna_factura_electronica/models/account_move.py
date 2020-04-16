@@ -8,7 +8,6 @@ from . import fe_xml_factory
 import logging
 
 
-
 class AccountMove(models.Model):
     _inherit = "account.move"
 
@@ -52,7 +51,6 @@ class AccountMove(models.Model):
         self.invoice_send_fe_proinfo()
         return res
 
-
     def invoice_send_fe_proinfo(self):
         for rec in self:
             tipo_CFE = fe_xml_factory.cfeFactory.get_tipo_cfe(rec.type, consumidor_final=not rec.partner_id.vat)
@@ -68,53 +66,43 @@ class AccountMove(models.Model):
             logging.info(str(res))
         return True
 
-
     def invoice_factura_electronica(self):
         for rec in self:
             options = fe_xml_factory.cfeFactoryOptions()
             options._lineasDetalle = []
 
             # todo ver tema tipo de cfe
-            options._tipoComprobante = fe_xml_factory.cfeFactory.get_tipo_cfe(rec.type, consumidor_final=not rec.partner_id.vat)
+            options._tipoComprobante = fe_xml_factory.cfeFactory.get_tipo_cfe(rec.type, rec.partner_id.fe_consumidor_final)
             # options._serieComprobante = rec. #todo
             # options._numeroComprobante = rec. #todo
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y%m%d')
 
-
             options._indicadorMontBruto = True #todo
 
-
-            options._formaPago = 1 #todo
+            options._formaPago = 1 #1-Contado, 2-Credito
             options._fechaVencimientoYYYYMMDD = rec.invoice_date.strftime('%Y%m%d')
 
-            # EMISOR
+            # EMISOR todo ver si los datos salen de aca o de los campos nuevos que puse
             options._emisorRuc = rec.company_id.partner_id.vat
-            options._emisorNombre = rec.company_id.partner_id.name
+            options._emisorNombre = rec.company_id.partner_id.name #razon social
             options._emisorDomicilioFiscal = rec.company_id.partner_id.street
             options._emisorNombreComercial = rec.company_id.name
-            # todo arreglar
-            # options._emisorCodigoCasaPrincipal = rec.company_id.codigo_casa_principal_sucursal
-            options._emisorCodigoCasaPrincipal = 1
+            options._emisorCodigoCasaPrincipal = rec.company_id.fe_codigo_principal_sucursal
             options._emisorCiudad = rec.company_id.partner_id.city
             options._emisorDepartamento = rec.company_id.partner_id.state_id.name
 
-            # RECEPTOR
-            # todo arreglar mapeo (vat_type tiene otros valores)
-            options._receptorTipoDocumento = 'RUT'#rec.partner_id.vat_type
-            options._receptorCodigoPais = 'UY'
-            # todo arreglar
-            # if rec.partner_id.pais_documento.code:
-            #     options._receptorCodigoPais = rec.partner_id.pais_documento.code
+            # RECEPTOR todo ver si los datos salen de aca o de los campos nuevos que puse
+            options._receptorTipoDocumento = rec.partner_id.fe_tipo_documento
+            if rec.partner_id.fe_pais_documento.code:
+                options._receptorCodigoPais = rec.partner_id.fe_pais_documento.code
             options._receptorDocumento = rec.partner_id.vat
-            options._receptorRazonSocial = rec.partner_id.name #invoice.partner_id.razon_social
-            options._receptorDireccion = rec.partner_id.street
+            options._receptorRazonSocial = rec.partner_id.fe_razon_social
+            options._receptorDireccion = rec.partner_id.fe_addr_facturacion
             options._receptorCiudad = rec.partner_id.city
             options._receptorDepartamento = rec.partner_id.state_id.name
 
-
             # TOTALES
-            options._tipoMonedaTransaccion=rec.currency_id.name
-            options._montoTotalNoGravado = rec.amount_untaxed #todo
+            options._tipoMonedaTransaccion = rec.currency_id.name
 
             group_taxes = rec.amount_by_group
             logging.info(group_taxes)
@@ -123,19 +111,19 @@ class AccountMove(models.Model):
             #  ('Tax 15%', 3525.0, 23500.0, '$ 3,525.00', '$ 23,500.00', 2, 2)
             #  ]
 
+            account_tax_obj = self.env['account.tax']
+            # account_tax_iva_exento_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
+            #                                                              ('fe_indicador_facturacion', '=', '1'),
+            #                                                              ('type_tax_use', '=', 'sale')], limit=1)[0]
+            account_tax_iva_minima_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
+                                                                         ('fe_indicador_facturacion', '=', '2'),
+                                                                         ('type_tax_use', '=', 'sale')], limit=1)[0]
+            account_tax_iva_basica_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
+                                                                         ('fe_indicador_facturacion', '=', '3'),
+                                                                         ('type_tax_use', '=', 'sale')], limit=1)[0]
 
-            options._montoNetoIVATasaMinima = rec.amount_tax
-            options._montoNetoIVATasaBasica = rec.amount_tax
-
-            options._IVATasaMinima=10 #todo
-            options._IVATasaBasica=22 #todo
-
-            options._montoIVATasaMinima = options._montoNetoIVATasaMinima * options._IVATasaMinima/ 100
-            options._montoIVATasaBasica = options._montoNetoIVATasaBasica * options._IVATasaBasica/ 100
-
-            options._montoTotal = rec.amount_total
-            options._montoTotalAPagar = rec.amount_total
-
+            options._IVATasaMinima = account_tax_iva_minima_id.amount
+            options._IVATasaBasica = account_tax_iva_basica_id.amount
 
             # ADICIONAL
             options._adicionalTipoDocumentoId = 0
@@ -154,6 +142,18 @@ class AccountMove(models.Model):
 
 
             # DETALLE
+            monto_no_gravado = 0
+            monto_neto_iva_tasa_basica = 0
+            monto_iva_tasa_basica = 0
+            monto_neto_iva_tasa_minima = 0
+            monto_neto_iva_tasa_otra = 0
+            monto_total = 0
+            monto_total_a_pagar = 0
+            monto_no_facturable = 0
+            monto_exportacion = 0
+            monto_iva_basica = 0
+            monto_iva_minima = 0
+
             for line in rec.invoice_line_ids:
                 line_aux = fe_xml_factory.cfeFactoryOptionsProductLineDetail()
                 line_aux._cantidad = line.quantity
@@ -162,14 +162,35 @@ class AccountMove(models.Model):
                 line_aux._precioUnitario = line.price_unit
                 line_aux._montoItem = line.quantity * line.price_unit
 
-                # todo asm ver este campo del detalle del producto, de donde lo tengo que sacar
-                # if line.product_id.taxes_id:
-                #     line_aux._indicadorFacturacion = line.product_id.taxes_id[0].codigo_dgi
+                impuesto = line.price_subtotal_incl - line.price_subtotal #todo revisar si esta bien
+                if line.product_id.tax_ids:
+                    line_aux._indicadorFacturacion = line.product_id.tax_ids[0].fe_indicador_facturacion
+                    if line.product_id.tax_ids[0].price_include:
+                        options._montoBruto = True
+                    if line.product_id.tax_ids[0].fe_indicador_facturacion == '1' and line.product_id.tax_ids[0].type_tax_use == 'sale':
+                        monto_no_gravado += line.price_subtotal
+                    if line.product_id.tax_ids[0].fe_indicador_facturacion == '2' and line.product_id.tax_ids[0].type_tax_use == 'sale':
+                        monto_neto_iva_tasa_minima += line.price_subtotal
+                        monto_iva_minima += impuesto
+                    if line.product_id.tax_ids[0].fe_indicador_facturacion == '3' and line.product_id.tax_ids[0].type_tax_use == 'sale':
+                        monto_neto_iva_tasa_basica += line.price_subtotal
+                        monto_iva_basica += impuesto
+                else:
+                    monto_no_gravado += line.price_subtotal
 
                 options._lineasDetalle.append(line_aux)
+
+            options._montoTotalNoGravado = monto_no_gravado
+            options._montoNetoIVATasaMinima = monto_neto_iva_tasa_minima
+            options._montoIVATasaMinima = monto_iva_minima
+            options._montoNetoIVATasaBasica = monto_neto_iva_tasa_basica
+            options._montoIVATasaBasica = monto_iva_basica
+
+            options._montoTotal = abs(rec.amount_total - monto_no_facturable)
+            options._montoTotalAPagar = rec.amount_total
 
             xml_factory = fe_xml_factory.cfeFactory(options=options)
             XML = xml_factory.getXML()
 
-        return XML
+            return XML
 
