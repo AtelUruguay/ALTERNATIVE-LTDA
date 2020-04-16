@@ -9,6 +9,7 @@
                 <field name="arch" type="xml">
                     <xpath expr="//page[@name='accounting']" position="inside">
                         <group>
+                            <field name="customer_rank" invisible="1"/>
                             <field name="fe_consumidor_final" attrs="{'invisible': ['|', ('is_company', '=', True), ('customer_rank', '=', 0)]}"/>
                             <field name="fe_tipo_documento" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
                             <field name="fe_pais_documento" attrs="{'required': [ ('fe_consumidor_final', '=', False)]}"/>
