@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+        <data>
+          <record model="ir.ui.view" id="res_partner_form_uy_fe">
+                <field name="name">res.partner.form</field>
+                <field name="model">res.partner</field>
+                <field name="inherit_id" ref="base.view_partner_form"/>
+                <field name="arch" type="xml">
+                    <field name="property_account_position" position="before">
+                        <field name="fe_consumidor_final" attrs="{'invisible': ['|', ('is_company', '=', True), ('customer', '=', False)]}"/>
+                        <field name="fe_tipo_documento" attrs="{'required': [ ('consumidor_final', '=', False)]}"/>
+                        <field name="fe_pais_documento" attrs="{'required': [ ('consumidor_final', '=', False)]}"/>
+                        <field name="fe_numero_doc" attrs="{'required': [ ('consumidor_final', '=', False)]}"/>
+                        <field name="fe_razon_social" attrs="{'invisible': [('is_company', '=', False)]}"/>
+                    </field>
+                </field>
+            </record>
+
+        </data>
+</openerp>

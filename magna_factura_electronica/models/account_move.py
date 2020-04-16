@@ -60,11 +60,11 @@ class AccountMove(models.Model):
 
             str_xml_sobre = fe_xml_factory.cfeFactory().invoice_ensobrar(str_xml_cfe=str_xml_cfe, tipo_CFE=tipo_CFE)
 
-            ok, result = self.env['fe.ws_connection'].get_client_conn()
+            ok, client_res = self.env['fe.ws_connection'].get_client_conn()
             if not ok:
-                return result
+                return client_res
             logging.info('VA A INVOCAR EL SERVICIO')
-            res = result.service.Execute(str_xml_sobre)
+            res = client_res.service.Execute(str_xml_sobre)
             logging.info(str(res))
         return True
 
@@ -74,11 +74,16 @@ class AccountMove(models.Model):
             options = fe_xml_factory.cfeFactoryOptions()
             options._lineasDetalle = []
 
+            # todo ver tema tipo de cfe
             options._tipoComprobante = fe_xml_factory.cfeFactory.get_tipo_cfe(rec.type, consumidor_final=not rec.partner_id.vat)
             # options._serieComprobante = rec. #todo
             # options._numeroComprobante = rec. #todo
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y%m%d')
-            options._indicadorMontBruto = 1 #todo
+
+
+            options._indicadorMontBruto = True #todo
+
+
             options._formaPago = 1 #todo
             options._fechaVencimientoYYYYMMDD = rec.invoice_date.strftime('%Y%m%d')
 

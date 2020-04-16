@@ -39,7 +39,7 @@ class cfeFactoryOptions():
     _tipoComprobante = 0
     _serieComprobante = 0
     _numeroComprobante = 0
-    _indicadorMontBruto = 0
+    _indicadorMontBruto = False
 
     _emisorRuc = ''
     _emisorNombre = ''
@@ -117,6 +117,44 @@ class cfeFactory():
                 return 112
         return 0
 
+    # def calc_tipo_comprobante(self, invoice):
+    #     tipo_comprobante=''
+    #     if invoice.fe_contingencia:
+    #         if invoice.type == 'out_invoice':
+    #             if invoice.partner_tipo_documento == 2:
+    #                 tipo_comprobante = 211
+    #                 if invoice.fe_nota_debito:
+    #                     tipo_comprobante=213
+    #             else:
+    #                 tipo_comprobante = 201
+    #                 if invoice.fe_nota_debito:
+    #                     tipo_comprobante=203
+    #
+    #         if invoice.type == 'out_refund':
+    #             if invoice.partner_tipo_documento == 2:
+    #                 tipo_comprobante = 212
+    #             else:
+    #                 tipo_comprobante = 202
+    #     else:
+    #         if invoice.type == 'out_invoice':
+    #             if invoice.partner_tipo_documento == 2:
+    #                 tipo_comprobante = 111
+    #                 if invoice.fe_nota_debito:
+    #                     tipo_comprobante=113
+    #             else:
+    #                 tipo_comprobante = 101
+    #                 if invoice.fe_nota_debito:
+    #                     tipo_comprobante=103
+    #
+    #         if invoice.type == 'out_refund':
+    #             if invoice.partner_tipo_documento == 2:
+    #                 tipo_comprobante = 112
+    #             else:
+    #                 tipo_comprobante = 102
+    #     logging.info('es de tipo')
+    #     logging.info(tipo_comprobante)
+    #     return tipo_comprobante
+
     def invoice_ensobrar(self, str_xml_cfe='', tipo_CFE=0):
         lote_id = 0
 
@@ -139,7 +177,8 @@ class cfeFactory():
         self._set_fe_node_data(doc, Execute, 'com:Fefacturaimportadaloteid', str(lote_id))
 
         str_xml_sobre = doc.toprettyxml()
-        str_xml_sobre = str_xml_sobre[str_xml_sobre.find("?>") + 2:]
+        # se quita el <?xml version="1.0" ?>
+        str_xml_sobre = str_xml_sobre.split("?>")[1]
 
         logging.info(str_xml_sobre)
 
@@ -160,7 +199,8 @@ class cfeFactory():
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocSerie', str(self.opt._serieComprobante))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocNro', str(self.opt._numeroComprobante))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFchEmis', str(self.opt._fechaComprobanteYYYYMMDD))
-        self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocMntBruto', str(self.opt._indicadorMontBruto))
+        if self.opt._indicadorMontBruto:
+            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocMntBruto', '1')
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFmaPago', str(self.opt._formaPago))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFchVenc', str(self.opt._fechaVencimientoYYYYMMDD))
 
@@ -243,11 +283,9 @@ class cfeFactory():
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'CorreoReceptor', str(self.opt._adicionalCorreoReceptor))
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'EsReceptor', str(self.opt._adicionalEsReceptor))
 
-        # XML = doc.toxml(encoding="utf-8")
         XML = doc.toprettyxml()
-
         # se quita el <?xml version="1.0" encoding="utf-8"?>
-        XML = XML[XML.find("?>") + 2:]
+        XML = XML.split("?>")[1]
 
         logging.info(XML)
 

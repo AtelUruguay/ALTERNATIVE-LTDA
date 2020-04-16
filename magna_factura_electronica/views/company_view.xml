@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+        <data>
+            <!-- CAMBIOS EN LA COMPAÑIA -->
+            <record model='ir.ui.view' id='res_company_uy_FE'>
+                <field name='name'>uy.fe.form.company</field>
+                <field name='model'>res.company</field>
+                <field name='inherit_id' ref='account.view_company_inherit_form'/>
+                <field name='type'>form</field>
+                <field name='arch' type='xml'>
+                  <!--  AGREGO NUEVA SOLAPA -->
+                <data>
+                    <page string="Overdue Payments" position="after">
+                        <page string="Configuración FE">
+                            <group>
+                                <group>
+                                    <field name="habilitar_envio_fe"/>
+                                    <field name="habilitar_numeracion_cae"/>
+                                    <field name="fe_contingencia_default" />
+                                    <field name="codigo_casa_principal_sucursal"/>
+                                </group>
+                                <group>
+                                    <field name="serial_certificado"/>
+                                    <field name="rsa_key_certificado"/>
+                                    <field name="emisor_certificado"/>
+                                    <field name="password_certificado"/>
+                                </group>
+                                <group>
+                                    <field name="fe_ubicacion_jar"/>
+                                    <field name="fe_ubicacion_jar_prod"/>
+                                    <field name="carpeta_almacenar"/>
+                                    <field name="carpeta_respuestas"/>
+                                </group>
+                                <group>
+                                    <field name="fe_fecha_limite"/>
+                                    <field name="fe_rut_dgi"/>
+                                    <field name="fe_resguardo_metodo_uyu"/>
+                                    <field name="fe_resguardo_metodo_usd"/>
+                                </group>
+                                <group>
+                                    <field name="fe_mail_alertas"/>
+                                </group>
+                            </group>
+                        </page>
+                    </page>
+                </data>
+                </field>
+            </record>
+        </data>
+</openerp>
