@@ -17,8 +17,8 @@
         # 'data/digest_data.xml',
         'views/account_move_views.xml',
         # 'views/partner_view.xml',
-        'views/company_view.xml',
-        'views/taxes_view.xml'
+        # 'views/company_view.xml',
+        # 'views/taxes_view.xml'
     ],
     'demo': [],
     # 'qweb': [
