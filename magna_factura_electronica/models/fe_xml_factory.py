@@ -176,7 +176,7 @@ class cfeFactory():
         self._set_fe_node_data(doc, Execute, 'com:Tipocfe', str(tipo_CFE))
         self._set_fe_node_data(doc, Execute, 'com:Fefacturaimportadaloteid', str(lote_id))
 
-        str_xml_sobre = doc.toprettyxml()
+        str_xml_sobre = doc.toxml()
         # se quita el <?xml version="1.0" ?>
         str_xml_sobre = str_xml_sobre.split("?>")[1]
 
@@ -283,7 +283,7 @@ class cfeFactory():
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'CorreoReceptor', str(self.opt._adicionalCorreoReceptor))
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'EsReceptor', str(self.opt._adicionalEsReceptor))
 
-        XML = doc.toprettyxml()
+        XML = doc.toxml()
         # se quita el <?xml version="1.0" encoding="utf-8"?>
         XML = XML.split("?>")[1]
 
@@ -323,8 +323,8 @@ class WsConnection(models.TransientModel):
             'No se encuentra configurada la ruta del WSDL para consumir los servicios del proveedor de FE',)
         # Establecer la conexión
         try:
-            # client = Client(fe_url_ws, cache=NoCache(), retxml=retornaXML)
-            client = Client(fe_url_ws)
+            client = Client(fe_url_ws, cache=NoCache(), retxml=retornaXML)
+            # client = Client(fe_url_ws)
             logging.info('-----------CLIENT %s', client)
             return True, client
         except Exception as e:
