@@ -62,6 +62,8 @@ class AccountMove(models.Model):
             if not ok:
                 return client_res
             logging.info('VA A INVOCAR EL SERVICIO')
+            logging.info('--------XML QUE ENVIA: %s', str_xml_sobre)
+
             res = client_res.service.Execute(str_xml_sobre)
             logging.info(str(res))
         return True

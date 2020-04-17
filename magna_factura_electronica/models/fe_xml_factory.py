@@ -180,7 +180,7 @@ class cfeFactory():
         # se quita el <?xml version="1.0" ?>
         str_xml_sobre = str_xml_sobre.split("?>")[1]
 
-        logging.info(str_xml_sobre)
+        # logging.info(str_xml_sobre)
 
         return str_xml_sobre
 
@@ -287,7 +287,7 @@ class cfeFactory():
         # se quita el <?xml version="1.0" encoding="utf-8"?>
         XML = XML.split("?>")[1]
 
-        logging.info(XML)
+        # logging.info(XML)
 
         return XML
 
