@@ -144,13 +144,8 @@ class AccountMove(models.Model):
             # DETALLE
             monto_no_gravado = 0
             monto_neto_iva_tasa_basica = 0
-            monto_iva_tasa_basica = 0
             monto_neto_iva_tasa_minima = 0
-            monto_neto_iva_tasa_otra = 0
-            monto_total = 0
-            monto_total_a_pagar = 0
             monto_no_facturable = 0
-            monto_exportacion = 0
             monto_iva_basica = 0
             monto_iva_minima = 0
 
@@ -163,16 +158,16 @@ class AccountMove(models.Model):
                 line_aux._montoItem = line.quantity * line.price_unit
 
                 impuesto = line.price_total - line.price_subtotal #todo revisar si esta bien
-                if line.product_id.tax_ids:
-                    line_aux._indicadorFacturacion = line.product_id.tax_ids[0].fe_tax_codigo_dgi
+                if line.tax_ids:
+                    line_aux._indicadorFacturacion = line.tax_ids[0].fe_tax_codigo_dgi
                     # if line.product_id.tax_ids[0].price_include:
                     #     options._montoBruto = True
-                    if line.product_id.tax_ids[0].fe_tax_codigo_dgi == '1' and line.product_id.tax_ids[0].type_tax_use == 'sale':
+                    if line.tax_ids[0].fe_tax_codigo_dgi == '1' and line.tax_ids[0].type_tax_use == 'sale':
                         monto_no_gravado += line.price_subtotal
-                    if line.product_id.tax_ids[0].fe_tax_codigo_dgi == '2' and line.product_id.tax_ids[0].type_tax_use == 'sale':
+                    if line.tax_ids[0].fe_tax_codigo_dgi == '2' and line.tax_ids[0].type_tax_use == 'sale':
                         monto_neto_iva_tasa_minima += line.price_subtotal
                         monto_iva_minima += impuesto
-                    if line.product_id.tax_ids[0].fe_tax_codigo_dgi == '3' and line.product_id.tax_ids[0].type_tax_use == 'sale':
+                    if line.tax_ids[0].fe_tax_codigo_dgi == '3' and line.tax_ids[0].type_tax_use == 'sale':
                         monto_neto_iva_tasa_basica += line.price_subtotal
                         monto_iva_basica += impuesto
                 else:
