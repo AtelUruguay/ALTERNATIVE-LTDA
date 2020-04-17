@@ -323,7 +323,10 @@ class WsConnection(models.TransientModel):
             'No se encuentra configurada la ruta del WSDL para consumir los servicios del proveedor de FE',)
         # Establecer la conexión
         try:
-            return True, Client(fe_url_ws, cache=NoCache(), retxml=retornaXML)
+            # client = Client(fe_url_ws, cache=NoCache(), retxml=retornaXML)
+            client = Client(fe_url_ws)
+            logging.info('-----------CLIENT %s', client)
+            return True, client
         except Exception as e:
             return False, 'Error!\n %s' % ('Ha ocurrido un error en la comunicación web con el proveedor de FE',)
 
