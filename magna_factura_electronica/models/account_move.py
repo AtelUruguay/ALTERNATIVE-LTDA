@@ -162,11 +162,11 @@ class AccountMove(models.Model):
                 line_aux._precioUnitario = line.price_unit
                 line_aux._montoItem = line.quantity * line.price_unit
 
-                impuesto = line.price_subtotal_incl - line.price_subtotal #todo revisar si esta bien
+                impuesto = line.price_total - line.price_subtotal #todo revisar si esta bien
                 if line.product_id.tax_ids:
                     line_aux._indicadorFacturacion = line.product_id.tax_ids[0].fe_tax_codigo_dgi
-                    if line.product_id.tax_ids[0].price_include:
-                        options._montoBruto = True
+                    # if line.product_id.tax_ids[0].price_include:
+                    #     options._montoBruto = True
                     if line.product_id.tax_ids[0].fe_tax_codigo_dgi == '1' and line.product_id.tax_ids[0].type_tax_use == 'sale':
                         monto_no_gravado += line.price_subtotal
                     if line.product_id.tax_ids[0].fe_tax_codigo_dgi == '2' and line.product_id.tax_ids[0].type_tax_use == 'sale':
