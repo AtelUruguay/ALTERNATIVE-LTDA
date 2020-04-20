@@ -62,21 +62,10 @@ class AccountMove(models.Model):
             if not ok:
                 return client_res
             logging.info('VA A INVOCAR EL SERVICIO')
-            str_xml_sobre = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="com.esignit.fe">
-   <soapenv:Header/>
-    <soapenv:Body>
-      <com:FEGeneraryFirmarDocumento.Execute>
-         <com:Inxmlentrada>
-</com:Inxmlentrada>
-          <com:Tipocfe>111</com:Tipocfe>
-        <com:Fefacturaimportadaloteid>0</com:Fefacturaimportadaloteid>
-      </com:FEGeneraryFirmarDocumento.Execute>
-   </soapenv:Body>
-</soapenv:Envelope>"""
             logging.info('--------XML QUE ENVIA: %s', str_xml_sobre)
 
             res = client_res.service.Execute(str_xml_sobre)
-            logging.info(str(res))
+            logging.info('------RESPUESTA: %s', res)
         return True
 
     def invoice_factura_electronica(self):
@@ -93,7 +82,7 @@ class AccountMove(models.Model):
             options._indicadorMontBruto = True #todo
 
             options._formaPago = 1 #1-Contado, 2-Credito
-            options._fechaVencimientoYYYYMMDD = rec.invoice_date.strftime('%Y%m%d')
+            options._fechaVencimientoYYYYMMDD = rec.invoice_date_due.strftime('%Y%m%d')
 
             # EMISOR todo ver si los datos salen de aca o de los campos nuevos que puse
             options._emisorRuc = rec.company_id.partner_id.vat
