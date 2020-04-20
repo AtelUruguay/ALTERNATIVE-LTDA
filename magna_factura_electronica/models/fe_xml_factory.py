@@ -91,7 +91,7 @@ class cfeFactoryOptions():
     _adicionalCAEFVD = ''
     _adicionalLoteId = 0
     _adicionalCorreoReceptor = ''
-    _adicionalEsReceptor = ''
+    _adicionalEsReceptor = 'false'
 
 
     def __init__(self):
@@ -323,7 +323,7 @@ class WsConnection(models.TransientModel):
             'No se encuentra configurada la ruta del WSDL para consumir los servicios del proveedor de FE',)
         # Establecer la conexión
         try:
-            client = Client(fe_url_ws, cache=NoCache(), retxml=retornaXML)
+            client = Client(fe_url_ws, cache=NoCache(), retxml=True)
             # client = Client(fe_url_ws)
             logging.info('-----------CLIENT %s', client)
             return True, client
