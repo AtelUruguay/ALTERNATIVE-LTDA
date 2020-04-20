@@ -62,6 +62,17 @@ class AccountMove(models.Model):
             if not ok:
                 return client_res
             logging.info('VA A INVOCAR EL SERVICIO')
+            str_xml_sobre = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="com.esignit.fe">
+   <soapenv:Header/>
+    <soapenv:Body>
+      <com:FEGeneraryFirmarDocumento.Execute>
+         <com:Inxmlentrada>
+</com:Inxmlentrada>
+          <com:Tipocfe>111</com:Tipocfe>
+        <com:Fefacturaimportadaloteid>0</com:Fefacturaimportadaloteid>
+      </com:FEGeneraryFirmarDocumento.Execute>
+   </soapenv:Body>
+</soapenv:Envelope>"""
             logging.info('--------XML QUE ENVIA: %s', str_xml_sobre)
 
             res = client_res.service.Execute(str_xml_sobre)
