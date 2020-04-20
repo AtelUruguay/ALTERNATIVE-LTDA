@@ -176,7 +176,7 @@ class cfeFactory():
         self._set_fe_node_data(doc, Execute, 'com:Tipocfe', str(tipo_CFE))
         self._set_fe_node_data(doc, Execute, 'com:Fefacturaimportadaloteid', str(lote_id))
 
-        str_xml_sobre = doc.toxml()
+        str_xml_sobre = doc.toprettyxml()
         # se quita el <?xml version="1.0" ?>
         str_xml_sobre = str_xml_sobre.split("?>")[1]
 
@@ -311,7 +311,7 @@ class WsConnection(models.TransientModel):
     _description = u'Conexión del ws'
 
     @api.model
-    def get_client_conn(self, retornaXML=False):
+    def get_client_conn(self):
         """
         Establece la conexión con el WS y crea el objeto SOAP cliente de dicha conexión.
         """

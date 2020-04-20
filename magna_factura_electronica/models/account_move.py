@@ -62,6 +62,96 @@ class AccountMove(models.Model):
             if not ok:
                 return client_res
             logging.info('VA A INVOCAR EL SERVICIO')
+            str_xml_sobre = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="com.esignit.fe">
+   <soapenv:Header/>
+    <soapenv:Body>
+      <com:FEGeneraryFirmarDocumento.Execute>
+         <com:Inxmlentrada>
+			&lt;CFEEntrada xmlns=&quot;com.esignit.fe&quot;&gt;
+	&lt;XMLEntradaNodoCFE&gt;
+		&lt;FEIDDocTipoCFE&gt;111&lt;/FEIDDocTipoCFE&gt;
+		&lt;FEIDDocSerie&gt;A&lt;/FEIDDocSerie&gt;
+		&lt;FEIDDocNro&gt;1&lt;/FEIDDocNro&gt;
+		&lt;FEIDDocFchEmis&gt;2020-04-18&lt;/FEIDDocFchEmis&gt;
+		&lt;FEIDDocFmaPago&gt;1&lt;/FEIDDocFmaPago&gt;
+		&lt;FEIDDocFchVenc&gt;2020-12-31&lt;/FEIDDocFchVenc&gt;
+		&lt;FEEMIRUCEmisor&gt;213738620011&lt;/FEEMIRUCEmisor&gt;
+		&lt;FEEMIRznSoc&gt;ALTERNATIVE LTDA&lt;/FEEMIRznSoc&gt;
+		&lt;FEEMINomComercial/&gt;
+		&lt;FEEMICdgDGISucur&gt;1&lt;/FEEMICdgDGISucur&gt;
+		&lt;FEEMIDomFiscal/&gt;
+		&lt;FEEMICiudad&gt;MONTEVIDEO&lt;/FEEMICiudad&gt;
+		&lt;FEEMIDepartamento&gt;Montevideo&lt;/FEEMIDepartamento&gt;
+		&lt;FERECTipoDocRecep&gt;2&lt;/FERECTipoDocRecep&gt;
+		&lt;FERECCodPaisRecep&gt;UY&lt;/FERECCodPaisRecep&gt;
+		&lt;FERECDocRecep&gt;214844360018&lt;/FERECDocRecep&gt;
+		&lt;FERECRznSocRecep&gt;DGI&lt;/FERECRznSocRecep&gt;
+		&lt;FERECDirRecep&gt;FERNANDEZ CRESPO 1534&lt;/FERECDirRecep&gt;
+		&lt;FERECCiudadRecep&gt;MONTEVIDEO&lt;/FERECCiudadRecep&gt;
+		&lt;FERECDeptoRecep/&gt;
+		&lt;FETOTTpoMoneda&gt;UYU&lt;/FETOTTpoMoneda&gt;
+		&lt;FETOTMntNoGrv&gt;0.00&lt;/FETOTMntNoGrv&gt;
+		&lt;FETOTMntNetoIvaTasaMin&gt;0.00&lt;/FETOTMntNetoIvaTasaMin&gt;
+		&lt;FETOTMntNetoIVATasaBasica&gt;20000.00&lt;/FETOTMntNetoIVATasaBasica&gt;
+		&lt;FETOTIVATasaBasica&gt;22.000&lt;/FETOTIVATasaBasica&gt;
+		&lt;FETOTMntIVATasaMin&gt;0.00&lt;/FETOTMntIVATasaMin&gt;
+		&lt;FETOTMntIVATasaBasica&gt;4400.00&lt;/FETOTMntIVATasaBasica&gt;
+		&lt;FETOTMntTotal&gt;24400.00&lt;/FETOTMntTotal&gt;
+		&lt;FETOTCantLinDet&gt;3&lt;/FETOTCantLinDet&gt;
+		&lt;FETOTMontoNF&gt;5000.00&lt;/FETOTMontoNF&gt;
+		&lt;FETOTMntPagar&gt;29400.00&lt;/FETOTMntPagar&gt;
+		&lt;FEDetalles&gt;
+			&lt;FEDetalle&gt;
+				&lt;FEDETNroLinDet&gt;1&lt;/FEDETNroLinDet&gt;
+				&lt;FEDETIndFact&gt;3&lt;/FEDETIndFact&gt;
+				&lt;FEDETNomItem&gt;aaa&lt;/FEDETNomItem&gt;
+				&lt;FEDETCantidad&gt;10.000&lt;/FEDETCantidad&gt;
+				&lt;FEDETUniMed&gt;kg&lt;/FEDETUniMed&gt;
+				&lt;FEDETPrecioUnitario&gt;1000.000000&lt;/FEDETPrecioUnitario&gt;
+				&lt;FEDETMontoItem&gt;10000.00&lt;/FEDETMontoItem&gt;
+			&lt;/FEDetalle&gt;
+			&lt;FEDetalle&gt;
+				&lt;FEDETNroLinDet&gt;2&lt;/FEDETNroLinDet&gt;
+				&lt;FEDETIndFact&gt;3&lt;/FEDETIndFact&gt;
+				&lt;FEDETNomItem&gt;bbb&lt;/FEDETNomItem&gt;
+				&lt;FEDETCantidad&gt;5.000&lt;/FEDETCantidad&gt;
+				&lt;FEDETUniMed&gt;kg&lt;/FEDETUniMed&gt;
+				&lt;FEDETPrecioUnitario&gt;2000.000000&lt;/FEDETPrecioUnitario&gt;
+				&lt;FEDETMontoItem&gt;10000.00&lt;/FEDETMontoItem&gt;
+			&lt;/FEDetalle&gt;
+			&lt;FEDetalle&gt;
+				&lt;FEDETNroLinDet&gt;3&lt;/FEDETNroLinDet&gt;
+				&lt;FEDETIndFact&gt;6&lt;/FEDETIndFact&gt;
+				&lt;FEDETNomItem&gt;ccc&lt;/FEDETNomItem&gt;
+				&lt;FEDETCantidad&gt;1.000&lt;/FEDETCantidad&gt;
+				&lt;FEDETUniMed&gt;N/A&lt;/FEDETUniMed&gt;
+				&lt;FEDETPrecioUnitario&gt;5000.000000&lt;/FEDETPrecioUnitario&gt;
+				&lt;FEDETMontoItem&gt;5000.00&lt;/FEDETMontoItem&gt;
+			&lt;/FEDetalle&gt;
+		&lt;/FEDetalles&gt;
+	&lt;/XMLEntradaNodoCFE&gt;
+	&lt;XMLEntradaNodoAdicional&gt;
+		&lt;TipoDocumentoId&gt;111&lt;/TipoDocumentoId&gt;
+		&lt;DocComCodigo&gt;1&lt;/DocComCodigo&gt;
+		&lt;DocComSerie&gt;A&lt;/DocComSerie&gt;
+		&lt;SucursalId&gt;1&lt;/SucursalId&gt;
+		&lt;Adenda/&gt;
+		&lt;CAEDnro&gt;1&lt;/CAEDnro&gt;
+		&lt;CAEHnro&gt;100&lt;/CAEHnro&gt;
+		&lt;CAENA&gt;20160001110&lt;/CAENA&gt;
+		&lt;CAEFA&gt;2016-01-01&lt;/CAEFA&gt;
+		&lt;CAEFVD&gt;2017-12-31&lt;/CAEFVD&gt;
+		&lt;LoteId&gt;0&lt;/LoteId&gt;
+		&lt;CorreoReceptor/&gt;
+		&lt;EsReceptor&gt;false&lt;/EsReceptor&gt;
+	&lt;/XMLEntradaNodoAdicional&gt;
+&lt;/CFEEntrada&gt;
+</com:Inxmlentrada>
+          <com:Tipocfe>111</com:Tipocfe>
+        <com:Fefacturaimportadaloteid>0</com:Fefacturaimportadaloteid>
+      </com:FEGeneraryFirmarDocumento.Execute>
+   </soapenv:Body>
+</soapenv:Envelope>"""
             logging.info('--------XML QUE ENVIA: %s', str_xml_sobre)
 
             res = client_res.service.Execute(str_xml_sobre)
