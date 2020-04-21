@@ -311,7 +311,7 @@ class cfeFactory():
         return True
 
 
-
+import os
 class WsConnection(models.TransientModel):
     _name = 'fe.ws_connection'
     _description = u'Conexión del ws'
@@ -329,8 +329,15 @@ class WsConnection(models.TransientModel):
             'No se encuentra configurada la ruta del WSDL para consumir los servicios del proveedor de FE',)
         # Establecer la conexión
         try:
-            client = Client(fe_url_ws, cache=NoCache(), retxml=True)
-            # client = Client(fe_url_ws)
+            # client = Client(fe_url_ws, cache=NoCache(), retxml=True)
+
+            path_file = os.path.dirname(os.path.abspath(__file__))
+            wsdl_ws = 'file://' + path_file + '/wsdls/FEGeneraryFirmarDocumento.wsdl'
+            url_ws = "https://fe-test.proinfo.uy:443/servlet/afegeneraryfirmardocumento"
+
+            client = Client(wsdl_ws, location=url_ws, timeout=10)
+
+
             logging.info('-----------CLIENT %s', client)
             return True, client
         except Exception as e:

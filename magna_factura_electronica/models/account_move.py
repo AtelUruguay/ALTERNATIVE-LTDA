@@ -8,24 +8,24 @@ from . import fe_xml_factory
 import logging
 
 
-# -----------
-import logging
-# logging.basicConfig(level=logging.INFO)
-# logging.getLogger('suds.client').setLevel(logging.DEBUG)
-_logger = logging.getLogger('suds.transport').setLevel(logging.DEBUG)
-# logging.getLogger('suds.xsd.schema').setLevel(logging.DEBUG)
-# logging.getLogger('suds.wsdl').setLevel(logging.DEBUG)
-
-from odoo.exceptions import UserError
-from odoo import api, fields, models, _, tools
-import os
-from suds.wsse import UsernameToken, Security
-from suds import Client, WebFault
-
-key_ws_FE_GeneraryFirmarDocumento = "url_ws.fe.ws_generar_y_firmar_doc"
-key_ws_FE_username = "url_ws.fe.username"
-key_ws_FE_password = "url_ws.fe.password"
-# -----------
+# # -----------
+# import logging
+# # logging.basicConfig(level=logging.INFO)
+# # logging.getLogger('suds.client').setLevel(logging.DEBUG)
+# _logger = logging.getLogger('suds.transport').setLevel(logging.DEBUG)
+# # logging.getLogger('suds.xsd.schema').setLevel(logging.DEBUG)
+# # logging.getLogger('suds.wsdl').setLevel(logging.DEBUG)
+#
+# from odoo.exceptions import UserError
+# from odoo import api, fields, models, _, tools
+# import os
+# from suds.wsse import UsernameToken, Security
+# from suds import Client, WebFault
+#
+# key_ws_FE_GeneraryFirmarDocumento = "url_ws.fe.ws_generar_y_firmar_doc"
+# key_ws_FE_username = "url_ws.fe.username"
+# key_ws_FE_password = "url_ws.fe.password"
+# # -----------
 
 
 
@@ -75,22 +75,22 @@ class AccountMove(models.Model):
 
     def invoice_send_fe_proinfo(self):
         for rec in self:
-            # tipo_CFE = fe_xml_factory.cfeFactory.get_tipo_cfe(rec.type, consumidor_final=not rec.partner_id.vat)
-            # str_xml_cfe = rec.invoice_factura_electronica()
-            #
-            # str_xml_sobre = fe_xml_factory.cfeFactory().invoice_ensobrar(str_xml_cfe=str_xml_cfe, tipo_CFE=tipo_CFE)
-            #
-            # ok, client_res = self.env['fe.ws_connection'].get_client_conn()
-            # if not ok:
-            #     return client_res
-            # logging.info('VA A INVOCAR EL SERVICIO')
-            #
-            # logging.info('--------XML QUE ENVIA: %s', str_xml_sobre)
-            #
-            # res = client_res.service.Execute(str_xml_sobre)
-            # logging.info('------RESPUESTA: %s', res)
+            tipo_CFE = fe_xml_factory.cfeFactory.get_tipo_cfe(rec.type, consumidor_final=not rec.partner_id.vat)
+            str_xml_cfe = rec.invoice_factura_electronica()
 
-            self.env['web.service.FE'].invocar_generar_y_firmar_doc()
+            str_xml_sobre = fe_xml_factory.cfeFactory().invoice_ensobrar(str_xml_cfe=str_xml_cfe, tipo_CFE=tipo_CFE)
+
+            ok, client_res = self.env['fe.ws_connection'].get_client_conn()
+            if not ok:
+                return client_res
+            logging.info('VA A INVOCAR EL SERVICIO')
+
+            logging.info('--------XML QUE ENVIA: %s', str_xml_sobre)
+
+            res = client_res.service.Execute(str_xml_sobre)
+            logging.info('------RESPUESTA: %s', res)
+
+            # self.env['web.service.FE'].invocar_generar_y_firmar_doc()
 
         return True
 
@@ -224,180 +224,180 @@ class AccountMove(models.Model):
 
 
 # -------------------------------------------------------------------------------------------------------------------------
-
-
-class WebServiceFE(models.TransientModel):
-    _name = 'web.service.FE'
-
-    def conectar_ws_FEGeneraryFirmarDocumento(self):
-        """
-        Establece la conexión con el WS y crea el objeto SOAP cliente
-        de dicha conexión.
-        """
-
-        # Obtener las URL necesaria de los parámetros del sistema
-        try:
-            # url_ws = tools.config[key_ws_FE_GeneraryFirmarDocumento]
-            url_ws = "https://fe-test.proinfo.uy:443/servlet/afegeneraryfirmardocumento"
-            if not url_ws:
-                raise UserError(_(
-                    'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio: %s ' %
-                    key_ws_FE_GeneraryFirmarDocumento))
-
-            # username_ws = tools.config[key_ws_FE_username]
-            # if not username_ws:
-            #     raise UserError(_(
-            #         'Error TLK: No se encuentra configurado el Usuario para consumir el servicio: %s ' %
-            #         key_ws_FE_username))
-            #
-            # pass_ws = tools.config[key_ws_FE_password]
-            # if not pass_ws:
-            #     raise UserError(_(
-            #         'Error TLK: No se encuentra configurada la contraseña para consumir el servicio: %s ' %
-            #         key_ws_FE_password))
-        except Exception:
-            raise UserError(_(
-                'Error No se encuentra configurada algun parametro: %s,'
-                '%s o %s ' %
-                (key_ws_FE_GeneraryFirmarDocumento, key_ws_FE_username,key_ws_FE_password)))
-
-        # se usa archivo wsdl local al addon: FEGeneraryFirmarDocumento.wsdl'
-        path_file = os.path.dirname(os.path.abspath(__file__))
-        wsdl_ws = 'file://' + path_file + '/wsdls/FEGeneraryFirmarDocumento.wsdl'
-        self.ws_FEGeneraryFirmarDocumento = None
-        # Establecer las conexiones
-        try:
-            self.ws_FEGeneraryFirmarDocumento = Client(wsdl_ws, location=url_ws, timeout=10)
-
-            # security = Security()
-            # token = UsernameToken(username_ws, pass_ws)
-            # security.tokens.append(token)
-            # self.ws_FEGeneraryFirmarDocumento.set_options(retxml=True)
-            # self.ws_FEGeneraryFirmarDocumento.set_options(wsse=security)
-            # _logger.info('self.ws_FEGeneraryFirmarDocumento: %s', self.ws_FEGeneraryFirmarDocumento)
-        except Exception as e:
-            raise UserError(
-                _(u'Error TLK: No se pudo cargar WSDL:') + tools.ustr(e) + ':' + url_ws)
-
-        return True
-
-
-    @api.model
-    def invocar_generar_y_firmar_doc(self):
-        """
-
-        :return:
-        """
-
-        # Establecer la conexión
-        if not self.conectar_ws_FEGeneraryFirmarDocumento():
-            _logger.error(u"No se pudo establecer conexión WS")
-            return False
-
-        # Consumo de novedades
-        try:
-
-            Inxmlentrada = '''&lt;CFEEntrada xmlns=&quot;com.esignit.fe&quot;&gt;
-	&lt;XMLEntradaNodoCFE&gt;
-		&lt;FEIDDocTipoCFE&gt;111&lt;/FEIDDocTipoCFE&gt;
-		&lt;FEIDDocSerie&gt;A&lt;/FEIDDocSerie&gt;
-		&lt;FEIDDocNro&gt;1&lt;/FEIDDocNro&gt;
-		&lt;FEIDDocFchEmis&gt;2020-04-18&lt;/FEIDDocFchEmis&gt;
-		&lt;FEIDDocFmaPago&gt;1&lt;/FEIDDocFmaPago&gt;
-		&lt;FEIDDocFchVenc&gt;2020-12-31&lt;/FEIDDocFchVenc&gt;
-		&lt;FEEMIRUCEmisor&gt;213738620011&lt;/FEEMIRUCEmisor&gt;
-		&lt;FEEMIRznSoc&gt;ALTERNATIVE LTDA&lt;/FEEMIRznSoc&gt;
-		&lt;FEEMINomComercial/&gt;
-		&lt;FEEMICdgDGISucur&gt;1&lt;/FEEMICdgDGISucur&gt;
-		&lt;FEEMIDomFiscal/&gt;
-		&lt;FEEMICiudad&gt;MONTEVIDEO&lt;/FEEMICiudad&gt;
-		&lt;FEEMIDepartamento&gt;Montevideo&lt;/FEEMIDepartamento&gt;
-		&lt;FERECTipoDocRecep&gt;2&lt;/FERECTipoDocRecep&gt;
-		&lt;FERECCodPaisRecep&gt;UY&lt;/FERECCodPaisRecep&gt;
-		&lt;FERECDocRecep&gt;214844360018&lt;/FERECDocRecep&gt;
-		&lt;FERECRznSocRecep&gt;DGI&lt;/FERECRznSocRecep&gt;
-		&lt;FERECDirRecep&gt;FERNANDEZ CRESPO 1534&lt;/FERECDirRecep&gt;
-		&lt;FERECCiudadRecep&gt;MONTEVIDEO&lt;/FERECCiudadRecep&gt;
-		&lt;FERECDeptoRecep/&gt;
-		&lt;FETOTTpoMoneda&gt;UYU&lt;/FETOTTpoMoneda&gt;
-		&lt;FETOTMntNoGrv&gt;0.00&lt;/FETOTMntNoGrv&gt;
-		&lt;FETOTMntNetoIvaTasaMin&gt;0.00&lt;/FETOTMntNetoIvaTasaMin&gt;
-		&lt;FETOTMntNetoIVATasaBasica&gt;20000.00&lt;/FETOTMntNetoIVATasaBasica&gt;
-		&lt;FETOTIVATasaBasica&gt;22.000&lt;/FETOTIVATasaBasica&gt;
-		&lt;FETOTMntIVATasaMin&gt;0.00&lt;/FETOTMntIVATasaMin&gt;
-		&lt;FETOTMntIVATasaBasica&gt;4400.00&lt;/FETOTMntIVATasaBasica&gt;
-		&lt;FETOTMntTotal&gt;24400.00&lt;/FETOTMntTotal&gt;
-		&lt;FETOTCantLinDet&gt;3&lt;/FETOTCantLinDet&gt;
-		&lt;FETOTMontoNF&gt;5000.00&lt;/FETOTMontoNF&gt;
-		&lt;FETOTMntPagar&gt;29400.00&lt;/FETOTMntPagar&gt;
-		&lt;FEDetalles&gt;
-			&lt;FEDetalle&gt;
-				&lt;FEDETNroLinDet&gt;1&lt;/FEDETNroLinDet&gt;
-				&lt;FEDETIndFact&gt;3&lt;/FEDETIndFact&gt;
-				&lt;FEDETNomItem&gt;aaa&lt;/FEDETNomItem&gt;
-				&lt;FEDETCantidad&gt;10.000&lt;/FEDETCantidad&gt;
-				&lt;FEDETUniMed&gt;kg&lt;/FEDETUniMed&gt;
-				&lt;FEDETPrecioUnitario&gt;1000.000000&lt;/FEDETPrecioUnitario&gt;
-				&lt;FEDETMontoItem&gt;10000.00&lt;/FEDETMontoItem&gt;
-			&lt;/FEDetalle&gt;
-			&lt;FEDetalle&gt;
-				&lt;FEDETNroLinDet&gt;2&lt;/FEDETNroLinDet&gt;
-				&lt;FEDETIndFact&gt;3&lt;/FEDETIndFact&gt;
-				&lt;FEDETNomItem&gt;bbb&lt;/FEDETNomItem&gt;
-				&lt;FEDETCantidad&gt;5.000&lt;/FEDETCantidad&gt;
-				&lt;FEDETUniMed&gt;kg&lt;/FEDETUniMed&gt;
-				&lt;FEDETPrecioUnitario&gt;2000.000000&lt;/FEDETPrecioUnitario&gt;
-				&lt;FEDETMontoItem&gt;10000.00&lt;/FEDETMontoItem&gt;
-			&lt;/FEDetalle&gt;
-			&lt;FEDetalle&gt;
-				&lt;FEDETNroLinDet&gt;3&lt;/FEDETNroLinDet&gt;
-				&lt;FEDETIndFact&gt;6&lt;/FEDETIndFact&gt;
-				&lt;FEDETNomItem&gt;ccc&lt;/FEDETNomItem&gt;
-				&lt;FEDETCantidad&gt;1.000&lt;/FEDETCantidad&gt;
-				&lt;FEDETUniMed&gt;N/A&lt;/FEDETUniMed&gt;
-				&lt;FEDETPrecioUnitario&gt;5000.000000&lt;/FEDETPrecioUnitario&gt;
-				&lt;FEDETMontoItem&gt;5000.00&lt;/FEDETMontoItem&gt;
-			&lt;/FEDetalle&gt;
-		&lt;/FEDetalles&gt;
-	&lt;/XMLEntradaNodoCFE&gt;
-	&lt;XMLEntradaNodoAdicional&gt;
-		&lt;TipoDocumentoId&gt;111&lt;/TipoDocumentoId&gt;
-		&lt;DocComCodigo&gt;1&lt;/DocComCodigo&gt;
-		&lt;DocComSerie&gt;A&lt;/DocComSerie&gt;
-		&lt;SucursalId&gt;1&lt;/SucursalId&gt;
-		&lt;Adenda/&gt;
-		&lt;CAEDnro&gt;1&lt;/CAEDnro&gt;
-		&lt;CAEHnro&gt;100&lt;/CAEHnro&gt;
-		&lt;CAENA&gt;20160001110&lt;/CAENA&gt;
-		&lt;CAEFA&gt;2016-01-01&lt;/CAEFA&gt;
-		&lt;CAEFVD&gt;2017-12-31&lt;/CAEFVD&gt;
-		&lt;LoteId&gt;0&lt;/LoteId&gt;
-		&lt;CorreoReceptor/&gt;
-		&lt;EsReceptor&gt;false&lt;/EsReceptor&gt;
-	&lt;/XMLEntradaNodoAdicional&gt;
-&lt;/CFEEntrada&gt;'''
-            respuesta_ws = self.ws_FEGeneraryFirmarDocumento.service.Execute(Inxmlentrada=Inxmlentrada,
-                    Tipocfe='111', Fefacturaimportadaloteid=12)  # noqa
-
-            if respuesta_ws:
-                if respuesta_ws.Outxmlsalida:
-                    print(respuesta_ws.Outxmlsalida)
-                else:
-                    raise UserError(
-                        'Error : ' + str(respuesta_ws))
-
-        except UserError:
-            raise
-
-        except WebFault as e:
-            _logger.error(_("No se pudo obtener los datos de WS:" + str(e)))
-            raise UserError(
-                'Error: No se pudo Procesar el request')
-
-        except Exception as e:
-            _logger.error(
-                _("No se pudo obtener los datos de WS:" + tools.ustr(e)))
-            raise UserError(
-                'Error: No se pudo Procesar el request, exception grave')
-
-        return True
+#
+#
+# class WebServiceFE(models.TransientModel):
+#     _name = 'web.service.FE'
+#
+#     def conectar_ws_FEGeneraryFirmarDocumento(self):
+#         """
+#         Establece la conexión con el WS y crea el objeto SOAP cliente
+#         de dicha conexión.
+#         """
+#
+#         # Obtener las URL necesaria de los parámetros del sistema
+#         try:
+#             # url_ws = tools.config[key_ws_FE_GeneraryFirmarDocumento]
+#             url_ws = "https://fe-test.proinfo.uy:443/servlet/afegeneraryfirmardocumento"
+#             if not url_ws:
+#                 raise UserError(_(
+#                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio: %s ' %
+#                     key_ws_FE_GeneraryFirmarDocumento))
+#
+#             # username_ws = tools.config[key_ws_FE_username]
+#             # if not username_ws:
+#             #     raise UserError(_(
+#             #         'Error TLK: No se encuentra configurado el Usuario para consumir el servicio: %s ' %
+#             #         key_ws_FE_username))
+#             #
+#             # pass_ws = tools.config[key_ws_FE_password]
+#             # if not pass_ws:
+#             #     raise UserError(_(
+#             #         'Error TLK: No se encuentra configurada la contraseña para consumir el servicio: %s ' %
+#             #         key_ws_FE_password))
+#         except Exception:
+#             raise UserError(_(
+#                 'Error No se encuentra configurada algun parametro: %s,'
+#                 '%s o %s ' %
+#                 (key_ws_FE_GeneraryFirmarDocumento, key_ws_FE_username,key_ws_FE_password)))
+#
+#         # se usa archivo wsdl local al addon: FEGeneraryFirmarDocumento.wsdl'
+#         path_file = os.path.dirname(os.path.abspath(__file__))
+#         wsdl_ws = 'file://' + path_file + '/wsdls/FEGeneraryFirmarDocumento.wsdl'
+#         self.ws_FEGeneraryFirmarDocumento = None
+#         # Establecer las conexiones
+#         try:
+#             self.ws_FEGeneraryFirmarDocumento = Client(wsdl_ws, location=url_ws, timeout=10)
+#
+#             # security = Security()
+#             # token = UsernameToken(username_ws, pass_ws)
+#             # security.tokens.append(token)
+#             # self.ws_FEGeneraryFirmarDocumento.set_options(retxml=True)
+#             # self.ws_FEGeneraryFirmarDocumento.set_options(wsse=security)
+#             # _logger.info('self.ws_FEGeneraryFirmarDocumento: %s', self.ws_FEGeneraryFirmarDocumento)
+#         except Exception as e:
+#             raise UserError(
+#                 _(u'Error TLK: No se pudo cargar WSDL:') + tools.ustr(e) + ':' + url_ws)
+#
+#         return True
+#
+#
+#     @api.model
+#     def invocar_generar_y_firmar_doc(self):
+#         """
+#
+#         :return:
+#         """
+#
+#         # Establecer la conexión
+#         if not self.conectar_ws_FEGeneraryFirmarDocumento():
+#             _logger.error(u"No se pudo establecer conexión WS")
+#             return False
+#
+#         # Consumo de novedades
+#         try:
+#
+#             Inxmlentrada = '''&lt;CFEEntrada xmlns=&quot;com.esignit.fe&quot;&gt;
+# 	&lt;XMLEntradaNodoCFE&gt;
+# 		&lt;FEIDDocTipoCFE&gt;111&lt;/FEIDDocTipoCFE&gt;
+# 		&lt;FEIDDocSerie&gt;A&lt;/FEIDDocSerie&gt;
+# 		&lt;FEIDDocNro&gt;1&lt;/FEIDDocNro&gt;
+# 		&lt;FEIDDocFchEmis&gt;2020-04-18&lt;/FEIDDocFchEmis&gt;
+# 		&lt;FEIDDocFmaPago&gt;1&lt;/FEIDDocFmaPago&gt;
+# 		&lt;FEIDDocFchVenc&gt;2020-12-31&lt;/FEIDDocFchVenc&gt;
+# 		&lt;FEEMIRUCEmisor&gt;213738620011&lt;/FEEMIRUCEmisor&gt;
+# 		&lt;FEEMIRznSoc&gt;ALTERNATIVE LTDA&lt;/FEEMIRznSoc&gt;
+# 		&lt;FEEMINomComercial/&gt;
+# 		&lt;FEEMICdgDGISucur&gt;1&lt;/FEEMICdgDGISucur&gt;
+# 		&lt;FEEMIDomFiscal/&gt;
+# 		&lt;FEEMICiudad&gt;MONTEVIDEO&lt;/FEEMICiudad&gt;
+# 		&lt;FEEMIDepartamento&gt;Montevideo&lt;/FEEMIDepartamento&gt;
+# 		&lt;FERECTipoDocRecep&gt;2&lt;/FERECTipoDocRecep&gt;
+# 		&lt;FERECCodPaisRecep&gt;UY&lt;/FERECCodPaisRecep&gt;
+# 		&lt;FERECDocRecep&gt;214844360018&lt;/FERECDocRecep&gt;
+# 		&lt;FERECRznSocRecep&gt;DGI&lt;/FERECRznSocRecep&gt;
+# 		&lt;FERECDirRecep&gt;FERNANDEZ CRESPO 1534&lt;/FERECDirRecep&gt;
+# 		&lt;FERECCiudadRecep&gt;MONTEVIDEO&lt;/FERECCiudadRecep&gt;
+# 		&lt;FERECDeptoRecep/&gt;
+# 		&lt;FETOTTpoMoneda&gt;UYU&lt;/FETOTTpoMoneda&gt;
+# 		&lt;FETOTMntNoGrv&gt;0.00&lt;/FETOTMntNoGrv&gt;
+# 		&lt;FETOTMntNetoIvaTasaMin&gt;0.00&lt;/FETOTMntNetoIvaTasaMin&gt;
+# 		&lt;FETOTMntNetoIVATasaBasica&gt;20000.00&lt;/FETOTMntNetoIVATasaBasica&gt;
+# 		&lt;FETOTIVATasaBasica&gt;22.000&lt;/FETOTIVATasaBasica&gt;
+# 		&lt;FETOTMntIVATasaMin&gt;0.00&lt;/FETOTMntIVATasaMin&gt;
+# 		&lt;FETOTMntIVATasaBasica&gt;4400.00&lt;/FETOTMntIVATasaBasica&gt;
+# 		&lt;FETOTMntTotal&gt;24400.00&lt;/FETOTMntTotal&gt;
+# 		&lt;FETOTCantLinDet&gt;3&lt;/FETOTCantLinDet&gt;
+# 		&lt;FETOTMontoNF&gt;5000.00&lt;/FETOTMontoNF&gt;
+# 		&lt;FETOTMntPagar&gt;29400.00&lt;/FETOTMntPagar&gt;
+# 		&lt;FEDetalles&gt;
+# 			&lt;FEDetalle&gt;
+# 				&lt;FEDETNroLinDet&gt;1&lt;/FEDETNroLinDet&gt;
+# 				&lt;FEDETIndFact&gt;3&lt;/FEDETIndFact&gt;
+# 				&lt;FEDETNomItem&gt;aaa&lt;/FEDETNomItem&gt;
+# 				&lt;FEDETCantidad&gt;10.000&lt;/FEDETCantidad&gt;
+# 				&lt;FEDETUniMed&gt;kg&lt;/FEDETUniMed&gt;
+# 				&lt;FEDETPrecioUnitario&gt;1000.000000&lt;/FEDETPrecioUnitario&gt;
+# 				&lt;FEDETMontoItem&gt;10000.00&lt;/FEDETMontoItem&gt;
+# 			&lt;/FEDetalle&gt;
+# 			&lt;FEDetalle&gt;
+# 				&lt;FEDETNroLinDet&gt;2&lt;/FEDETNroLinDet&gt;
+# 				&lt;FEDETIndFact&gt;3&lt;/FEDETIndFact&gt;
+# 				&lt;FEDETNomItem&gt;bbb&lt;/FEDETNomItem&gt;
+# 				&lt;FEDETCantidad&gt;5.000&lt;/FEDETCantidad&gt;
+# 				&lt;FEDETUniMed&gt;kg&lt;/FEDETUniMed&gt;
+# 				&lt;FEDETPrecioUnitario&gt;2000.000000&lt;/FEDETPrecioUnitario&gt;
+# 				&lt;FEDETMontoItem&gt;10000.00&lt;/FEDETMontoItem&gt;
+# 			&lt;/FEDetalle&gt;
+# 			&lt;FEDetalle&gt;
+# 				&lt;FEDETNroLinDet&gt;3&lt;/FEDETNroLinDet&gt;
+# 				&lt;FEDETIndFact&gt;6&lt;/FEDETIndFact&gt;
+# 				&lt;FEDETNomItem&gt;ccc&lt;/FEDETNomItem&gt;
+# 				&lt;FEDETCantidad&gt;1.000&lt;/FEDETCantidad&gt;
+# 				&lt;FEDETUniMed&gt;N/A&lt;/FEDETUniMed&gt;
+# 				&lt;FEDETPrecioUnitario&gt;5000.000000&lt;/FEDETPrecioUnitario&gt;
+# 				&lt;FEDETMontoItem&gt;5000.00&lt;/FEDETMontoItem&gt;
+# 			&lt;/FEDetalle&gt;
+# 		&lt;/FEDetalles&gt;
+# 	&lt;/XMLEntradaNodoCFE&gt;
+# 	&lt;XMLEntradaNodoAdicional&gt;
+# 		&lt;TipoDocumentoId&gt;111&lt;/TipoDocumentoId&gt;
+# 		&lt;DocComCodigo&gt;1&lt;/DocComCodigo&gt;
+# 		&lt;DocComSerie&gt;A&lt;/DocComSerie&gt;
+# 		&lt;SucursalId&gt;1&lt;/SucursalId&gt;
+# 		&lt;Adenda/&gt;
+# 		&lt;CAEDnro&gt;1&lt;/CAEDnro&gt;
+# 		&lt;CAEHnro&gt;100&lt;/CAEHnro&gt;
+# 		&lt;CAENA&gt;20160001110&lt;/CAENA&gt;
+# 		&lt;CAEFA&gt;2016-01-01&lt;/CAEFA&gt;
+# 		&lt;CAEFVD&gt;2017-12-31&lt;/CAEFVD&gt;
+# 		&lt;LoteId&gt;0&lt;/LoteId&gt;
+# 		&lt;CorreoReceptor/&gt;
+# 		&lt;EsReceptor&gt;false&lt;/EsReceptor&gt;
+# 	&lt;/XMLEntradaNodoAdicional&gt;
+# &lt;/CFEEntrada&gt;'''
+#             respuesta_ws = self.ws_FEGeneraryFirmarDocumento.service.Execute(Inxmlentrada=Inxmlentrada,
+#                     Tipocfe='111', Fefacturaimportadaloteid=12)  # noqa
+#
+#             if respuesta_ws:
+#                 if respuesta_ws.Outxmlsalida:
+#                     print(respuesta_ws.Outxmlsalida)
+#                 else:
+#                     raise UserError(
+#                         'Error : ' + str(respuesta_ws))
+#
+#         except UserError:
+#             raise
+#
+#         except WebFault as e:
+#             _logger.error(_("No se pudo obtener los datos de WS:" + str(e)))
+#             raise UserError(
+#                 'Error: No se pudo Procesar el request')
+#
+#         except Exception as e:
+#             _logger.error(
+#                 _("No se pudo obtener los datos de WS:" + tools.ustr(e)))
+#             raise UserError(
+#                 'Error: No se pudo Procesar el request, exception grave')
+#
+#         return True
