@@ -78,20 +78,10 @@ class AccountMove(models.Model):
             tipo_CFE = fe_xml_factory.cfeFactory.get_tipo_cfe(rec.type, consumidor_final=not rec.partner_id.vat)
             in_xml_entrada = rec.gen_Inxmlentrada()
 
-            # str_xml_sobre = fe_xml_factory.cfeFactory().invoice_ensobrar(str_xml_cfe=str_xml_cfe, tipo_CFE=tipo_CFE)
             fe_xml_factory.cfeFactory().invocar_generar_y_firmar_doc(str_xml_cfe=in_xml_entrada, tipo_CFE=tipo_CFE)
 
-            # ok, client_res = self.env['fe.ws_connection'].get_client_conn()
-            # if not ok:
-            #     return client_res
-            # logging.info('VA A INVOCAR EL SERVICIO')
-            #
-            # logging.info('--------XML QUE ENVIA: %s', str_xml_sobre)
-            #
-            # res = client_res.service.Execute(str_xml_sobre)
-            # logging.info('------RESPUESTA: %s', res)
-            #
-            # # self.env['web.service.FE'].invocar_generar_y_firmar_doc()
+
+
 
         return True
 

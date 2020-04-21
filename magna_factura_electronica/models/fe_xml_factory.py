@@ -356,7 +356,16 @@ class cfeFactory():
 
             if respuesta_ws:
                 if respuesta_ws.Outxmlsalida:
-                    print(respuesta_ws.Outxmlsalida)
+                    # print(respuesta_ws.Outxmlsalida)
+
+                    if respuesta_ws.Outxmlsalida.MensajeError:
+                        _logger.error('----MENSAJE ERROR: %s',respuesta_ws.Outxmlsalida.MensajeError)
+
+
+                    # dom = parse(respuesta_ws.Outxmlsalida)
+                    # for node in dom.getElementsByTagName('FEXMLSalida'):
+
+
                 else:
                     raise UserError('Error : ' + str(respuesta_ws))
 
