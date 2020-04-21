@@ -8,6 +8,12 @@ from xml.dom.minidom import Document, parse
 import logging
 from odoo import api, fields, models
 
+# logging.basicConfig(level=logging.INFO)
+# logging.getLogger('suds.client').setLevel(logging.DEBUG)
+logging.getLogger('suds.transport').setLevel(logging.DEBUG)
+# logging.getLogger('suds.xsd.schema').setLevel(logging.DEBUG)
+# logging.getLogger('suds.wsdl').setLevel(logging.DEBUG)
+
 debug = True
 
 # try:
