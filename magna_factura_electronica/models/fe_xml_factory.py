@@ -419,7 +419,7 @@ class cfeFactory():
     def ws_procesar_respuesta(self, response_xml):
         res = []
         vals = {}
-        logging.info('---------ASM 1')
+        logging.info('---------ASM 1: %s', response_xml)
         doc = parse(response_xml)
         logging.info('---------ASM 2')
         lista_sobres = doc.getElementsByTagName("FEXMLSalida")
