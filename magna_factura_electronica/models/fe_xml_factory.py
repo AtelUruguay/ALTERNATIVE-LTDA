@@ -10,17 +10,17 @@ from odoo import api, fields, models
 
 # logging.basicConfig(level=logging.INFO)
 # logging.getLogger('suds.client').setLevel(logging.DEBUG)
-logging.getLogger('suds.transport').setLevel(logging.DEBUG)
+# logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 # logging.getLogger('suds.xsd.schema').setLevel(logging.DEBUG)
 # logging.getLogger('suds.wsdl').setLevel(logging.DEBUG)
 
 
 
 # -----------
-import logging
+# import logging
 # logging.basicConfig(level=logging.INFO)
 # logging.getLogger('suds.client').setLevel(logging.DEBUG)
-_logger = logging.getLogger('suds.transport').setLevel(logging.DEBUG)
+# _logger = logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 # logging.getLogger('suds.xsd.schema').setLevel(logging.DEBUG)
 # logging.getLogger('suds.wsdl').setLevel(logging.DEBUG)
 
@@ -370,7 +370,7 @@ class cfeFactory():
         # if not self.conectar_ws_FEGeneraryFirmarDocumento():
         client = self.conectar_ws_FE()
         if not client:
-            _logger.error(u"No se pudo establecer conexión WS")
+            logging.error(u"No se pudo establecer conexión WS")
             return False
 
         # Consumo de servicio
@@ -405,11 +405,11 @@ class cfeFactory():
             raise
 
         except WebFault as e:
-            _logger.error(_("No se pudo obtener los datos de WS:" + str(e)))
+            logging.error(_("No se pudo obtener los datos de WS:" + str(e)))
             raise UserError('Error: No se pudo Procesar el request')
 
         except Exception as e:
-            _logger.error(_("No se pudo obtener los datos de WS:" + tools.ustr(e)))
+            logging.error(_("No se pudo obtener los datos de WS:" + tools.ustr(e)))
             raise UserError('Error: No se pudo Procesar el request, exception grave')
 
         return True
@@ -497,7 +497,7 @@ class cfeFactory():
 #             # security.tokens.append(token)
 #             # self.ws_FEGeneraryFirmarDocumento.set_options(retxml=True)
 #             # self.ws_FEGeneraryFirmarDocumento.set_options(wsse=security)
-#             # _logger.info('self.ws_FEGeneraryFirmarDocumento: %s', self.ws_FEGeneraryFirmarDocumento)
+#             # logging.info('self.ws_FEGeneraryFirmarDocumento: %s', self.ws_FEGeneraryFirmarDocumento)
 #         except Exception as e:
 #             raise UserError(
 #                 _(u'Error TLK: No se pudo cargar WSDL:') + tools.ustr(e) + ':' + url_ws)
@@ -513,7 +513,7 @@ class cfeFactory():
 #
 #         # Establecer la conexión
 #         if not self.conectar_ws_FEGeneraryFirmarDocumento():
-#             _logger.error(u"No se pudo establecer conexión WS")
+#             logging.error(u"No se pudo establecer conexión WS")
 #             return False
 #
 #         # Consumo de servicio
@@ -531,11 +531,11 @@ class cfeFactory():
 #             raise
 #
 #         except WebFault as e:
-#             _logger.error(_("No se pudo obtener los datos de WS:" + str(e)))
+#             logging.error(_("No se pudo obtener los datos de WS:" + str(e)))
 #             raise UserError('Error: No se pudo Procesar el request')
 #
 #         except Exception as e:
-#             _logger.error(_("No se pudo obtener los datos de WS:" + tools.ustr(e)))
+#             logging.error(_("No se pudo obtener los datos de WS:" + tools.ustr(e)))
 #             raise UserError('Error: No se pudo Procesar el request, exception grave')
 #
 #         return True
