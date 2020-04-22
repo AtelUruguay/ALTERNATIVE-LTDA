@@ -419,15 +419,14 @@ class cfeFactory():
     def ws_procesar_respuesta(self, response_xml):
         res = []
         vals = {}
-        logging.info('---------ASM 1: %s', response_xml)
         doc = parseString(response_xml)
-        logging.info('---------ASM 2')
         lista_sobres = doc.getElementsByTagName("FEXMLSalida")
-        logging.info('---------ASM 3')
         for sobre in lista_sobres:
-            logging.info('---------ASM 4')
-            logging.info('---------NODO: %s', sobre)
-            # nodo_detalle = sobre.getElementsByTagName("Detalle")[0]
+
+
+            nodo_ruc = sobre.getElementsByTagName("RUC")[0]
+            logging.info('---------NODO: %s', nodo_ruc)
+
             # nodo_caratula = sobre.getElementsByTagName("Caratula")[0]
             # estado = nodo_detalle.getElementsByTagName("Estado")[0]
             # if estado.firstChild.data == 'AS':
