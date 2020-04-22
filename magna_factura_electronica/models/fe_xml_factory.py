@@ -1,40 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
-from suds.client import Client
-from suds.cache import NoCache
-# from openerp.exceptions import ValidationError
 from xml.dom.minidom import Document, parseString
 import logging
-from odoo import api, fields, models
-
-# logging.basicConfig(level=logging.INFO)
-# logging.getLogger('suds.client').setLevel(logging.DEBUG)
-# logging.getLogger('suds.transport').setLevel(logging.DEBUG)
-# logging.getLogger('suds.xsd.schema').setLevel(logging.DEBUG)
-# logging.getLogger('suds.wsdl').setLevel(logging.DEBUG)
-
-
-
-# -----------
-# import logging
-# logging.basicConfig(level=logging.INFO)
-# logging.getLogger('suds.client').setLevel(logging.DEBUG)
-# _logger = logging.getLogger('suds.transport').setLevel(logging.DEBUG)
-# logging.getLogger('suds.xsd.schema').setLevel(logging.DEBUG)
-# logging.getLogger('suds.wsdl').setLevel(logging.DEBUG)
-
 from odoo.exceptions import UserError
 from odoo import api, fields, models, _, tools
 import os
 from suds.wsse import UsernameToken, Security
 from suds import Client, WebFault
 
-key_ws_FE_GeneraryFirmarDocumento = "url_ws.fe.ws_generar_y_firmar_doc"
-key_ws_FE_username = "url_ws.fe.username"
-key_ws_FE_password = "url_ws.fe.password"
-# -----------
-
+# logging.basicConfig(level=logging.INFO)
+# logging.getLogger('suds.client').setLevel(logging.DEBUG)
+# logging.getLogger('suds.transport').setLevel(logging.DEBUG)
+# logging.getLogger('suds.xsd.schema').setLevel(logging.DEBUG)
+# logging.getLogger('suds.wsdl').setLevel(logging.DEBUG)
 
 
 debug = True
@@ -51,6 +30,9 @@ def loguear(text):
         logging.info(text)
 
 
+key_ws_FE_url = "magna_ws_fe.url"
+key_ws_FE_username = "magna_ws_fe.username"
+key_ws_FE_password = "magna_ws_fe.password"
 
 
 class cfeFactoryOptionsProductLineDetail():
@@ -106,7 +88,7 @@ class cfeFactoryOptions():
     # _montoIVATasaOtra=0
 
 
-    _lineasDetalle = [] #invoice.invoice_line
+    _lineasDetalle = []
 
     _adicionalTipoDocumentoId = 0
     _adicionalDocComCodigo = ''
@@ -122,69 +104,15 @@ class cfeFactoryOptions():
     _adicionalCorreoReceptor = ''
     _adicionalEsReceptor = 'false'
 
-
     def __init__(self):
         pass
 
 
-class cfeFactory():
+class CfeFactory():
     opt = cfeFactoryOptions()
 
     def __init__(self, options=None):
         self.opt = options
-
-    def get_tipo_cfe(invoice_type, consumidor_final):
-        if consumidor_final:  # eTicket
-            if invoice_type == 'out_invoice':  # Factura de cliente
-                return 101
-            elif invoice_type == 'out_refund':  # NC de cliente
-                return 102
-        else:  # eFactura
-            if invoice_type == 'out_invoice':  # Factura de cliente
-                return 111
-            elif invoice_type == 'out_refund':  # NC de cliente
-                return 112
-        return 0
-
-    # def calc_tipo_comprobante(self, invoice):
-    #     tipo_comprobante=''
-    #     if invoice.fe_contingencia:
-    #         if invoice.type == 'out_invoice':
-    #             if invoice.partner_tipo_documento == 2:
-    #                 tipo_comprobante = 211
-    #                 if invoice.fe_nota_debito:
-    #                     tipo_comprobante=213
-    #             else:
-    #                 tipo_comprobante = 201
-    #                 if invoice.fe_nota_debito:
-    #                     tipo_comprobante=203
-    #
-    #         if invoice.type == 'out_refund':
-    #             if invoice.partner_tipo_documento == 2:
-    #                 tipo_comprobante = 212
-    #             else:
-    #                 tipo_comprobante = 202
-    #     else:
-    #         if invoice.type == 'out_invoice':
-    #             if invoice.partner_tipo_documento == 2:
-    #                 tipo_comprobante = 111
-    #                 if invoice.fe_nota_debito:
-    #                     tipo_comprobante=113
-    #             else:
-    #                 tipo_comprobante = 101
-    #                 if invoice.fe_nota_debito:
-    #                     tipo_comprobante=103
-    #
-    #         if invoice.type == 'out_refund':
-    #             if invoice.partner_tipo_documento == 2:
-    #                 tipo_comprobante = 112
-    #             else:
-    #                 tipo_comprobante = 102
-    #     logging.info('es de tipo')
-    #     logging.info(tipo_comprobante)
-    #     return tipo_comprobante
-
-    #
 
 
     def getXML(self):
@@ -289,8 +217,6 @@ class cfeFactory():
         # se quita el <?xml version="1.0" encoding="utf-8"?>
         XML = XML.split("?>")[1]
 
-        # logging.info(XML)
-
         return XML
 
     @api.model
@@ -308,20 +234,19 @@ class cfeFactory():
 
 
 
-    def conectar_ws_FE(self):
+    def conectar_ws_FEGeneraryFirmarDocumento(self):
         """
         Establece la conexión con el WS y crea el objeto SOAP cliente
         de dicha conexión.
         """
-        client = None
         # Obtener las URL necesaria de los parámetros del sistema
         try:
-            # url_ws = tools.config[key_ws_FE_GeneraryFirmarDocumento]
-            url_ws = "https://fe-test.proinfo.uy:443/servlet/afegeneraryfirmardocumento"
+            url_ws = tools.config[key_ws_FE_url]
+            # url_ws = "https://fe-test.proinfo.uy:443/servlet/afegeneraryfirmardocumento"
             if not url_ws:
                 raise UserError(_(
                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio: %s ' %
-                    key_ws_FE_GeneraryFirmarDocumento))
+                    key_ws_FE_url))
 
             # username_ws = tools.config[key_ws_FE_username]
             # if not username_ws:
@@ -336,39 +261,33 @@ class cfeFactory():
             #         key_ws_FE_password))
         except Exception:
             raise UserError(_(
-                'Error No se encuentra configurada algun parametro: %s,'
-                '%s o %s ' %
-                (key_ws_FE_GeneraryFirmarDocumento, key_ws_FE_username,key_ws_FE_password)))
+                'Error No se encuentra configurada algun parametro: %s, %s o %s ' %
+                (key_ws_FE_url, key_ws_FE_username,key_ws_FE_password)))
 
         # se usa archivo wsdl local al addon: FEGeneraryFirmarDocumento.wsdl'
         path_file = os.path.dirname(os.path.abspath(__file__))
         wsdl_ws = 'file://' + path_file + '/wsdls/FEGeneraryFirmarDocumento.wsdl'
-        self.ws_FEGeneraryFirmarDocumento = None
+
         # Establecer las conexiones
         try:
-            # self.ws_FEGeneraryFirmarDocumento = Client(wsdl_ws, location=url_ws, timeout=10)
             client = Client(wsdl_ws, location=url_ws, timeout=10)
-
             # security = Security()
             # token = UsernameToken(username_ws, pass_ws)
             # security.tokens.append(token)
             # self.ws_FEGeneraryFirmarDocumento.set_options(retxml=True)
             # self.ws_FEGeneraryFirmarDocumento.set_options(wsse=security)
             # _logger.info('self.ws_FEGeneraryFirmarDocumento: %s', self.ws_FEGeneraryFirmarDocumento)
+            return client
         except Exception as e:
             raise UserError(
                 _(u'Error TLK: No se pudo cargar WSDL:') + tools.ustr(e) + ':' + url_ws)
-
-        return client
 
     def invocar_generar_y_firmar_doc(self, str_xml_cfe, tipo_CFE):
         """
         :return:
         """
-
         # Establecer la conexión
-        # if not self.conectar_ws_FEGeneraryFirmarDocumento():
-        client = self.conectar_ws_FE()
+        client = self.conectar_ws_FEGeneraryFirmarDocumento()
         if not client:
             logging.error(u"No se pudo establecer conexión WS")
             return False
@@ -376,30 +295,12 @@ class cfeFactory():
         # Consumo de servicio
         try:
             respuesta_ws = client.service.Execute(Inxmlentrada=str_xml_cfe, Tipocfe=tipo_CFE, Fefacturaimportadaloteid=0)
-
             if respuesta_ws:
-                logging.info('---------RESPUESTA: %s',respuesta_ws.Outxmlsalida)
-                self.ws_procesar_respuesta(respuesta_ws.Outxmlsalida)
-
-
-
-
-                # print(respuesta_ws)
-                # if respuesta_ws.Outxmlsalida:
-                #     # print(respuesta_ws.Outxmlsalida)
-                #
-                #     xml_data = parse(respuesta_ws.Outxmlsalida).getElementsByTagName('FEXMLSalida')
-                #     print(xml_data)
-                #
-                #     # parts = xml_data[0].getElementsByTagName('ITEM')
-                #     # for p in parts:
-                #
-                #     # dom = parse(respuesta_ws.Outxmlsalida)
-                #     # for node in dom.getElementsByTagName('FEXMLSalida'):
-                #
-                #
-                # else:
-                #     raise UserError('Error : ' + str(respuesta_ws))
+                if respuesta_ws.Outxmlsalida:
+                    # logging.info('---------RESPUESTA: %s',respuesta_ws.Outxmlsalida)
+                    return self.ws_procesar_respuesta(respuesta_ws.Outxmlsalida)
+                else:
+                    raise UserError('Error : ' + str(respuesta_ws))
 
         except UserError:
             raise
@@ -417,165 +318,27 @@ class cfeFactory():
 
 
     def ws_procesar_respuesta(self, response_xml):
-        res = []
         vals = {}
         doc = parseString(response_xml)
-        lista_sobres = doc.getElementsByTagName("FEXMLSalida")
-        for sobre in lista_sobres:
+        nodos = doc.getElementsByTagName("FEXMLSalida")
+        for nodo in nodos:
+            estado = nodo.getElementsByTagName("Estado")[0].firstChild.data
+            if estado == 'AS':
+                vals['fe_Serie'] = nodo.getElementsByTagName("Serie")[0].firstChild.data
+                vals['fe_DocNro'] = nodo.getElementsByTagName("DocNro")[0].firstChild.data
+                vals['fe_FechaHoraFirma'] = nodo.getElementsByTagName("FechaHoraFirma")[0].firstChild.data
+                vals['fe_Estado'] = estado
+                vals['fe_URLParaVerificarQR'] = nodo.getElementsByTagName("URLParaVerificarQR")[0].firstChild.data
+                vals['fe_URLParaVerificarTexto'] = nodo.getElementsByTagName("URLParaVerificarTexto")[0].firstChild.data
+                vals['fe_CAEDNro'] = nodo.getElementsByTagName("FechaHoraFirma")[0].firstChild.data
+                vals['fe_CAEHNro'] = nodo.getElementsByTagName("CAEHNro")[0].firstChild.data
+                vals['fe_CAENA'] = nodo.getElementsByTagName("CAENA")[0].firstChild.data
+                vals['fe_CAEFA'] = nodo.getElementsByTagName("CAEFA")[0].firstChild.data
+                vals['fe_CAEFVD'] = nodo.getElementsByTagName("CAEFVD")[0].firstChild.data
+                vals['fe_Hash'] = nodo.getElementsByTagName("Hash")[0].firstChild.data
+            elif estado == 'BS':
+                error_msg = nodo.getElementsByTagName("MensajeError")[0].firstChild.data
+                raise ValueError('Ha habido un error en el envío de la factura al proveedor de FE: %s', error_msg)
 
-
-            nodo_ruc = sobre.getElementsByTagName("RUC")[0]
-            logging.info('---------NODO: %s', nodo_ruc.firstChild.data)
-
-            # nodo_caratula = sobre.getElementsByTagName("Caratula")[0]
-            # estado = nodo_detalle.getElementsByTagName("Estado")[0]
-            # if estado.firstChild.data == 'AS':
-            #     vals['aceptado'] = True
-            #     nodo_paramconsulta = nodo_detalle.getElementsByTagName('ParamConsulta')[0]
-            #     vals['idreceptor'] = nodo_caratula.getElementsByTagName('IDReceptor')[0].firstChild.data
-            #     vals['token'] = nodo_paramconsulta.getElementsByTagName('Token')[0].firstChild.data
-            # elif estado.firstChild.data == 'BS':
-            #     nodo_motivo_detalle = nodo_detalle.getElementsByTagName("MotivosRechazo")[0]
-            #     glosa = nodo_motivo_detalle.getElementsByTagName("Glosa")[0]
-            #     detalle = nodo_motivo_detalle.getElementsByTagName("Detalle")[0]
-            #     motivo = nodo_motivo_detalle.getElementsByTagName("Motivo")[0]
-            #     vals['codigo'] = motivo.firstChild.data
-            #     vals['descripcion'] = detalle.firstChild.data
-            #     vals['glosa'] = glosa.firstChild.data
-            #     vals['aceptado'] = False
-            #     if vals['codigo'].strip() == 'S08':
-            #         vals['idreceptor'] = nodo_caratula.getElementsByTagName('IDReceptor')[0].firstChild.data
-            #         vals['token'] = ''  # nodo_paramconsulta.getElementsByTagName('Token')[0].firstChild.data
-            #         vals['aceptado'] = True
-            # res.append(vals)
-        return True
-
-
-# -------------------------------------------------------------------------------------------------------------------------
-
-# class WebServiceFE(models.TransientModel):
-#     _name = 'web.service.FE'
-#
-#     def conectar_ws_FEGeneraryFirmarDocumento(self):
-#         """
-#         Establece la conexión con el WS y crea el objeto SOAP cliente
-#         de dicha conexión.
-#         """
-#
-#         # Obtener las URL necesaria de los parámetros del sistema
-#         try:
-#             # url_ws = tools.config[key_ws_FE_GeneraryFirmarDocumento]
-#             url_ws = "https://fe-test.proinfo.uy:443/servlet/afegeneraryfirmardocumento"
-#             if not url_ws:
-#                 raise UserError(_(
-#                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio: %s ' %
-#                     key_ws_FE_GeneraryFirmarDocumento))
-#
-#             # username_ws = tools.config[key_ws_FE_username]
-#             # if not username_ws:
-#             #     raise UserError(_(
-#             #         'Error TLK: No se encuentra configurado el Usuario para consumir el servicio: %s ' %
-#             #         key_ws_FE_username))
-#             #
-#             # pass_ws = tools.config[key_ws_FE_password]
-#             # if not pass_ws:
-#             #     raise UserError(_(
-#             #         'Error TLK: No se encuentra configurada la contraseña para consumir el servicio: %s ' %
-#             #         key_ws_FE_password))
-#         except Exception:
-#             raise UserError(_(
-#                 'Error No se encuentra configurada algun parametro: %s,'
-#                 '%s o %s ' %
-#                 (key_ws_FE_GeneraryFirmarDocumento, key_ws_FE_username,key_ws_FE_password)))
-#
-#         # se usa archivo wsdl local al addon: FEGeneraryFirmarDocumento.wsdl'
-#         path_file = os.path.dirname(os.path.abspath(__file__))
-#         wsdl_ws = 'file://' + path_file + '/wsdls/FEGeneraryFirmarDocumento.wsdl'
-#         self.ws_FEGeneraryFirmarDocumento = None
-#         # Establecer las conexiones
-#         try:
-#             self.ws_FEGeneraryFirmarDocumento = Client(wsdl_ws, location=url_ws, timeout=10)
-#
-#             # security = Security()
-#             # token = UsernameToken(username_ws, pass_ws)
-#             # security.tokens.append(token)
-#             # self.ws_FEGeneraryFirmarDocumento.set_options(retxml=True)
-#             # self.ws_FEGeneraryFirmarDocumento.set_options(wsse=security)
-#             # logging.info('self.ws_FEGeneraryFirmarDocumento: %s', self.ws_FEGeneraryFirmarDocumento)
-#         except Exception as e:
-#             raise UserError(
-#                 _(u'Error TLK: No se pudo cargar WSDL:') + tools.ustr(e) + ':' + url_ws)
-#
-#         return True
-#
-#
-#     # @api.model
-#     def invocar_generar_y_firmar_doc(self, str_xml_cfe, tipo_CFE):
-#         """
-#         :return:
-#         """
-#
-#         # Establecer la conexión
-#         if not self.conectar_ws_FEGeneraryFirmarDocumento():
-#             logging.error(u"No se pudo establecer conexión WS")
-#             return False
-#
-#         # Consumo de servicio
-#         try:
-#             respuesta_ws = self.ws_FEGeneraryFirmarDocumento.service.Execute(Inxmlentrada=str_xml_cfe,
-#                     Tipocfe=tipo_CFE, Fefacturaimportadaloteid=0)
-#
-#             if respuesta_ws:
-#                 if respuesta_ws.Outxmlsalida:
-#                     print(respuesta_ws.Outxmlsalida)
-#                 else:
-#                     raise UserError('Error : ' + str(respuesta_ws))
-#
-#         except UserError:
-#             raise
-#
-#         except WebFault as e:
-#             logging.error(_("No se pudo obtener los datos de WS:" + str(e)))
-#             raise UserError('Error: No se pudo Procesar el request')
-#
-#         except Exception as e:
-#             logging.error(_("No se pudo obtener los datos de WS:" + tools.ustr(e)))
-#             raise UserError('Error: No se pudo Procesar el request, exception grave')
-#
-#         return True
-
-#
-#
-# import os
-# class WsConnection(models.TransientModel):
-#     _name = 'fe.ws_connection'
-#     _description = u'Conexión del ws'
-#
-#     @api.model
-#     def get_client_conn(self):
-#         """
-#         Establece la conexión con el WS y crea el objeto SOAP cliente de dicha conexión.
-#         """
-#         # Obtener la URL de parámetros del sistema
-#         fe_url_ws = self.env['ir.config_parameter'].get_param('magna_fe_url_ws', '')
-#         if not fe_url_ws or fe_url_ws == '0':
-#             logging.info('Servicio Web FE: No se pudo conectar con el servicio.')
-#             return False, 'Error!\n %s' % (
-#             'No se encuentra configurada la ruta del WSDL para consumir los servicios del proveedor de FE',)
-#         # Establecer la conexión
-#         try:
-#             # client = Client(fe_url_ws, cache=NoCache(), retxml=True)
-#
-#             path_file = os.path.dirname(os.path.abspath(__file__))
-#             wsdl_ws = 'file://' + path_file + '/wsdls/FEGeneraryFirmarDocumento.wsdl'
-#             url_ws = "https://fe-test.proinfo.uy:443/servlet/afegeneraryfirmardocumento"
-#
-#             client = Client(wsdl_ws, location=url_ws, timeout=10)
-#
-#
-#             logging.info('-----------CLIENT %s', client)
-#             return True, client
-#         except Exception as e:
-#             return False, 'Error!\n %s' % ('Ha ocurrido un error en la comunicación web con el proveedor de FE',)
-#
+        return vals
 
