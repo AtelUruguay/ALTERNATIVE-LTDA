@@ -340,7 +340,7 @@ class CfeFactory():
                 vals['fe_Hash'] = nodo.getElementsByTagName("Hash")[0].firstChild.data
             elif estado == 'BS':
                 error_msg = nodo.getElementsByTagName("MensajeError")[0].firstChild.data
-                raise ValueError('Ha habido un error en el envío de la factura al proveedor de FE: %s', error_msg)
+                raise UserError(u'Ha habido un error en el envío de la factura al proveedor de FE: ' + error_msg)
 
         return vals
 
