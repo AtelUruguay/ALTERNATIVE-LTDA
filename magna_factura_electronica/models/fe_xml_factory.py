@@ -425,7 +425,7 @@ class cfeFactory():
 
 
             nodo_ruc = sobre.getElementsByTagName("RUC")[0]
-            logging.info('---------NODO: %s', nodo_ruc)
+            logging.info('---------NODO: %s', nodo_ruc.firstChild.data)
 
             # nodo_caratula = sobre.getElementsByTagName("Caratula")[0]
             # estado = nodo_detalle.getElementsByTagName("Estado")[0]
