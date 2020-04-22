@@ -122,16 +122,20 @@ class AccountMove(models.Model):
             account_tax_obj = self.env['account.tax']
             # account_tax_iva_exento_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
             #                                                              ('fe_tax_codigo_dgi', '=', '1'),
-            #                                                              ('type_tax_use', '=', 'sale')], limit=1)[0]
+            #                                                              ('type_tax_use', '=', 'sale')], limit=1)
             account_tax_iva_minima_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
                                                                          ('fe_tax_codigo_dgi', '=', '2'),
-                                                                         ('type_tax_use', '=', 'sale')], limit=1)[0]
+                                                                         ('type_tax_use', '=', 'sale')], limit=1)
             account_tax_iva_basica_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
                                                                          ('fe_tax_codigo_dgi', '=', '3'),
-                                                                         ('type_tax_use', '=', 'sale')], limit=1)[0]
+                                                                         ('type_tax_use', '=', 'sale')], limit=1)
+            if not account_tax_iva_minima_id:
+                raise ValueError(u'No existe configurado un impuesto con Código de DGI 2 (Iva tasa mínima)')
+            if not account_tax_iva_basica_id:
+                raise ValueError(u'No existe configurado un impuesto con Código de DGI 3 (Iva tasa basica)')
 
-            options._IVATasaMinima = account_tax_iva_minima_id.amount
-            options._IVATasaBasica = account_tax_iva_basica_id.amount
+            options._IVATasaMinima = account_tax_iva_minima_id[0].amount
+            options._IVATasaBasica = account_tax_iva_basica_id[0].amount
 
             # ADICIONAL
             options._adicionalTipoDocumentoId = 0
