@@ -4,7 +4,7 @@
 from suds.client import Client
 from suds.cache import NoCache
 # from openerp.exceptions import ValidationError
-from xml.dom.minidom import Document, parse
+from xml.dom.minidom import Document, parseString
 import logging
 from odoo import api, fields, models
 
@@ -420,7 +420,7 @@ class cfeFactory():
         res = []
         vals = {}
         logging.info('---------ASM 1: %s', response_xml)
-        doc = parse(response_xml)
+        doc = parseString(response_xml)
         logging.info('---------ASM 2')
         lista_sobres = doc.getElementsByTagName("FEXMLSalida")
         logging.info('---------ASM 3')
