@@ -379,7 +379,7 @@ class cfeFactory():
 
             if respuesta_ws:
                 logging.info('---------RESPUESTA: %s',respuesta_ws.Outxmlsalida)
-                self.ws_procesar_respuesta(respuesta_ws.Outxmlsalida)
+                self.ws_procesar_respuesta(respuesta_ws)
 
 
 
