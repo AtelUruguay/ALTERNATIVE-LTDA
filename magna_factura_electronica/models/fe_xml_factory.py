@@ -355,12 +355,15 @@ class cfeFactory():
             respuesta_ws = client.service.Execute(Inxmlentrada=str_xml_cfe, Tipocfe=tipo_CFE, Fefacturaimportadaloteid=0)
 
             if respuesta_ws:
+                print(respuesta_ws)
                 if respuesta_ws.Outxmlsalida:
                     # print(respuesta_ws.Outxmlsalida)
 
-                    if respuesta_ws.Outxmlsalida.MensajeError:
-                        _logger.error('----MENSAJE ERROR: %s',respuesta_ws.Outxmlsalida.MensajeError)
+                    xml_data = parse(respuesta_ws.Outxmlsalida).getElementsByTagName('FEXMLSalida')
+                    print(xml_data)
 
+                    # parts = xml_data[0].getElementsByTagName('ITEM')
+                    # for p in parts:
 
                     # dom = parse(respuesta_ws.Outxmlsalida)
                     # for node in dom.getElementsByTagName('FEXMLSalida'):
