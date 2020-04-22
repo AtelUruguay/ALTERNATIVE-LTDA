@@ -14,6 +14,29 @@ logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 # logging.getLogger('suds.xsd.schema').setLevel(logging.DEBUG)
 # logging.getLogger('suds.wsdl').setLevel(logging.DEBUG)
 
+
+
+# -----------
+import logging
+# logging.basicConfig(level=logging.INFO)
+# logging.getLogger('suds.client').setLevel(logging.DEBUG)
+_logger = logging.getLogger('suds.transport').setLevel(logging.DEBUG)
+# logging.getLogger('suds.xsd.schema').setLevel(logging.DEBUG)
+# logging.getLogger('suds.wsdl').setLevel(logging.DEBUG)
+
+from odoo.exceptions import UserError
+from odoo import api, fields, models, _, tools
+import os
+from suds.wsse import UsernameToken, Security
+from suds import Client, WebFault
+
+key_ws_FE_GeneraryFirmarDocumento = "url_ws.fe.ws_generar_y_firmar_doc"
+key_ws_FE_username = "url_ws.fe.username"
+key_ws_FE_password = "url_ws.fe.password"
+# -----------
+
+
+
 debug = True
 
 # try:
@@ -355,22 +378,28 @@ class cfeFactory():
             respuesta_ws = client.service.Execute(Inxmlentrada=str_xml_cfe, Tipocfe=tipo_CFE, Fefacturaimportadaloteid=0)
 
             if respuesta_ws:
-                print(respuesta_ws)
-                if respuesta_ws.Outxmlsalida:
-                    # print(respuesta_ws.Outxmlsalida)
-
-                    xml_data = parse(respuesta_ws.Outxmlsalida).getElementsByTagName('FEXMLSalida')
-                    print(xml_data)
-
-                    # parts = xml_data[0].getElementsByTagName('ITEM')
-                    # for p in parts:
-
-                    # dom = parse(respuesta_ws.Outxmlsalida)
-                    # for node in dom.getElementsByTagName('FEXMLSalida'):
+                logging.info('---------RESPUESTA: %s',parse(respuesta_ws))
 
 
-                else:
-                    raise UserError('Error : ' + str(respuesta_ws))
+
+
+
+                # print(respuesta_ws)
+                # if respuesta_ws.Outxmlsalida:
+                #     # print(respuesta_ws.Outxmlsalida)
+                #
+                #     xml_data = parse(respuesta_ws.Outxmlsalida).getElementsByTagName('FEXMLSalida')
+                #     print(xml_data)
+                #
+                #     # parts = xml_data[0].getElementsByTagName('ITEM')
+                #     # for p in parts:
+                #
+                #     # dom = parse(respuesta_ws.Outxmlsalida)
+                #     # for node in dom.getElementsByTagName('FEXMLSalida'):
+                #
+                #
+                # else:
+                #     raise UserError('Error : ' + str(respuesta_ws))
 
         except UserError:
             raise
@@ -386,25 +415,39 @@ class cfeFactory():
         return True
 
 
+
+    # def ws_procesar_respuesta(self, response_xml):
+    #     res = []
+    #     vals = {}
+    #     doc = parse(response_xml)
+        # lista_sobres = doc.getElementsByTagName("ACKSobre")
+        # for sobre in lista_sobres:
+        #     nodo_detalle = sobre.getElementsByTagName("Detalle")[0]
+        #     nodo_caratula = sobre.getElementsByTagName("Caratula")[0]
+        #     estado = nodo_detalle.getElementsByTagName("Estado")[0]
+        #     if estado.firstChild.data == 'AS':
+        #         vals['aceptado'] = True
+        #         nodo_paramconsulta = nodo_detalle.getElementsByTagName('ParamConsulta')[0]
+        #         vals['idreceptor'] = nodo_caratula.getElementsByTagName('IDReceptor')[0].firstChild.data
+        #         vals['token'] = nodo_paramconsulta.getElementsByTagName('Token')[0].firstChild.data
+        #     elif estado.firstChild.data == 'BS':
+        #         nodo_motivo_detalle = nodo_detalle.getElementsByTagName("MotivosRechazo")[0]
+        #         glosa = nodo_motivo_detalle.getElementsByTagName("Glosa")[0]
+        #         detalle = nodo_motivo_detalle.getElementsByTagName("Detalle")[0]
+        #         motivo = nodo_motivo_detalle.getElementsByTagName("Motivo")[0]
+        #         vals['codigo'] = motivo.firstChild.data
+        #         vals['descripcion'] = detalle.firstChild.data
+        #         vals['glosa'] = glosa.firstChild.data
+        #         vals['aceptado'] = False
+        #         if vals['codigo'].strip() == 'S08':
+        #             vals['idreceptor'] = nodo_caratula.getElementsByTagName('IDReceptor')[0].firstChild.data
+        #             vals['token'] = ''  # nodo_paramconsulta.getElementsByTagName('Token')[0].firstChild.data
+        #             vals['aceptado'] = True
+        #     res.append(vals)
+        # return res
+
+
 # -------------------------------------------------------------------------------------------------------------------------
-# -----------
-import logging
-# logging.basicConfig(level=logging.INFO)
-# logging.getLogger('suds.client').setLevel(logging.DEBUG)
-_logger = logging.getLogger('suds.transport').setLevel(logging.DEBUG)
-# logging.getLogger('suds.xsd.schema').setLevel(logging.DEBUG)
-# logging.getLogger('suds.wsdl').setLevel(logging.DEBUG)
-
-from odoo.exceptions import UserError
-from odoo import api, fields, models, _, tools
-import os
-from suds.wsse import UsernameToken, Security
-from suds import Client, WebFault
-
-key_ws_FE_GeneraryFirmarDocumento = "url_ws.fe.ws_generar_y_firmar_doc"
-key_ws_FE_username = "url_ws.fe.username"
-key_ws_FE_password = "url_ws.fe.password"
-# -----------
 
 # class WebServiceFE(models.TransientModel):
 #     _name = 'web.service.FE'
