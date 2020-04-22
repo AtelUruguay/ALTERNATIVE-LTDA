@@ -84,12 +84,12 @@ class AccountMove(models.Model):
             options._tipoComprobante = tipo_CFE
             # options._serieComprobante = rec. #todo
             # options._numeroComprobante = rec. #todo
-            options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y%m%d')
+            options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y-%m-%d')
 
             options._indicadorMontBruto = True #todo
 
             options._formaPago = 1 #1-Contado, 2-Credito
-            options._fechaVencimientoYYYYMMDD = rec.invoice_date_due.strftime('%Y%m%d')
+            options._fechaVencimientoYYYYMMDD = rec.invoice_date_due.strftime('%Y-%m-%d')
 
             # EMISOR todo ver si los datos salen de aca o de los campos nuevos que puse
             options._emisorRuc = rec.company_id.partner_id.vat

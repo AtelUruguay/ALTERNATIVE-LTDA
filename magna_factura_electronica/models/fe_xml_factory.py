@@ -38,7 +38,7 @@ key_ws_FE_password = "magna_ws_fe.password"
 class cfeFactoryOptionsProductLineDetail():
     _cantidad = 0
     _nombreItem = ''
-    _unidadMedidad = 0
+    _unidadMedidad = ''
     _precioUnitario = 0
     _montoItem = 0
     _indicadorFacturacion = 0
@@ -48,8 +48,8 @@ class cfeFactoryOptions():
     _fechaComprobanteYYYYMMDD = ''
     _esContingencia = False
     _tipoComprobante = 0
-    _serieComprobante = 0
-    _numeroComprobante = 0
+    _serieComprobante = 'A'
+    _numeroComprobante = 1
     _indicadorMontBruto = False
 
     _emisorRuc = ''
@@ -150,7 +150,8 @@ class CfeFactory():
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECCodPaisRecep', cod_pais_receptor)
         if self.opt._receptorDocumento:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDocRecep', self.opt._receptorDocumento)
-        self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECRznSocRecep', str(self.opt._receptorRazonSocial))
+        if self.opt._receptorRazonSocial:
+            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECRznSocRecep', str(self.opt._receptorRazonSocial))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDirRecep', str(self.opt._receptorDireccion))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECCiudadRecep', str(self.opt._receptorCiudad))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDeptoRecep', str(self.opt._receptorDepartamento))
@@ -217,7 +218,7 @@ class CfeFactory():
         # se quita el <?xml version="1.0" encoding="utf-8"?>
         XML = XML.split("?>")[1]
 
-        logging.info('Inxmlentrada --> %s', XML)
+        # logging.info('Inxmlentrada --> %s', XML)
 
         return XML
 
@@ -299,7 +300,7 @@ class CfeFactory():
             respuesta_ws = client.service.Execute(Inxmlentrada=str_xml_cfe, Tipocfe=tipo_CFE, Fefacturaimportadaloteid=0)
             if respuesta_ws:
                 if respuesta_ws.Outxmlsalida:
-                    # logging.info('---------RESPUESTA: %s',respuesta_ws.Outxmlsalida)
+                    logging.info('RESPUESTA: %s',respuesta_ws.Outxmlsalida)
                     return self.ws_procesar_respuesta(respuesta_ws.Outxmlsalida)
                 else:
                     raise UserError('Error : ' + str(respuesta_ws))
