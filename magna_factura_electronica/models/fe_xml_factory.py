@@ -378,7 +378,7 @@ class cfeFactory():
             respuesta_ws = client.service.Execute(Inxmlentrada=str_xml_cfe, Tipocfe=tipo_CFE, Fefacturaimportadaloteid=0)
 
             if respuesta_ws:
-                logging.info('---------RESPUESTA: %s',parse(respuesta_ws))
+                logging.info('---------RESPUESTA: %s',respuesta_ws.Outxmlsalida)
 
 
 
