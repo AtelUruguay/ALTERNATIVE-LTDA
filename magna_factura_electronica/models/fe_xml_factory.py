@@ -115,7 +115,7 @@ class CfeFactory():
         self.opt = options
 
 
-    def getXML(self):
+    def get_data_XML(self):
         doc = Document()
 
         CFEEntrada = doc.createElement("CFEEntrada")
@@ -213,9 +213,11 @@ class CfeFactory():
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'CorreoReceptor', str(self.opt._adicionalCorreoReceptor))
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'EsReceptor', str(self.opt._adicionalEsReceptor))
 
-        XML = doc.toxml()
+        XML = doc.toprettyxml()
         # se quita el <?xml version="1.0" encoding="utf-8"?>
         XML = XML.split("?>")[1]
+
+        logging.info('Inxmlentrada --> %s', XML)
 
         return XML
 
@@ -261,7 +263,7 @@ class CfeFactory():
             #         key_ws_FE_password))
         except Exception:
             raise UserError(_(
-                'Error No se encuentra configurada algun parametro: %s, %s o %s ' %
+                'Error No se encuentra configurado algun parametro: %s, %s o %s ' %
                 (key_ws_FE_url, key_ws_FE_username,key_ws_FE_password)))
 
         # se usa archivo wsdl local al addon: FEGeneraryFirmarDocumento.wsdl'

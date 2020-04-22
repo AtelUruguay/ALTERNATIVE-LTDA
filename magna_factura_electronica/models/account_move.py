@@ -5,6 +5,7 @@ import base64
 from io import BytesIO
 from odoo import api, fields, models
 from . import fe_xml_factory
+from odoo.exceptions import UserError
 import logging
 
 
@@ -130,9 +131,11 @@ class AccountMove(models.Model):
                                                                          ('fe_tax_codigo_dgi', '=', '3'),
                                                                          ('type_tax_use', '=', 'sale')], limit=1)
             if not account_tax_iva_minima_id:
-                raise ValueError(u'No existe configurado un impuesto con Código de DGI 2 (Iva tasa mínima)')
+                raise UserError(
+                    'No existe configurado un impuesto con Código de DGI 2 (Iva tasa mínima)')
+
             if not account_tax_iva_basica_id:
-                raise ValueError(u'No existe configurado un impuesto con Código de DGI 3 (Iva tasa basica)')
+                raise UserError(u'No existe configurado un impuesto con Código de DGI 3 (Iva tasa basica)')
 
             options._IVATasaMinima = account_tax_iva_minima_id[0].amount
             options._IVATasaBasica = account_tax_iva_basica_id[0].amount
@@ -197,6 +200,6 @@ class AccountMove(models.Model):
             options._montoTotalAPagar = rec.amount_total
 
             xml_factory = fe_xml_factory.CfeFactory(options=options)
-            XML = xml_factory.getXML()
+            XML = xml_factory.get_data_XML()
 
             return XML
