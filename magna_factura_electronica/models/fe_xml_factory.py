@@ -34,6 +34,8 @@ key_ws_FE_url = "magna_ws_fe.url"
 key_ws_FE_username = "magna_ws_fe.username"
 key_ws_FE_password = "magna_ws_fe.password"
 
+import requests
+
 
 class cfeFactoryOptionsProductLineDetail():
     _cantidad = 0
@@ -248,6 +250,11 @@ class CfeFactory():
         try:
             url_ws = tools.config[key_ws_FE_url]
             # url_ws = "https://fe-test.proinfo.uy:443/servlet/afegeneraryfirmardocumento"
+
+            r = requests.head('https://fe-test.proinfo.uy/servlet/afegeneraryfirmardocumento', allow_redirects=True)
+            logging.info('URL REDIRECT: %s', r.url)
+
+
             if not url_ws:
                 raise UserError(_(
                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio: %s ' %
