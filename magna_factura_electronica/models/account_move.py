@@ -102,11 +102,10 @@ class AccountMove(models.Model):
 
             # RECEPTOR todo ver si los datos salen de aca o de los campos nuevos que puse
             options._receptorTipoDocumento = rec.partner_id.fe_tipo_documento
-            if rec.partner_id.fe_pais_documento:
-                options._receptorCodigoPais = rec.partner_id.fe_pais_documento.code
-            options._receptorDocumento = rec.partner_id.vat
-            options._receptorRazonSocial = rec.partner_id.fe_razon_social
-            options._receptorDireccion = rec.partner_id.fe_addr_facturacion
+            options._receptorCodigoPais = rec.partner_id.fe_pais_documento.code
+            options._receptorDocumento = rec.partner_id.fe_nro_doc
+            options._receptorRazonSocial = rec.partner_id.name
+            options._receptorDireccion = rec.partner_id.street
             options._receptorCiudad = rec.partner_id.city
             options._receptorDepartamento = rec.partner_id.state_id.name
 
