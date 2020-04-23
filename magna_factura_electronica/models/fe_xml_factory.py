@@ -346,6 +346,6 @@ class CfeFactory():
             elif estado == 'BS':
                 error_msg = nodo.getElementsByTagName("MensajeError")[0].firstChild.data
                 raise UserError(u'Ha habido un error en el envío de la factura al proveedor de FE: ' + error_msg)
-
+        logging.info('VALS: %s', vals)
         return vals
 
