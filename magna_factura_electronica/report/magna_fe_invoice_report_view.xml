@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <report id="fe_invoice_report"
+                model="account.move"
+                name="magna_factura_electronica.fe_invoice_report"
+                string="Factura electrónica"
+                report_type="qweb-pdf"
+                file="fe_invoice_report"
+        />
+
+    </data>
+</openerp>

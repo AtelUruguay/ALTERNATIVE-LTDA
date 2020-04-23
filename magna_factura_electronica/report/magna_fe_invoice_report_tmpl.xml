@@ -1,0 +1,344 @@
+<?xml version="1.0"?>
+<t t-name="magna_factura_electronica.fe_invoice_report">
+    <t t-set="data_report_margin_top" t-value="8"/>
+    <t t-set="data_report_header_spacing" t-value="9"/>
+    <t t-set="data_report_dpi" t-value="100"/>
+    <!--t-->
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <!--<t t-debug="ipdb"/>-->
+            <!--<div class="header">-->
+            <!--</div>-->
+            <div class="page">
+                <div t-if="o.state == 'draft'"
+                     style="position:absolute;opacity:0.40;z-index:1000;transform:rotate(300deg);-webkit-transform:rotate(300deg);width:150%;font-size:152px">
+                    <p>BORRADOR</p>
+                </div>
+                <div class="row">
+                    <div style="border-top: 1px solid black;"> <!--Datos del Emisor-->
+                        <table width="100%">
+                            <tr>
+                                <td style="vertical-align: top">
+                                    <table cellspacing="10" width="100%" class="text-left">
+                                        <tr>
+                                            <td>
+                                                <span t-field="o.company_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span t-field="o.company_id.logo_web"
+                                                      t-field-options="{&quot;widget&quot;: &quot;image&quot;}"
+                                                      width="200" height="40"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span t-field="o.company_id.street"/>
+                                                -
+                                                <span t-field="o.company_id.city"/>
+                                                -
+                                                <span t-field="o.company_id.country_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tel:
+                                                <span t-field="o.company_id.phone"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span t-field="o.company_id.email"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span t-field="o.company_id.website"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table style="empty-cells: hide" cellspacing="10" width="100%" align="right"
+                                           class="text-right">
+                                        <tr>
+                                            <th style="border: 1px solid black;text-align: center;" colspan="5">
+                                                <b>
+                                                    <span t-if="o.company_id.vat">RUT EMISOR:
+                                                        <t t-set="get_rut_func" t-value="(o.company_id.vat)[2:]"/>
+                                                        <t t-esc="get_rut_func"/>
+                                                    </span>
+                                                </b>
+                                            </th>
+                                        </tr> <!--tr> <th style="border: 1px solid black;text-align: center;" colspan="5"><span t-if="o.type == 'out_invoice' and o.partner_id.vat != '' ">E-FACTURA</span></th> </tr-->
+                                        <tr>
+                                            <th style="border: 1px solid black;text-align: center;" colspan="5">
+                                                <b>
+                                                    <span t-field="o.doct_type"/>
+                                                </b>
+                                            </th>
+                                        </tr>
+                                        <tr t-if="not o.partner_id.vat"
+                                            style="border: 1px solid black;text-align: center;">
+                                            <th style="border: 1px solid black;text-align: center;" colspan="5">
+                                                <b>
+                                                    <span>CONSUMO FINAL</span>
+                                                </b>
+                                            </th>
+                                        </tr>
+                                        <tr t-if="o.type == 'out_refund' ">
+                                            <th style="border: 1px solid black;text-align: center;" colspan="5">
+                                                <b>Documento de Origen:
+                                                    <span t-field="o.num_orig"/>
+                                                </b>
+                                            </th>
+                                        </tr> <!--tr> <td>&#160;</td> </tr--> <!--<tr>--> <!--<td>&#160;</td>--> <!--<td>&#160;</td>--> <!--<td>&#160;</td>--> <!--<td>&#160;</td>--> <!--</tr>-->
+                                        <tr style="border: 1px solid black;">
+                                            <td style="border: 1px solid black;text-align: center;">Serie</td>
+                                            <td style="border: 1px solid black;text-align: center;">Numero</td>
+                                            <td style="border: 1px solid black;text-align: center;">Pago</td>
+                                            <td style="border: 1px solid black;text-align: center;">Moneda</td>
+                                            <td style="border: 1px solid black;text-align: center;">TC</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border: 1px solid black;text-align: center;">
+                                                <span t-if="o.fe_Serie">
+                                                    <t t-esc="o.fe_Serie"/>
+                                                </span>
+                                            </td>
+                                            <td style="border: 1px solid black;text-align: center;">
+                                                <span t-if="o.fe_DocNro">
+                                                    <t t-esc="o.fe_DocNro"/>
+                                                </span>
+                                            </td>
+                                            <td style="border: 1px solid black;text-align: center;">
+                                                <span t-if="o.payment_term">
+                                                    <t t-esc="o.tipo_pago"/>
+                                                </span>
+                                            </td>
+                                            <td style="border: 1px solid black;text-align: center;">
+                                                <span t-field="o.currency_id.name"/>
+                                            </td>
+                                            <td style="border: 1px solid black;text-align: center;">
+                                                <t t-set="get_currency_value"
+                                                   t-value="round(1/(o.currency_id.rate_ids[0].rate),2)"/>
+                                                <span>
+                                                    <t t-esc="get_currency_value"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="o.partner_id.vat" style="border: 1px solid black;text-align: center;">
+                                            <th style="border: 1px solid black;text-align: center;" colspan="5">
+                                                <b>
+                                                    <t t-esc="o.formatter.return_document_type(o.partner_id.vat_type)"/>
+                                                    <span></span>
+                                                    <t t-esc="o.partner_id.vat[2:]"/>
+                                                </b>
+                                            </th>
+                                        </tr>
+                                        <tr style="border: 1px solid black;text-align: center;">
+                                            <td tyle="border: 1px solid black;text-align: center;" colspan="5">
+                                                <br/>
+                                                <span t-field="o.partner_id.name"/>
+                                                <br/>
+                                                <span t-field="o.partner_id.street"/>
+                                                <br/>
+                                                <span t-field="o.partner_id.city"/>
+                                                <br/>
+                                                <br/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br/> <!--<table cellspacing="10" width="20%">--> <!--<tr>--> <!--<th>--> <!--Numero Interno: <span t-if="o.fe_DocNro"><t t-set="get_number" t-value="(o.number)[2:]"/> <t t-esc="get_number"/></span>--> <!--</th>--> <!--</tr>--> <!----> <!--</table>-->
+                    <br/>
+                    <table cellspacing="10" width="100%">
+                        <tr style="border: 1px solid black;">
+                            <th style="border: 1px solid black;text-align: center;" colspan="4">Fecha Factura:
+                                <span t-field="o.date_invoice"/>
+                            </th>
+                            <th style="border: 1px solid black;text-align: center;" colspan="1">Condición de Pago: <span
+                                    t-if="o.type == 'out_refund' and (o.partner_id.vat != False)">Contado
+                            </span>
+                                <span t-if="o.type == 'out_invoice' and (o.payment_term.name == 'Contado')">Contado
+                                </span>
+                                <span t-if="o.type == 'out_invoice' and (o.payment_term.name != 'Contado')">
+                                    <span t-field="o.payment_term.name"/>
+                                </span>
+                            </th>
+                            <th style="border: 1px solid black;text-align: center;" colspan="1">Vencimiento:
+                                <span t-if="o.type == 'out_refund' and (o.partner_id.vat != False)">
+                                    <span t-field="o.date_invoice"/>
+                                </span>
+                                <span t-if="o.type == 'out_invoice'">
+                                    <span t-field="o.date_due"/>
+                                </span>
+                            </th>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Descripción</th>
+                                <th>Cantidad</th>
+                                <th class="text-right">Precio Unitario</th>
+                                <th class="text-right" groups="sale.group_discount_per_so_line">Descuento (%)
+                                </th> <!--th class="text-right">Impuestos</th-->
+                                <th class="text-right">Importe</th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody">
+                            <tr t-foreach="o.invoice_line" t-as="l">
+                                <td>
+                                    <span t-field="l.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="o.formatter.currency_fmt(l.quantity)"/>
+                                    <span t-field="l.uos_id" groups="product.group_uom"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="o.formatter.currency_fmt(l.price_unit)"/>
+                                </td>
+                                <td class="text-right" groups="sale.group_discount_per_so_line">
+                                    <span t-esc="o.formatter.currency_fmt(l.discount)"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="o.formatter.currency_fmt(l.price_subtotal)"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-4 pull-right">
+                            <table class="table table-condensed">
+                                <tr class="border-black">
+                                    <td>
+                                        <strong>Total sin impuestos</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="o.currency_id.symbol"/>
+                                        <span t-esc="o.formatter.currency_fmt(o.amount_untaxed)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>IVA Tasa básica</td>
+                                    <td class="text-right">
+                                        <span t-esc="o.currency_id.symbol"/>
+                                        <span t-esc="o.formatter.currency_fmt(o.amount_tax)"/>
+                                    </td>
+                                </tr>
+                                <tr class="border-black">
+                                    <td>
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="o.currency_id.symbol"/>
+                                        <span t-esc="o.formatter.currency_fmt(o.amount_total)"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 pull-right">
+                        <table width="100%" style="border: 1px solid black;text-align: right;">
+                            <th>
+                                <b>TIPO DE CAMBIO SOLO A EFECTOS FISCALES</b>
+                            </th>
+                        </table>
+                    </div>
+                </div>
+                <br/>
+                <div style="border-top: 1px solid black;"/>
+                <p align="center">
+                    <strong>ADENDA</strong>
+                </p>
+                <strong>Nro Interno ERP:</strong>
+                <span t-field="o.number"/>
+                <p t-if="o.comment">
+                    <strong>Información adicional:</strong>
+                    <span t-field="o.comment"/>
+                </p>
+                <p align="center">
+                    <strong>FIN ADENDA</strong>
+                </p>
+                <div style="border-top: 1px solid black;"/> <!--div class="footer"-->
+                <div>
+                    <div class="row">
+                        <span t-if="o.doct_type">Iva al dia |</span>
+                        <span t-if="o.fe_CAENA">Nro CAE:
+                            <span t-field="o.fe_CAENA"/>
+                            |
+                        </span>
+                        <span t-if="o.fe_CAEDNro">Rango:
+                            <span t-field="o.fe_CAEDNro"/>
+                            -
+                            <span t-field="o.fe_CAEHNro"/>
+                            |
+                        </span>
+                        <span t-if="o.fe_CAEFA">CAE Fecha de autorización:
+                            <span t-field="o.fe_CAEFA"/>
+                            |
+                        </span>
+                        <span t-if="o.fe_CAEFVD">CAE vencimiento:
+                            <span t-field="o.fe_CAEFVD"/>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-push-8">
+                            <span t-if="o.qr_img">
+                                <span t-field="o.qr_img" t-field-options="{&quot;widget&quot;: &quot;image&quot;}"/>
+                            </span>
+                            <br>
+                                <span t-if="o.fe_Hash">Código de Seguridad:
+                                    <t t-set="get_hash" t-value="(o.fe_Hash)[:6]"/>
+                                    <t t-esc="get_hash"/>
+                                </span>
+                            </br>
+                            <br>
+                                <span t-if="o.fe_CAEFVD">Resolución DGI No.</span>
+                            </br>
+                            <span t-if="o.DgiParam">
+                                <t t-esc="o.DgiParam"/>
+                            </span>
+                            <span t-if="o.doct_type">
+                                <t t-esc="o.doct_type"/>
+                            </span>
+                            <span></span>
+                            <br>
+                                <span t-if="o.fe_CAEFVD">Puede verificar comprobante en:</span>
+                            </br>
+                            <span t-if="o.fe_CAEFVD">
+                                <t t-esc="o.fe_URLParaVerificarTexto"/>
+                            </span>
+                        </div>
+                    </div>
+                    <br/>
+                    <div t-if="o.fe_CAEFVD">
+                        <table class="table table-condensed">
+                            <tr>
+                                <td>
+                                    <strong>Firma:</strong>
+                                </td>
+                                <td>
+                                    <strong>Fecha:</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Aclaración</strong>
+                                    <td>
+                                        <strong>C.I.</strong>
+                                    </td>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div> <!--/div-->
+            </div>
+        </t>
+    </t> <!--/t-->
+</t>
