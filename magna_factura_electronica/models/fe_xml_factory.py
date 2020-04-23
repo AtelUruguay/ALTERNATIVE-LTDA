@@ -92,8 +92,8 @@ class cfeFactoryOptions():
     _lineasDetalle = []
 
     _adicionalTipoDocumentoId = 0
-    _adicionalDocComCodigo = ''
-    _adicionalDocComSerie = ''
+    _adicionalDocComCodigo = 1
+    _adicionalDocComSerie = 'A'
     _adicionalSucursalId = 0
     _adicionalAdenda = ''
     _adicionalCAEDnro = 0
@@ -319,6 +319,7 @@ class CfeFactory():
             logging.error(_("No se pudo obtener los datos de WS:" + tools.ustr(e)))
             raise UserError('Error: No se pudo Procesar el request, exception grave')
 
+        logging.info('FE ENVIADO CORRECTAMENTE')
         return True
 
 
