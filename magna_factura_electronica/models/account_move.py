@@ -82,8 +82,8 @@ class AccountMove(models.Model):
             options._lineasDetalle = []
 
             options._tipoComprobante = tipo_CFE
-            # options._serieComprobante = rec. #todo
-            # options._numeroComprobante = rec. #todo
+            options._serieComprobante = 'A' #todo
+            options._numeroComprobante = 1 #todo
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y-%m-%d')
             options._esContingencia = rec.fe_Contingencia
             options._indicadorMontBruto = True #todo
@@ -141,10 +141,10 @@ class AccountMove(models.Model):
             options._IVATasaBasica = account_tax_iva_basica_id[0].amount
 
             # ADICIONAL
-            options._adicionalTipoDocumentoId = 0
-            options._adicionalDocComCodigo = ''
-            options._adicionalDocComSerie = ''
-            options._adicionalSucursalId = 0
+            options._adicionalTipoDocumentoId = options._tipoComprobante
+            options._adicionalDocComCodigo = options._numeroComprobante
+            options._adicionalDocComSerie = options._serieComprobante
+            options._adicionalSucursalId = options._emisorCodigoCasaPrincipal
             options._adicionalAdenda = ''
             options._adicionalCAEDnro = 0
             options._adicionalCAEHnro = 0
