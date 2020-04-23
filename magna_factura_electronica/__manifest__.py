@@ -15,7 +15,7 @@
         'views/partner_view.xml',
         'views/company_view.xml',
         'views/taxes_view.xml',
-        'report/magna_fe_invoice_report_tmpl.xml',
+        # 'report/magna_fe_invoice_report_tmpl.xml',
         'report/magna_fe_invoice_report_view.xml'
     ],
     'demo': [],
