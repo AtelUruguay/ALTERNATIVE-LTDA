@@ -47,10 +47,10 @@ class AccountMove(models.Model):
             rec.fe_qr_img = qr_image
 
     # se llama al action_post de super y antes de devolver el control, se envía la información de FE
-    def action_post(self):
-        res = super(AccountMove, self).action_post()
-        self.invoice_send_fe_proinfo()
-        return res
+    # def action_post(self):
+    #     res = super(AccountMove, self).action_post()
+    #     self.invoice_send_fe_proinfo()
+    #     return res
 
     def invoice_send_fe_proinfo(self):
         for rec in self:
@@ -85,7 +85,7 @@ class AccountMove(models.Model):
             # options._serieComprobante = rec. #todo
             # options._numeroComprobante = rec. #todo
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y-%m-%d')
-
+            options._esContingencia = rec.fe_Contingencia
             options._indicadorMontBruto = True #todo
 
             options._formaPago = 1 #1-Contado, 2-Credito
@@ -102,7 +102,7 @@ class AccountMove(models.Model):
 
             # RECEPTOR todo ver si los datos salen de aca o de los campos nuevos que puse
             options._receptorTipoDocumento = rec.partner_id.fe_tipo_documento
-            if rec.partner_id.fe_pais_documento.code:
+            if rec.partner_id.fe_pais_documento:
                 options._receptorCodigoPais = rec.partner_id.fe_pais_documento.code
             options._receptorDocumento = rec.partner_id.vat
             options._receptorRazonSocial = rec.partner_id.fe_razon_social
