@@ -81,9 +81,12 @@ class AccountMove(models.Model):
             options = fe_xml_factory.cfeFactoryOptions()
             options._lineasDetalle = []
 
+            serie = 'B'
+            numero = rec.id
+
             options._tipoComprobante = tipo_CFE
-            # options._serieComprobante = 'A' #todo
-            # options._numeroComprobante = 1 #todo
+            options._serieComprobante = serie
+            options._numeroComprobante = numero
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y-%m-%d')
             options._esContingencia = rec.fe_Contingencia
             options._indicadorMontBruto = True #todo
@@ -142,8 +145,8 @@ class AccountMove(models.Model):
 
             # ADICIONAL
             options._adicionalTipoDocumentoId = tipo_CFE
-            # options._adicionalDocComCodigo = todo
-            # options._adicionalDocComSerie =  todo
+            options._adicionalDocComCodigo = numero
+            options._adicionalDocComSerie = serie
             options._adicionalSucursalId = rec.company_id.fe_codigo_principal_sucursal
             options._adicionalAdenda = ''
             options._adicionalCAEDnro = 0
