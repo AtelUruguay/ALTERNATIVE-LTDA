@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<openerp>
+<odoo>
         <data>
             <!-- CAMBIOS EN LA COMPAÑIA -->
             <record model='ir.ui.view' id='res_company_uy_FE'>
@@ -19,4 +19,4 @@
                 </field>
             </record>
         </data>
-</openerp>
+</odoo>

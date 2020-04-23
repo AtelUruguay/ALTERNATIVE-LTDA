@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<data>
+<odoo>
+    <data>
 
     <record id="magna_fe_view_move_form" model="ir.ui.view">
         <field name="name">magna.fe_account_move_form</field>
@@ -89,4 +90,4 @@
         </field>
     </record>
 </data>
-
+</odoo>
