@@ -110,7 +110,8 @@ class AccountMove(models.Model):
             options._receptorDepartamento = rec.partner_id.state_id.name
 
             # TOTALES
-            options._tipoMonedaTransaccion = rec.currency_id.name
+            # options._tipoMonedaTransaccion = rec.currency_id.name #todo
+            options._tipoMonedaTransaccion = 'UYU'
 
             group_taxes = rec.amount_by_group
             logging.info(group_taxes)
