@@ -337,7 +337,7 @@ class CfeFactory():
                 vals['fe_Estado'] = estado
                 vals['fe_URLParaVerificarQR'] = nodo.getElementsByTagName("URLParaVerificarQR")[0].firstChild.data
                 vals['fe_URLParaVerificarTexto'] = nodo.getElementsByTagName("URLParaVerificarTexto")[0].firstChild.data
-                vals['fe_CAEDNro'] = nodo.getElementsByTagName("FechaHoraFirma")[0].firstChild.data
+                vals['fe_CAEDNro'] = nodo.getElementsByTagName("CAEDNro")[0].firstChild.data
                 vals['fe_CAEHNro'] = nodo.getElementsByTagName("CAEHNro")[0].firstChild.data
                 vals['fe_CAENA'] = nodo.getElementsByTagName("CAENA")[0].firstChild.data
                 vals['fe_CAEFA'] = nodo.getElementsByTagName("CAEFA")[0].firstChild.data
