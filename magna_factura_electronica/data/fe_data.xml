@@ -8,15 +8,15 @@
         <!--</record>-->
 
 
-        <record id="fe_tax_codigo_dgi_1" model="fe_tax_codigo_dgi">
+        <record id="fe_ind_fact_dgi_1" model="fe_indicador_facturacion_dgi">
             <field name="name">Exento de IVA</field>
             <field name="code">1</field>
         </record>
-        <record id="fe_tax_codigo_dgi_2" model="fe_tax_codigo_dgi">
+        <record id="fe_ind_fact_dgi_2" model="fe_indicador_facturacion_dgi">
             <field name="name">Gravado a Tasa Mínima</field>
             <field name="code">2</field>
         </record>
-        <record id="fe_tax_codigo_dgi_3" model="fe_tax_codigo_dgi">
+        <record id="fe_ind_fact_dgi_3" model="fe_indicador_facturacion_dgi">
             <field name="name">Gravado a Tasa Básica</field>
             <field name="code">3</field>
         </record>
