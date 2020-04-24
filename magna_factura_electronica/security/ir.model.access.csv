@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fe_indicador_facturacion_dgi_account_manager,fe_indicador_facturacion_dgi_account_manager,model_fe_indicador_facturacion_dgi,account.group_account_manager,1,1,1,0
+access_fe_indicador_facturacion_dgi_account_invoice,fe_indicador_facturacion_dgi_account_invoice,model_fe_indicador_facturacion_dgi,account.group_account_invoice,1,0,0,0
+

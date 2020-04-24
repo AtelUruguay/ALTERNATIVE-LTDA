@@ -10,6 +10,7 @@
     'website': 'https://www.quanam.com',
     'depends' : ['base', 'account'],
     'data': [
+        'security/ir.model.access.csv',
         'data/fe_data.xml',
         'views/account_move_views.xml',
         'views/partner_view.xml',
