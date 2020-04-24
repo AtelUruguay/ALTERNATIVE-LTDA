@@ -26,7 +26,7 @@ class AccountMove(models.Model):
     fe_CAEHNro = fields.Integer('CAE Hasta')
     fe_CAENA = fields.Char(u'CAE Autorización')
     fe_CAEFA = fields.Char(u'CAE Fecha de autorización')
-    fe_CAEFVD = fields.Char('CAE vencimiento')
+    fe_CAEFVD = fields.Char('CAE Vencimiento')
     fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=False)
 
     @api.depends('fe_URLParaVerificarQR')
@@ -81,15 +81,16 @@ class AccountMove(models.Model):
             options = fe_xml_factory.cfeFactoryOptions()
             options._lineasDetalle = []
 
-            serie = 'B'
-            numero = rec.id
+            if rec.fe_Contingencia:
+                options._serieComprobante = rec.fe_SerieContingencia
+                options._numeroComprobante = rec.fe_DocNroContingencia
 
             options._tipoComprobante = tipo_CFE
-            options._serieComprobante = serie
-            options._numeroComprobante = numero
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y-%m-%d')
             options._esContingencia = rec.fe_Contingencia
-            options._indicadorMontBruto = True #todo
+
+            # todo
+            options._indicadorMontBruto = True
 
             options._formaPago = 1 #1-Contado, 2-Credito
             options._fechaVencimientoYYYYMMDD = rec.invoice_date_due.strftime('%Y-%m-%d')
@@ -125,13 +126,13 @@ class AccountMove(models.Model):
 
             account_tax_obj = self.env['account.tax']
             # account_tax_iva_exento_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
-            #                                                              ('fe_tax_codigo_dgi', '=', '1'),
+            #                                                              ('fe_tax_codigo_dgi.code', '=', '1'),
             #                                                              ('type_tax_use', '=', 'sale')], limit=1)
             account_tax_iva_minima_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
-                                                                         ('fe_tax_codigo_dgi', '=', '2'),
+                                                                         ('fe_tax_codigo_dgi.code', '=', '2'),
                                                                          ('type_tax_use', '=', 'sale')], limit=1)
             account_tax_iva_basica_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
-                                                                         ('fe_tax_codigo_dgi', '=', '3'),
+                                                                         ('fe_tax_codigo_dgi.code', '=', '3'),
                                                                          ('type_tax_use', '=', 'sale')], limit=1)
             if not account_tax_iva_minima_id:
                 raise UserError(
@@ -145,8 +146,8 @@ class AccountMove(models.Model):
 
             # ADICIONAL
             options._adicionalTipoDocumentoId = tipo_CFE
-            options._adicionalDocComCodigo = numero
-            options._adicionalDocComSerie = serie
+            options._adicionalDocComCodigo = rec.id
+            # options._adicionalDocComSerie = 'A'
             options._adicionalSucursalId = rec.company_id.fe_codigo_principal_sucursal
             options._adicionalAdenda = ''
             options._adicionalCAEDnro = 0
@@ -177,15 +178,15 @@ class AccountMove(models.Model):
 
                 impuesto = line.price_total - line.price_subtotal #todo revisar si esta bien
                 if line.tax_ids:
-                    line_aux._indicadorFacturacion = line.tax_ids[0].fe_tax_codigo_dgi
+                    line_aux._indicadorFacturacion = line.tax_ids[0].fe_tax_codigo_dgi.code
                     # if line.product_id.tax_ids[0].price_include:
                     #     options._montoBruto = True
-                    if line.tax_ids[0].fe_tax_codigo_dgi == '1' and line.tax_ids[0].type_tax_use == 'sale':
+                    if line.tax_ids[0].fe_tax_codigo_dgi.code == '1' and line.tax_ids[0].type_tax_use == 'sale':
                         monto_no_gravado += line.price_subtotal
-                    if line.tax_ids[0].fe_tax_codigo_dgi == '2' and line.tax_ids[0].type_tax_use == 'sale':
+                    if line.tax_ids[0].fe_tax_codigo_dgi.code == '2' and line.tax_ids[0].type_tax_use == 'sale':
                         monto_neto_iva_tasa_minima += line.price_subtotal
                         monto_iva_minima += impuesto
-                    if line.tax_ids[0].fe_tax_codigo_dgi == '3' and line.tax_ids[0].type_tax_use == 'sale':
+                    if line.tax_ids[0].fe_tax_codigo_dgi.code == '3' and line.tax_ids[0].type_tax_use == 'sale':
                         monto_neto_iva_tasa_basica += line.price_subtotal
                         monto_iva_basica += impuesto
                 else:

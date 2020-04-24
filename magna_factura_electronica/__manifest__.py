@@ -10,7 +10,7 @@
     'website': 'https://www.quanam.com',
     'depends' : ['base', 'account'],
     'data': [
-        # 'data/fe_data.xml',
+        'data/fe_data.xml',
         'views/account_move_views.xml',
         'views/partner_view.xml',
         'views/company_view.xml',
