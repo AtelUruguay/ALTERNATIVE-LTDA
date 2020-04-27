@@ -6,9 +6,12 @@
             <field name="model">account.tax</field>
             <field name="inherit_id" ref="account.view_tax_form"/>
             <field name="arch" type="xml">
-                <field name="tax_group_id" position="after">
-                    <field name="fe_tax_codigo_dgi"/>
-                </field>
+                <!--<field name="tax_group_id" position="after">-->
+                <group name="advanced_booleans" position="after">
+                    <group name="fe" string="Factura Electrónica">
+                        <field name="fe_tax_codigo_dgi" attrs="{'required':[('type_tax_use','=','sale')], 'invisible':[('type_tax_use','!=','sale')]}"/>
+                    </group>
+                </group>
             </field>
       </record>
     </data>
