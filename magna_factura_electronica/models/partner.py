@@ -19,7 +19,7 @@ class ResPartner(models.Model):
     fe_tipo_documento = fields.Selection(DOCUMENT_TYPE_SELECTION, 'Tipo de Documento', default='3')
     fe_pais_documento = fields.Many2one('res.country',u'País del Documento')
     fe_numero_doc = fields.Char(u'Número de Documento', size=32)
-    fe_nombre_fantasia = fields.Char(u'Nombre fantasia', size=50)
+    # fe_nombre_fantasia = fields.Char(u'Nombre fantasia', size=50)
     # fe_addr_facturacion = fields.Char(u'Dirección de Facturación', size=75)
 
 
