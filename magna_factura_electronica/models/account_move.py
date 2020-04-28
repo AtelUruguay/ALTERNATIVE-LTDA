@@ -209,7 +209,7 @@ class AccountMove(models.Model):
             options._montoIVATasaBasica = monto_iva_tasa_basica
 
             # options._montoTotal = abs(rec.amount_total - monto_no_facturable)
-            options._montoTotal = sum(monto_no_gravado, monto_neto_iva_tasa_minima, monto_neto_iva_tasa_basica, monto_iva_tasa_minima, monto_iva_tasa_basica)
+            options._montoTotal = monto_no_gravado + monto_neto_iva_tasa_minima + monto_neto_iva_tasa_basica + monto_iva_tasa_minima + monto_iva_tasa_basica
             options._montoTotalAPagar = rec.amount_total
 
             xml_factory = fe_xml_factory.CfeFactory(options=options)
