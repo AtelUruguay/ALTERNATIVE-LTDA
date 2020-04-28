@@ -197,6 +197,7 @@ class AccountMove(models.Model):
                         monto_neto_iva_tasa_basica += monto_item
                 else:
                     monto_no_gravado += monto_item
+                    line_aux._indicadorFacturacion = self.env.ref('magna_factura_electronica.fe_ind_fact_dgi_1').code
 
                 options._lineasDetalle.append(line_aux)
 
