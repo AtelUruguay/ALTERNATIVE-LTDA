@@ -12,7 +12,7 @@
                     <notebook position="inside">
                         <page string="Facturación Electrónica">
                             <group>
-                                <field name="fe_nombre_fantasia" />
+                                <!--<field name="fe_nombre_fantasia" />-->
                                 <field name="fe_codigo_principal_sucursal"/>
                             </group>
                         </page>

@@ -104,7 +104,7 @@ class AccountMove(models.Model):
             options._emisorCiudad = rec.company_id.city
             options._emisorDepartamento = rec.company_id.state_id.name
 
-            # RECEPTOR todo ver si los datos salen de aca o de los campos nuevos que puse
+            # RECEPTOR
             options._receptorTipoDocumento = rec.partner_id.fe_tipo_documento
             options._receptorCodigoPais = rec.partner_id.fe_pais_documento.code
             options._receptorDocumento = rec.partner_id.fe_numero_doc
