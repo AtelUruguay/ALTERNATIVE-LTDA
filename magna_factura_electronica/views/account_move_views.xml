@@ -17,7 +17,6 @@
             </xpath>
             <xpath expr="//sheet//group" position="inside">
                 <group attrs="{'invisible':[('state','==','draft')]}">
-                <group>
                     <field name="fe_qr_img" widget="image" nolabel="1" attrs="{'invisible': [('fe_qr_img', '=', False)]}"/>
                 </group>
             </xpath>
@@ -52,9 +51,7 @@
                 <div class="oe_right oe_button_box" style="width: 350px; margin-top: -17px; margin-right: -14px;" name="buttons">
                     <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', False)]}" icon="fa-bolt" string="CFE Activa"></button>-->
                     <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', True)]}" icon="fa fa-exclamation-triangle" string="CFE Desactivada"></button>-->
-                    <!--todo asm volver a poner-->
-                    <!--<group col="5" attrs="{'invisible':[('state','==','draft')]}">-->
-                    <group col="5">
+                    <group col="5" attrs="{'invisible':[('state','==','draft')]}">
                         <div/>
                         <group col="3" colspan="1">
                             <div/>
@@ -68,9 +65,7 @@
             </xpath>
 
             <notebook position="inside">
-                <!--todo asm volver a poner-->
-                <!--<page string="Factura Electrónica" attrs="{'invisible':[('state','==','draft')]}">-->
-                <page string="Factura Electrónica">
+                <page string="Factura Electrónica" attrs="{'invisible':[('state','==','draft')]}">
                     <group>
                         <field name="fe_Contingencia" attrs="{'readonly':[('fe_Estado','=','AS')]}"/>
                         <field name="fe_SerieContingencia" attrs="{'invisible': [('fe_Contingencia','=',False)]}"/>
