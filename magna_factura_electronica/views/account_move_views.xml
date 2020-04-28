@@ -17,7 +17,6 @@
             </xpath>
             <xpath expr="//sheet//group" position="inside">
                 <group attrs="{'invisible':[('state','==','draft')]}">
-                <group>
                     <field name="fe_qr_img" widget="image" nolabel="1" attrs="{'invisible': [('fe_qr_img', '=', False)]}"/>
                 </group>
             </xpath>
