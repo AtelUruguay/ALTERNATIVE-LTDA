@@ -177,7 +177,7 @@ class AccountMove(models.Model):
                 line_aux._nombreItem = line.product_id.name
                 line_aux._unidadMedidad = 'Unit'
                 line_aux._precioUnitario = line.price_unit
-                monto_descuento = line.price_unit * line.discount / 100
+                monto_descuento = line.quantity * line.price_unit * line.discount / 100
                 monto_item = (line.quantity * line.price_unit) - monto_descuento
                 line_aux._descuentoMonto = monto_descuento
                 line_aux._montoItem = monto_item
