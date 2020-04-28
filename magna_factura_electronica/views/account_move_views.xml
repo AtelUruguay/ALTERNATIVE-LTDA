@@ -16,8 +16,7 @@
                 <attribute name="col">5</attribute>
             </xpath>
             <xpath expr="//sheet//group" position="inside">
-                <!--todo asm sacar esto-->
-                <!--<group attrs="{'invisible':[('state','==','draft')]}">-->
+                <group attrs="{'invisible':[('state','==','draft')]}">
                 <group>
                     <field name="fe_qr_img" widget="image" nolabel="1" attrs="{'invisible': [('fe_qr_img', '=', False)]}"/>
                 </group>
@@ -28,7 +27,6 @@
                 <!--<field name="invoice_id" attrs="{'invisible': [('is_debit_note','=',False)], 'required':  [('is_debit_note','=',True)]}" domain="[('partner_id', '=', partner_id)]"/>-->
                 <!--<field name="for_export"/>-->
             <!--</xpath>-->
-
             <!--<xpath expr="//field[@name='payment_term']" position="after">-->
                 <!--<field name="nro_compra" style="width: 60%" attrs="{'readonly':[('state', 'not in', 'draft')]}"/>-->
             <!--</xpath>-->
@@ -54,9 +52,7 @@
                 <div class="oe_right oe_button_box" style="width: 350px; margin-top: -17px; margin-right: -14px;" name="buttons">
                     <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', False)]}" icon="fa-bolt" string="CFE Activa"></button>-->
                     <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', True)]}" icon="fa fa-exclamation-triangle" string="CFE Desactivada"></button>-->
-                    <!--todo asm volver a poner-->
-                    <!--<group col="5" attrs="{'invisible':[('state','==','draft')]}">-->
-                    <group col="5">
+                    <group col="5" attrs="{'invisible':[('state','==','draft')]}">
                         <div/>
                         <group col="3" colspan="1">
                             <div/>
@@ -70,9 +66,7 @@
             </xpath>
 
             <notebook position="inside">
-                <!--todo asm volver a poner-->
-                <!--<page string="Factura Electrónica" attrs="{'invisible':[('state','==','draft')]}">-->
-                <page string="Factura Electrónica">
+                <page string="Factura Electrónica" attrs="{'invisible':[('state','==','draft')]}">
                     <group>
                         <field name="fe_Contingencia" attrs="{'readonly':[('fe_Estado','=','AS')]}"/>
                         <field name="fe_SerieContingencia" attrs="{'invisible': [('fe_Contingencia','=',False)]}"/>
@@ -86,9 +80,7 @@
                         <field name="fe_CAEFA" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
                         <field name="fe_CAEFVD" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
                         <field name="fe_Estado" attrs="{'invisible': True}"/>
-                        <!--<button name="resend_einvoice" type="object" string="Volver a enviar" attrs="{'invisible': [('fe_URLParaVerificarQR','=',False)]}"/>-->
-                        <button name="invoice_send_fe_proinfo" type="object" string="Probar FE" />
-
+                        <button name="invoice_send_fe_proinfo" type="object" string="Volver a enviar" attrs="{'invisible': ['|',('fe_Estado','=','AS'),('fe_Contingencia','=',False)]}"/>/>
                     </group>
                 </page>
             </notebook>
