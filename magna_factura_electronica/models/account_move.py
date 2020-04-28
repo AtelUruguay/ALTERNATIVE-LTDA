@@ -63,7 +63,7 @@ class AccountMove(models.Model):
     def get_tipo_cfe(self):
         for rec in self:
             invoice_type = rec.type
-            consumidor_final = rec.partner_id.fe_consumidor_final
+            consumidor_final = rec.partner_id.fe_tipo_documento != '2'
             if consumidor_final:  # eTicket
                 if invoice_type == 'out_invoice':  # Factura de cliente
                     return 101

@@ -26,11 +26,11 @@ class ResPartner(models.Model):
     fe_numero_doc = fields.Char(u'Número de Documento', size=32)
 
 
-    @api.onchange('is_company')
-    def onchange_type(self):
-        if self.is_company:
-            self.fe_consumidor_final = False
-
+    # @api.onchange('is_company')
+    # def onchange_type(self):
+    #     if self.is_company:
+    #         self.fe_consumidor_final = False
+    #
 
 
     # Funcion que chequea el digito verificador de la cedula
