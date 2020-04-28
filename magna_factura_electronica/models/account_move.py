@@ -47,10 +47,10 @@ class AccountMove(models.Model):
             rec.fe_qr_img = qr_image
 
     # se llama al action_post de super y antes de devolver el control, se envía la información de FE
-    # def action_post(self):
-    #     res = super(AccountMove, self).action_post()
-    #     self.invoice_send_fe_proinfo()
-    #     return res
+    def action_post(self):
+        res = super(AccountMove, self).action_post()
+        self.invoice_send_fe_proinfo()
+        return res
 
     def invoice_send_fe_proinfo(self):
         for rec in self:
