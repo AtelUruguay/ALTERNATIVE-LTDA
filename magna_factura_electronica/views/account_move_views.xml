@@ -16,7 +16,7 @@
                 <attribute name="col">5</attribute>
             </xpath>
             <xpath expr="//sheet//group" position="inside">
-                <group attrs="{'invisible':[('state','==','draft')]}">
+                <group attrs="{'invisible':[('state','=','draft')]}">
                     <field name="fe_qr_img" widget="image" nolabel="1" attrs="{'invisible': [('fe_qr_img', '=', False)]}"/>
                 </group>
             </xpath>
@@ -79,7 +79,7 @@
                         <field name="fe_CAEFA" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
                         <field name="fe_CAEFVD" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
                         <field name="fe_Estado" attrs="{'invisible': True}"/>
-                        <button name="invoice_send_fe_proinfo" type="object" string="Volver a enviar" attrs="{'invisible': ['|',('fe_Estado','=','AS'),('fe_Contingencia','=',False)]}"/>/>
+                        <button name="invoice_send_fe_proinfo" type="object" string="Volver a enviar" attrs="{'invisible': ['|',('fe_Estado','=','AS'),('fe_Contingencia','=',False)]}"/>
                     </group>
                 </page>
             </notebook>
