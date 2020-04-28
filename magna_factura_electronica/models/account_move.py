@@ -95,14 +95,14 @@ class AccountMove(models.Model):
             options._formaPago = 1 #1-Contado, 2-Credito
             options._fechaVencimientoYYYYMMDD = rec.invoice_date_due.strftime('%Y-%m-%d')
 
-            # EMISOR todo ver si los datos salen de aca o de los campos nuevos que puse
-            options._emisorRuc = rec.company_id.partner_id.vat
-            options._emisorNombre = rec.company_id.partner_id.name #razon social
-            options._emisorDomicilioFiscal = rec.company_id.partner_id.street
-            options._emisorNombreComercial = rec.company_id.name
+            # EMISOR
+            options._emisorRuc = rec.company_id.vat
+            options._emisorNombre = rec.company_id.name
+            options._emisorDomicilioFiscal = rec.company_id.street
+            options._emisorNombreComercial = rec.company_id.fe_nombre_fantasia
             options._emisorCodigoCasaPrincipal = rec.company_id.fe_codigo_principal_sucursal
-            options._emisorCiudad = rec.company_id.partner_id.city
-            options._emisorDepartamento = rec.company_id.partner_id.state_id.name
+            options._emisorCiudad = rec.company_id.city
+            options._emisorDepartamento = rec.company_id.state_id.name
 
             # RECEPTOR todo ver si los datos salen de aca o de los campos nuevos que puse
             options._receptorTipoDocumento = rec.partner_id.fe_tipo_documento

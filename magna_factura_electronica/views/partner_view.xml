@@ -15,8 +15,6 @@
                             <field name="fe_tipo_documento" />
                             <field name="fe_pais_documento" />
                             <field name="fe_numero_doc" />
-                            <!--<field name="fe_nombre_fantasia" />-->
-                            <!--<field name="fe_addr_facturacion"/>-->
                         </group>
                     </page>
                 </xpath>
