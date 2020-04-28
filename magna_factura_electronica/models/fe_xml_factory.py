@@ -161,7 +161,7 @@ class CfeFactory():
         # TOTALES DE ENCABEZADO
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTTpoMoneda', str(self.opt._tipoMonedaTransaccion))
         if self.opt._tipoMonedaTransaccion != 'UYU':
-            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTTpoCambio', self.opt._tipoCambio)
+            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTTpoCambio', "{0:.3f}".format(self.opt._tipoCambio))
 
         if self.opt._montoTotalNoGravado: #Tiene valor sólo si es exento de iva o no tiene impuestos (monto total de lineas que no tienen impuestos o exentos de iva)
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntNoGrv', "{0:.2f}".format(self.opt._montoTotalNoGravado).replace(".", ".").replace('-',''))
