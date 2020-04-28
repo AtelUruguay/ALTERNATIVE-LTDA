@@ -41,6 +41,7 @@ class cfeFactoryOptionsProductLineDetail():
     _nombreItem = ''
     _unidadMedidad = ''
     _precioUnitario = 0
+    _descuentoMonto = 0
     _montoItem = 0
     _indicadorFacturacion = 0
 
@@ -51,7 +52,7 @@ class cfeFactoryOptions():
     _tipoComprobante = 0
     _serieComprobante = 'A'
     _numeroComprobante = 1
-    _indicadorMontBruto = False
+    _indicadorMontoBruto = False
 
     _emisorRuc = ''
     _emisorNombre = ''
@@ -130,7 +131,7 @@ class CfeFactory():
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocSerie', str(self.opt._serieComprobante))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocNro', str(self.opt._numeroComprobante))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFchEmis', str(self.opt._fechaComprobanteYYYYMMDD))
-        if self.opt._indicadorMontBruto:
+        if self.opt._indicadorMontoBruto:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocMntBruto', '1')
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFmaPago', str(self.opt._formaPago))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFchVenc', str(self.opt._fechaVencimientoYYYYMMDD))
@@ -159,22 +160,20 @@ class CfeFactory():
 
         # TOTALES DE ENCABEZADO
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTTpoMoneda', str(self.opt._tipoMonedaTransaccion))
+        if self.opt._tipoMonedaTransaccion != 'UYU':
+            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTTpoCambio', self.opt._tipoCambio)
+
         if self.opt._montoTotalNoGravado: #Tiene valor sólo si es exento de iva o no tiene impuestos (monto total de lineas que no tienen impuestos o exentos de iva)
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntNoGrv', "{0:.2f}".format(self.opt._montoTotalNoGravado).replace(".", ".").replace('-',''))
-        else:
-            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntNoGrv', '0.00')
         if self.opt._montoNetoIVATasaMinima:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntNetoIvaTasaMin', "{0:.2f}".format(self.opt._montoNetoIVATasaMinima).replace(".", "."))
+            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTIVATasaMin', "{0:.3f}".format(self.opt._IVATasaMinima).replace(".", "."))
+            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntIVATasaMin', "{0:.2f}".format(self.opt._montoIVATasaMinima).replace(".", "."))
         if self.opt._montoNetoIVATasaBasica:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntNetoIVATasaBasica', "{0:.2f}".format(self.opt._montoNetoIVATasaBasica).replace(".", "."))
-        if self.opt._IVATasaMinima:
-            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTIVATasaMin', "{0:.3f}".format(self.opt._IVATasaMinima).replace(".", "."))
-        if self.opt._IVATasaBasica:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTIVATasaBasica', "{0:.3f}".format(self.opt._IVATasaBasica).replace(".", "."))
-        if self.opt._montoIVATasaMinima:
-            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntIVATasaMin', "{0:.2f}".format(self.opt._montoIVATasaMinima).replace(".", "."))
-        if self.opt._montoIVATasaBasica:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntIVATasaBasica', "{0:.2f}".format(self.opt._montoIVATasaBasica).replace(".", "."))
+
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntTotal',  "{0:.2f}".format(self.opt._montoTotal).replace(".", ".").replace('-',''))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTCantLinDet', str(len(self.opt._lineasDetalle)))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntPagar',  "{0:.2f}".format(self.opt._montoTotalAPagar).replace(".", ".").replace('-',''))
@@ -196,6 +195,7 @@ class CfeFactory():
             if linea._unidadMedidad:
                 self._set_fe_node_data(doc, SubZonaItem, 'FEDETUniMed', linea._unidadMedidad)
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETPrecioUnitario', "{0:.6f}".format(linea._precioUnitario).replace(".", "."))
+            self._set_fe_node_data(doc, SubZonaItem, 'FEDETDescuentoMonto', "{0:.6f}".format(linea._descuentoMonto).replace(".", "."))
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETMontoItem', "{0:.2f}".format(linea._montoItem).replace(".", "."))
 
         # NODO ADICIONAL

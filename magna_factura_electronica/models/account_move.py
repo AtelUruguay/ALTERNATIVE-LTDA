@@ -81,19 +81,24 @@ class AccountMove(models.Model):
             options = fe_xml_factory.cfeFactoryOptions()
             options._lineasDetalle = []
 
+            options._esContingencia = rec.fe_Contingencia
             if rec.fe_Contingencia:
                 options._serieComprobante = rec.fe_SerieContingencia
                 options._numeroComprobante = rec.fe_DocNroContingencia
-
             options._tipoComprobante = tipo_CFE
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y-%m-%d')
-            options._esContingencia = rec.fe_Contingencia
-
-            # todo
-            options._indicadorMontBruto = True
-
-            options._formaPago = 1 #1-Contado, 2-Credito
             options._fechaVencimientoYYYYMMDD = rec.invoice_date_due.strftime('%Y-%m-%d')
+            # indica si los montos de las líneas de detalles se expresan con impuestos incluidos
+            options._indicadorMontoBruto = False
+
+            # 1-Contado, 2-Credito
+            today = fields.Date.context_today(self)
+            payment_term_contado = self.env.ref('account.account_payment_term_immediate').id
+            if rec.invoice_payment_term_id == payment_term_contado or rec.invoice_date_due == today:
+                options._formaPago = 1
+            else:
+                options._formaPago = 2
+
 
             # EMISOR
             options._emisorRuc = rec.company_id.vat
@@ -114,8 +119,8 @@ class AccountMove(models.Model):
             options._receptorDepartamento = rec.partner_id.state_id.name
 
             # TOTALES
-            # options._tipoMonedaTransaccion = rec.currency_id.name #todo
-            options._tipoMonedaTransaccion = 'UYU'
+            options._tipoMonedaTransaccion = rec.currency_id.name
+            options._tipoCambio = rec.currency_id.rate #todo cambiar
 
             group_taxes = rec.amount_by_group
             logging.info(group_taxes)
@@ -165,8 +170,6 @@ class AccountMove(models.Model):
             monto_neto_iva_tasa_basica = 0
             monto_neto_iva_tasa_minima = 0
             monto_no_facturable = 0
-            monto_iva_basica = 0
-            monto_iva_minima = 0
 
             for line in rec.invoice_line_ids:
                 line_aux = fe_xml_factory.cfeFactoryOptionsProductLineDetail()
@@ -174,33 +177,39 @@ class AccountMove(models.Model):
                 line_aux._nombreItem = line.product_id.name
                 line_aux._unidadMedidad = 'Unit'
                 line_aux._precioUnitario = line.price_unit
-                line_aux._montoItem = line.quantity * line.price_unit
+                monto_descuento = line.price_unit * line.discount / 100
+                monto_item = (line.quantity * line.price_unit) - monto_descuento
+                line_aux._descuentoMonto = monto_descuento
+                line_aux._montoItem = monto_item
 
-                impuesto = line.price_total - line.price_subtotal #todo revisar si esta bien
                 if line.tax_ids:
-                    line_aux._indicadorFacturacion = line.tax_ids[0].fe_tax_codigo_dgi.code
                     # if line.product_id.tax_ids[0].price_include:
-                    #     options._montoBruto = True
+                    #     options._indicadorMontoBruto = True
+                    #todo si el indicador es true, ojo que tendria que "desarmar" los montos para esta linea...
+
+                    line_aux._indicadorFacturacion = line.tax_ids[0].fe_tax_codigo_dgi.code # todo ojo,esta asumiendo que hay 1 solo impuesto por linea...
+
                     if line.tax_ids[0].fe_tax_codigo_dgi.code == '1' and line.tax_ids[0].type_tax_use == 'sale':
-                        monto_no_gravado += line.price_subtotal
+                        monto_no_gravado += monto_item
                     if line.tax_ids[0].fe_tax_codigo_dgi.code == '2' and line.tax_ids[0].type_tax_use == 'sale':
-                        monto_neto_iva_tasa_minima += line.price_subtotal
-                        monto_iva_minima += impuesto
+                        monto_neto_iva_tasa_minima += monto_item
                     if line.tax_ids[0].fe_tax_codigo_dgi.code == '3' and line.tax_ids[0].type_tax_use == 'sale':
-                        monto_neto_iva_tasa_basica += line.price_subtotal
-                        monto_iva_basica += impuesto
+                        monto_neto_iva_tasa_basica += monto_item
                 else:
-                    monto_no_gravado += line.price_subtotal
+                    monto_no_gravado += monto_item
 
                 options._lineasDetalle.append(line_aux)
 
+            monto_iva_tasa_minima = monto_neto_iva_tasa_minima * account_tax_iva_minima_id[0].amount /100
+            monto_iva_tasa_basica = monto_neto_iva_tasa_basica * account_tax_iva_basica_id[0].amount / 100
             options._montoTotalNoGravado = monto_no_gravado
             options._montoNetoIVATasaMinima = monto_neto_iva_tasa_minima
-            options._montoIVATasaMinima = monto_iva_minima
+            options._montoIVATasaMinima = monto_iva_tasa_minima
             options._montoNetoIVATasaBasica = monto_neto_iva_tasa_basica
-            options._montoIVATasaBasica = monto_iva_basica
+            options._montoIVATasaBasica = monto_iva_tasa_basica
 
-            options._montoTotal = abs(rec.amount_total - monto_no_facturable)
+            # options._montoTotal = abs(rec.amount_total - monto_no_facturable)
+            options._montoTotal = sum(monto_no_gravado, monto_neto_iva_tasa_minima, monto_neto_iva_tasa_basica, monto_iva_tasa_minima, monto_iva_tasa_basica)
             options._montoTotalAPagar = rec.amount_total
 
             xml_factory = fe_xml_factory.CfeFactory(options=options)
