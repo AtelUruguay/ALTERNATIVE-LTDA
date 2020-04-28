@@ -15,9 +15,14 @@ DOCUMENT_TYPE_SELECTION = [
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    fe_consumidor_final = fields.Boolean('Consumidor final FE', default=True)
+    @api.model
+    def _get_default_country(self):
+        # country = self.env['res.country'].search([('code', '=', 'HK')], limit=1)
+        country = self.env.ref('base.uy').id
+        return country
+
     fe_tipo_documento = fields.Selection(DOCUMENT_TYPE_SELECTION, 'Tipo de Documento', default='3')
-    fe_pais_documento = fields.Many2one('res.country',u'País del Documento')
+    fe_pais_documento = fields.Many2one('res.country',u'País del Documento', default=_get_default_country)
     fe_numero_doc = fields.Char(u'Número de Documento', size=32)
 
 

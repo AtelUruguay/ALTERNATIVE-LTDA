@@ -10,11 +10,9 @@
                     <page name="fe" string="Facturación Electrónica" attrs="{'invisible':[('customer_rank','=',0)]}">
                         <group>
                             <field name="customer_rank" invisible="1"/>
-                            <!--<field name="fe_consumidor_final" attrs="{'invisible': ['|', ('is_company', '=', True), ('customer_rank', '=', 0)]}"/>-->
-                            <field name="fe_consumidor_final"/>
-                            <field name="fe_tipo_documento" />
-                            <field name="fe_pais_documento" />
-                            <field name="fe_numero_doc" />
+                            <field name="fe_tipo_documento" attrs="{'required':[('customer_rank','>',0)]}"/>
+                            <field name="fe_pais_documento" attrs="{'required':[('customer_rank','>',0)]}"/>
+                            <field name="fe_numero_doc" attrs="{'required':[('customer_rank','>',0)]}"/>
                         </group>
                     </page>
                 </xpath>
