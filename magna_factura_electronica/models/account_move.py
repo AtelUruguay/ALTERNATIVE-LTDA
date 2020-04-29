@@ -81,15 +81,13 @@ class AccountMove(models.Model):
             options = fe_xml_factory.cfeFactoryOptions()
             options._lineasDetalle = []
 
-            options._esContingencia = rec.fe_Contingencia
-            if rec.fe_Contingencia:
-                options._serieComprobante = rec.fe_SerieContingencia
-                options._numeroComprobante = rec.fe_DocNroContingencia
             options._tipoComprobante = tipo_CFE
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y-%m-%d')
             options._fechaVencimientoYYYYMMDD = rec.invoice_date_due.strftime('%Y-%m-%d')
             # indica si los montos de las líneas de detalles se expresan con impuestos incluidos
             options._indicadorMontoBruto = False
+            options._esContingencia = rec.fe_Contingencia
+
 
             # 1-Contado, 2-Credito
             today = fields.Date.context_today(self)
@@ -130,9 +128,6 @@ class AccountMove(models.Model):
             #  ]
 
             account_tax_obj = self.env['account.tax']
-            # account_tax_iva_exento_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
-            #                                                              ('fe_tax_codigo_dgi.code', '=', '1'),
-            #                                                              ('type_tax_use', '=', 'sale')], limit=1)
             account_tax_iva_minima_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
                                                                          ('fe_tax_codigo_dgi.code', '=', '2'),
                                                                          ('type_tax_use', '=', 'sale')], limit=1)
@@ -142,7 +137,6 @@ class AccountMove(models.Model):
             if not account_tax_iva_minima_id:
                 raise UserError(
                     'No existe configurado un impuesto con Código de DGI 2 (Iva tasa mínima)')
-
             if not account_tax_iva_basica_id:
                 raise UserError(u'No existe configurado un impuesto con Código de DGI 3 (Iva tasa basica)')
 
@@ -152,25 +146,23 @@ class AccountMove(models.Model):
             # ADICIONAL
             options._adicionalTipoDocumentoId = tipo_CFE
             options._adicionalDocComCodigo = rec.id
-            # options._adicionalDocComSerie = 'A'
             options._adicionalSucursalId = rec.company_id.fe_codigo_principal_sucursal
             options._adicionalAdenda = ''
-            options._adicionalCAEDnro = 0
-            options._adicionalCAEHnro = 0
-            options._adicionalCAENA = ''
-            options._adicionalCAEFA = ''
-            options._adicionalCAEFVD = ''
-            options._adicionalLoteId = 0
             options._adicionalCorreoReceptor = ''
-            options._adicionalEsReceptor = 'false'
+            if rec.fe_Contingencia:
+                options._serieComprobante = rec.fe_SerieContingencia
+                options._numeroComprobante = rec.fe_DocNroContingencia
+                options._adicionalCAEDnro = rec.fe_CAEDNro
+                options._adicionalCAEHnro = rec.fe_CAEHNro
+                options._adicionalCAENA = rec.fe_CAENA
+                options._adicionalCAEFA = rec.fe_CAEFA
+                options._adicionalCAEFVD = rec.fe_CAEFVD
 
 
             # DETALLE
             monto_no_gravado = 0
             monto_neto_iva_tasa_basica = 0
             monto_neto_iva_tasa_minima = 0
-            monto_no_facturable = 0
-
             for line in rec.invoice_line_ids:
                 line_aux = fe_xml_factory.cfeFactoryOptionsProductLineDetail()
                 line_aux._cantidad = line.quantity
@@ -181,12 +173,10 @@ class AccountMove(models.Model):
                 monto_item = (line.quantity * line.price_unit) - monto_descuento
                 line_aux._descuentoMonto = monto_descuento
                 line_aux._montoItem = monto_item
-
                 if line.tax_ids:
                     # if line.product_id.tax_ids[0].price_include:
                     #     options._indicadorMontoBruto = True
                     #todo si el indicador es true, ojo que tendria que "desarmar" los montos para esta linea...
-
                     line_aux._indicadorFacturacion = line.tax_ids[0].fe_tax_codigo_dgi.code # todo ojo,esta asumiendo que hay 1 solo impuesto por linea...
 
                     if line.tax_ids[0].fe_tax_codigo_dgi.code == '1' and line.tax_ids[0].type_tax_use == 'sale':

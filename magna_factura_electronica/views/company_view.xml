@@ -12,8 +12,8 @@
                     <notebook position="inside">
                         <page string="Facturación Electrónica">
                             <group>
-                                <field name="fe_nombre_fantasia" />
-                                <field name="fe_codigo_principal_sucursal"/>
+                                <field name="fe_nombre_fantasia"/>
+                                <field name="fe_codigo_principal_sucursal" attrs="{'required':[('parent_id','=',False)]}"/>
                             </group>
                         </page>
                     </notebook>
