@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_interfaz_monedas_group_multi_currency,access_interfaz_monedas_group_multi_currency,uy_cotizaciones_bcu.model_interfaz_monedas,base.group_multi_currency,1,1,1,1
+

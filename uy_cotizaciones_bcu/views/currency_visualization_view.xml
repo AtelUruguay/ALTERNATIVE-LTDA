@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp> <!-- XML de versión 8.0 son <odoo></odoo> -->
+    <data>
+
+        <!-- Agrego en la grilla de currency el nuevo campo -->
+        <record id="custom_res_currency_view_tree" model="ir.ui.view">
+            <field name="name">custom.res.currency.tree</field>
+            <field name="model">res.currency</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="base.view_currency_tree"/>
+            <field name="arch" type="xml">
+                <field name="rate_silent" position="after">
+                    <field name="pizarra_silent"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Agrego en la grilla de histórico de tasas el nuevo campo -->
+        <record id="custom_res_currency_view_form" model="ir.ui.view">
+            <field name="name">custom.res.currency.form</field>
+            <field name="model">res.currency</field>
+            <field name="priority" eval="8"/>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_currency_form"/>
+            <field name="arch" type="xml">
+                <field name="rate_silent" position="after">
+                    <field name="pizarra_silent"/>
+                </field>
+                <field mode="tree" name="rate_ids" attrs="{'readonly':[('base','=',True)]}">
+                    <tree string="Rates" editable="bottom">
+                        <field name="name"/>
+                        <field name="rate" on_change="calculate_pizarra_value(rate)"/>
+                        <field name="pizarra"/>
+                    </tree>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
