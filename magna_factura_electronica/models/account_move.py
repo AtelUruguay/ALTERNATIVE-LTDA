@@ -261,3 +261,8 @@ class AccountMove(models.Model):
     def report_get_DgiParam(self):
         resolucion_dgi = self.env["ir.config_parameter"].sudo().get_param("magna_fe_resolucion_DGI")
         return resolucion_dgi
+
+    def report_get_document_type(self):
+        value = dict(self._fields['fe_tipo_documento'].selection).get(self.fe_tipo_documento)
+        return value
+

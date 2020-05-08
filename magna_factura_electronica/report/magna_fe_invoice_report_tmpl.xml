@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-        <template id="magna_factura_electronica.fe_invoice_report">
+    <template id="magna_factura_electronica.fe_invoice_report">
         <t t-set="data_report_margin_top" t-value="8"/>
         <t t-set="data_report_header_spacing" t-value="9"/>
         <t t-set="data_report_dpi" t-value="100"/>
@@ -11,8 +11,7 @@
         <!--<div class="header">-->
         <!--</div>-->
         <div class="page">
-            <div t-if="o.state == 'draft'"
-                 style="position:absolute;opacity:0.40;z-index:1000;transform:rotate(300deg);-webkit-transform:rotate(300deg);width:150%;font-size:152px">
+            <div t-if="o.state == 'draft'" style="position:absolute;opacity:0.40;z-index:1000;transform:rotate(300deg);-webkit-transform:rotate(300deg);width:150%;font-size:152px">
                 <p>BORRADOR</p>
             </div>
             <div class="row">
@@ -31,7 +30,7 @@
                                             <!--<span t-field="o.company_id.logo"-->
                                                   <!--t-field-options="{&quot;widget&quot;: &quot;image&quot;}"-->
                                                   <!--width="200" height="40"/>-->
-                                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" width="200" height="40"/>
+                                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" width="40" height="40"/>
 
                                         </td>
                                     </tr>
@@ -62,8 +61,7 @@
                                 </table>
                             </td>
                             <td>
-                                <table style="empty-cells: hide" cellspacing="10" width="100%" align="right"
-                                       class="text-right">
+                                <table style="empty-cells: hide" cellspacing="10" width="100%" align="right" class="text-right">
                                     <tr>
                                         <th style="border: 1px solid black;text-align: center;" colspan="5">
                                             <b>
@@ -77,12 +75,12 @@
                                     <tr>
                                         <th style="border: 1px solid black;text-align: center;" colspan="5">
                                             <b>
-                                                <span t-field="o.doct_type"/>
+                                                <!--<span t-field="o.doct_type"/>-->
+                                                <span>DOCT TYPE</span>
                                             </b>
                                         </th>
                                     </tr>
-                                    <tr t-if="not o.partner_id.vat"
-                                        style="border: 1px solid black;text-align: center;">
+                                    <tr t-if="not o.partner_id.vat" style="border: 1px solid black;text-align: center;">
                                         <th style="border: 1px solid black;text-align: center;" colspan="5">
                                             <b>
                                                 <span>CONSUMO FINAL</span>
@@ -123,8 +121,7 @@
                                             <span t-field="o.currency_id.name"/>
                                         </td>
                                         <td style="border: 1px solid black;text-align: center;">
-                                            <t t-set="get_currency_value"
-                                               t-value="round(1/(o.currency_id.rate_ids[0].rate),2)"/>
+                                            <t t-set="get_currency_value" t-value="round(1/(o.currency_id.rate_ids[0].rate),2)"/>
                                             <span>
                                                 <t t-esc="get_currency_value"/>
                                             </span>
@@ -132,11 +129,9 @@
                                     </tr>
                                     <tr t-if="o.partner_id.vat" style="border: 1px solid black;text-align: center;">
                                         <th style="border: 1px solid black;text-align: center;" colspan="5">
-                                            <b>
-                                                <t t-esc="o.partner_id.fe_tipo_documento"/>
-                                                <span></span>
-                                                <t t-esc="o.partner_id.vat"/>
-                                            </b>
+                                            <b><t t-esc="o.report_get_document_type()"/>
+                                            <span></span>
+                                            <t t-esc="o.partner_id.vat"/></b>
                                         </th>
                                     </tr>
                                     <tr style="border: 1px solid black;text-align: center;">
@@ -163,8 +158,7 @@
                         <th style="border: 1px solid black;text-align: center;" colspan="4">Fecha Factura:
                             <span t-field="o.invoice_date"/>
                         </th>
-                        <th style="border: 1px solid black;text-align: center;" colspan="1">Condición de Pago: <span
-                                t-if="o.type == 'out_refund' and (o.partner_id.vat != False)">Contado</span>
+                        <th style="border: 1px solid black;text-align: center;" colspan="1">Condición de Pago: <span t-if="o.type == 'out_refund' and (o.partner_id.vat != False)">Contado</span>
                             <span t-if="o.type == 'out_invoice' and (o.invoice_payment_term_id.name == 'Contado')">Contado</span>
                             <span t-if="o.type == 'out_invoice' and (o.invoice_payment_term_id.name != 'Contado')">
                                 <span t-field="o.invoice_payment_term_id.name"/>
@@ -238,7 +232,7 @@
                                 </td>
                                 <td class="text-right">
                                     <span t-esc="o.currency_id.symbol"/>
-                                    <span t-field="o.amount_total" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}' />
+                                    <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
                                 </td>
                             </tr>
                         </table>
@@ -293,7 +287,7 @@
                     <div class="col-xs-push-8">
                         <span t-if="o.fe_qr_img">
                             <!--<span t-field="o.fe_qr_img" t-field-options="{&quot;widget&quot;: &quot;image&quot;}"/>-->
-                            <img t-if="o.fe_qr_img" t-att-src="image_data_uri(o.fe_qr_img)"/>
+                            <img t-if="o.fe_qr_img" t-att-src="image_data_uri(o.fe_qr_img)" width="100" height="100"/>
                         </span>
                         <br>
                             <span t-if="o.fe_Hash">Código de Seguridad:
@@ -311,7 +305,7 @@
                         <span t-if="o.doct_type">
                             <t t-esc="o.doct_type"/>
                         </span>
-                        <span></span>
+                        <span/>
                         <br>
                             <span t-if="o.fe_CAEFVD">Puede verificar comprobante en:</span>
                         </br>
@@ -346,6 +340,6 @@
     </t>
         </t>
 
-        </template>
+    </template>
 
 </odoo>
