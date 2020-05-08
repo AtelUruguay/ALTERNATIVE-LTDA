@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!--<record id="magna_fe_url_ws" model="ir.config_parameter">-->
+            <!--<field name="key">magna_fe_url_ws</field>-->
+            <!--<field name="value">https://fe-test.proinfo.uy/servlet/afegeneraryfirmardocumento?wsdl</field>-->
+        <!--</record>-->
+
+        <record id="magna_fe_resolucion_DGI" model="ir.config_parameter">
+            <field name="key">magna_fe_resolucion_DGI</field>
+            <field name="value">57/2016</field>
+        </record>
+
+        <record id="magna_fe_activa" model="ir.config_parameter">
+            <field name="key">magna_fe_activa</field>
+            <field name="value">True</field>
+        </record>
+
+        <record id="magna_fe_serie" model="ir.config_parameter">
+            <field name="key">magna_fe_serie</field>
+            <field name="value">A</field>
+        </record>
+
+        <record id="fe_ind_fact_dgi_1" model="fe_indicador_facturacion_dgi">
+            <field name="name">Exento de IVA</field>
+            <field name="code">1</field>
+        </record>
+        <record id="fe_ind_fact_dgi_2" model="fe_indicador_facturacion_dgi">
+            <field name="name">Gravado a Tasa Mínima</field>
+            <field name="code">2</field>
+        </record>
+        <record id="fe_ind_fact_dgi_3" model="fe_indicador_facturacion_dgi">
+            <field name="name">Gravado a Tasa Básica</field>
+            <field name="code">3</field>
+        </record>
+
+
+    </data>
+</odoo>

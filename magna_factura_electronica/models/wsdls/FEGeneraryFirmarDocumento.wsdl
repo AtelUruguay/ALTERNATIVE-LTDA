@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions name="FEGeneraryFirmarDocumento" targetNamespace="com.esignit.fe" xmlns:wsdlns="com.esignit.fe" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="com.esignit.fe">
+	<types>
+		<schema targetNamespace="com.esignit.fe" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" elementFormDefault="qualified">
+			<element name="FEGeneraryFirmarDocumento.Execute">
+				<complexType>
+					<sequence>
+						<element minOccurs="1" maxOccurs="1" name="Inxmlentrada" type="xsd:string"/>
+						<element minOccurs="1" maxOccurs="1" name="Tipocfe" type="xsd:short"/>
+						<element minOccurs="1" maxOccurs="1" name="Fefacturaimportadaloteid" type="xsd:long"/>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="FEGeneraryFirmarDocumento.ExecuteResponse">
+				<complexType>
+					<sequence>
+						<element minOccurs="1" maxOccurs="1" name="Outxmlsalida" type="xsd:string"/>
+						<element minOccurs="1" maxOccurs="1" name="Errornum" type="xsd:byte"/>
+						<element minOccurs="1" maxOccurs="1" name="Msgerror" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+		</schema>
+	</types>
+	<message name="FEGeneraryFirmarDocumento.ExecuteSoapIn">
+		<part name="parameters" element="tns:FEGeneraryFirmarDocumento.Execute"/>
+	</message>
+	<message name="FEGeneraryFirmarDocumento.ExecuteSoapOut">
+		<part name="parameters" element="tns:FEGeneraryFirmarDocumento.ExecuteResponse"/>
+	</message>
+	<portType name="FEGeneraryFirmarDocumentoSoapPort">
+		<operation name="Execute">
+			<input message="wsdlns:FEGeneraryFirmarDocumento.ExecuteSoapIn"/>
+			<output message="wsdlns:FEGeneraryFirmarDocumento.ExecuteSoapOut"/>
+		</operation>
+	</portType>
+	<binding name="FEGeneraryFirmarDocumentoSoapBinding" type="wsdlns:FEGeneraryFirmarDocumentoSoapPort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="Execute">
+			<soap:operation soapAction="com.esignit.feaction/AFEGENERARYFIRMARDOCUMENTO.Execute"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="FEGeneraryFirmarDocumento">
+		<port name="FEGeneraryFirmarDocumentoSoapPort" binding="wsdlns:FEGeneraryFirmarDocumentoSoapBinding">
+			<soap:address location="http://fe-test.proinfo.uy/servlet/afegeneraryfirmardocumento"/>
+		</port>
+	</service>
+</definitions>
