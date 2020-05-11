@@ -8,45 +8,6 @@
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
 
-            <!--<xpath expr="//group//field[@name='invoice_payment_term_id']" position="attributes">-->
-                <!--<attribute name="required">True</attribute>-->
-            <!--</xpath>-->
-
-            <xpath expr="//sheet//group" position="attributes">
-                <attribute name="col">5</attribute>
-            </xpath>
-            <xpath expr="//sheet//group" position="inside">
-                <group attrs="{'invisible':[('state','=','draft')]}">
-                    <field name="fe_qr_img" widget="image" nolabel="1" attrs="{'invisible': [('fe_qr_img', '=', False)]}"/>
-                </group>
-            </xpath>
-
-            <!--<xpath expr="//field[@name='fiscal_position']" position="after">-->
-                <!--<field name="is_debit_note" invisible="1"/>-->
-                <!--<field name="invoice_id" attrs="{'invisible': [('is_debit_note','=',False)], 'required':  [('is_debit_note','=',True)]}" domain="[('partner_id', '=', partner_id)]"/>-->
-                <!--<field name="for_export"/>-->
-            <!--</xpath>-->
-            <!--<xpath expr="//field[@name='payment_term']" position="after">-->
-                <!--<field name="nro_compra" style="width: 60%" attrs="{'readonly':[('state', 'not in', 'draft')]}"/>-->
-            <!--</xpath>-->
-
-            <!--<xpath expr="//h1" position="replace">-->
-                <!--<h1>-->
-                <!--<span attrs="{'invisible': [('is_debit_note','=', True)]}" class="oe_inline">-->
-                    <!--<label string="Draft Invoice" attrs="{'invisible': ['|',('state','not in',('draft',)), ('type','!=','out_invoice')]}"/>-->
-                    <!--<label string="Draft Refund" attrs="{'invisible': ['|',('state','not in',('draft',)), ('type','!=','out_refund')]}"/>-->
-                    <!--<label string="Pro Forma Invoice" attrs="{'invisible': [('state','not in',('proforma','proforma2'))]}"/>-->
-                    <!--<label string="Invoice" attrs="{'invisible': ['|',('state','in',('draft','proforma','proforma2')), ('type','!=','out_invoice')]}"/>-->
-                    <!--<label string="Refund" attrs="{'invisible': ['|',('state','in',('draft','proforma','proforma2')), ('type','!=','out_refund')]}"/>-->
-                <!--</span>-->
-                <!--<span attrs="{'invisible': [('is_debit_note','!=', True)]}" class="oe_inline">-->
-                    <!--<label string="Nota de Débito borrador" attrs="{'invisible': ['|',('state','not in',('draft',)), ('is_debit_note','!=',True)]}"/>-->
-                    <!--<label string="Nota de Débito" attrs="{'invisible': ['|',('state','in',('draft','proforma','proforma2')), ('is_debit_note','!=',True)]}"/>-->
-                <!--</span>-->
-                <!--<field name="number" readonly="1" class="oe_inline"/>-->
-                <!--</h1>-->
-            <!--</xpath>-->
-
             <xpath expr="//h1//field[@name='name']" position="after">
                 <div class="oe_right oe_button_box" style="width: 350px; margin-top: -17px; margin-right: -14px;" name="buttons">
                     <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', False)]}" icon="fa-bolt" string="CFE Activa"></button>-->
@@ -65,7 +26,7 @@
             </xpath>
 
             <notebook position="inside">
-                <page string="Factura Electrónica" attrs="{'invisible':[('state','==','draft')]}">
+                <page string="Factura Electrónica" attrs="{'invisible':[('state','=','draft')]}">
                     <group>
                         <field name="fe_Contingencia" attrs="{'readonly':[('fe_Estado','=','AS')]}"/>
                         <field name="fe_SerieContingencia" attrs="{'invisible': [('fe_Contingencia','=',False)]}"/>
@@ -79,6 +40,7 @@
                         <field name="fe_CAEFA" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
                         <field name="fe_CAEFVD" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
                         <field name="fe_Estado" attrs="{'invisible': True}"/>
+                        <field name="fe_qr_img" widget="image" nolabel="1" attrs="{'invisible': [('fe_qr_img', '=', False)]}"/>
                         <button name="invoice_send_fe_proinfo" type="object" string="Volver a enviar" attrs="{'invisible': ['|',('fe_Estado','=','AS'),('fe_Contingencia','=',False)]}"/>
                     </group>
                 </page>

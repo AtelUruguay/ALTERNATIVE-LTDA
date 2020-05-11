@@ -75,8 +75,8 @@
                                     <tr>
                                         <th style="border: 1px solid black;text-align: center;" colspan="5">
                                             <b>
-                                                <!--<span t-field="o.doct_type"/>-->
-                                                <span>DOCT TYPE</span>
+                                                <t t-set="doct_type" t-esc="(o.report_get_doct_type())"/>
+                                                <span t-esc="doct_type"/>
                                             </b>
                                         </th>
                                     </tr>
@@ -121,7 +121,7 @@
                                             <span t-field="o.currency_id.name"/>
                                         </td>
                                         <td style="border: 1px solid black;text-align: center;">
-                                            <t t-set="get_currency_value" t-value="round(1/(o.currency_id.rate_ids[0].rate),2)"/>
+                                            <t t-set="get_currency_value" t-value="round(1/(o.currency_id.rate_ids[0].inverse_rate),2)"/>
                                             <span>
                                                 <t t-esc="get_currency_value"/>
                                             </span>
@@ -264,7 +264,7 @@
             <div style="border-top: 1px solid black;"/> <!--div class="footer"-->
             <div>
                 <div class="row">
-                    <span t-if="o.doct_type">Iva al dia |</span>
+                    <span t-if="doct_type">Iva al dia |</span>
                     <span t-if="o.fe_CAENA">Nro CAE:
                         <span t-field="o.fe_CAENA"/>
                         |
@@ -302,8 +302,8 @@
                         <span t-if="DgiParam">
                             <t t-esc="DgiParam"/>
                         </span>
-                        <span t-if="o.doct_type">
-                            <t t-esc="o.doct_type"/>
+                        <span t-if="doct_type">
+                            <t t-esc="doct_type"/>
                         </span>
                         <span/>
                         <br>
