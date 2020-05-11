@@ -72,7 +72,7 @@ class AccountMove(models.Model):
     fe_CAENA = fields.Char(u'CAE Autorización')
     fe_CAEFA = fields.Date(u'CAE Fecha de autorización')
     fe_CAEFVD = fields.Date('CAE Vencimiento')
-    fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True)
+    fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True, default=False)
     # doct_type = fields.Selection(DOC_TYPE_DGI, compute='_compute_doct_type', string='Tipo de factura DGI')
     tipo_pago = fields.Char('Tipo de pago', default='Contado')
 
@@ -85,13 +85,14 @@ class AccountMove(models.Model):
             border=4,
         )
         for rec in self:
-            qr.add_data(rec.fe_URLParaVerificarQR)
-            qr.make(fit=True)
-            img = qr.make_image()
-            temp = BytesIO()
-            img.save(temp, format="PNG")
-            qr_image = base64.b64encode(temp.getvalue())
-            rec.fe_qr_img = qr_image
+            if rec.fe_URLParaVerificarQR:
+                qr.add_data(rec.fe_URLParaVerificarQR)
+                qr.make(fit=True)
+                img = qr.make_image()
+                temp = BytesIO()
+                img.save(temp, format="PNG")
+                qr_image = base64.b64encode(temp.getvalue())
+                rec.fe_qr_img = qr_image
 
     # @api.depends('type', 'partner_id')
     # def _compute_doct_type(self):
