@@ -8,8 +8,8 @@
                 string="e-Factura"
                 report_type="qweb-pdf"
                 file="magna_factura_electronica.fe_invoice_report"
-                attachment="(object.state in ('open','paid')) and ('Factura '+(str(object.fe_Serie or ''))+(str(object.fe_DocNro or ''))+'.pdf')"
         />
+                <!--attachment="(object.state in ('open','paid')) and ('Factura '+(str(object.fe_Serie or ''))+(str(object.fe_DocNro or ''))+'.pdf')"-->
 
     </data>
 </odoo>

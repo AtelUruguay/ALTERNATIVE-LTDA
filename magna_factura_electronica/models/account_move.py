@@ -72,8 +72,8 @@ class AccountMove(models.Model):
     fe_CAENA = fields.Char(u'CAE Autorización')
     fe_CAEFA = fields.Date(u'CAE Fecha de autorización')
     fe_CAEFVD = fields.Date('CAE Vencimiento')
-    fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True)
-    doct_type = fields.Selection(DOC_TYPE_DGI, string='Tipo de factura DGI')
+    fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True, default=False)
+    # doct_type = fields.Selection(DOC_TYPE_DGI, compute='_compute_doct_type', string='Tipo de factura DGI')
     tipo_pago = fields.Char('Tipo de pago', default='Contado')
 
     @api.depends('fe_URLParaVerificarQR')
@@ -85,13 +85,33 @@ class AccountMove(models.Model):
             border=4,
         )
         for rec in self:
-            qr.add_data(rec.fe_URLParaVerificarQR)
-            qr.make(fit=True)
-            img = qr.make_image()
-            temp = BytesIO()
-            img.save(temp, format="PNG")
-            qr_image = base64.b64encode(temp.getvalue())
-            rec.fe_qr_img = qr_image
+            if rec.fe_URLParaVerificarQR:
+                qr.add_data(rec.fe_URLParaVerificarQR)
+                qr.make(fit=True)
+                img = qr.make_image()
+                temp = BytesIO()
+                img.save(temp, format="PNG")
+                qr_image = base64.b64encode(temp.getvalue())
+                rec.fe_qr_img = qr_image
+
+    # @api.depends('type', 'partner_id')
+    # def _compute_doct_type(self):
+    #     for rec in self:
+    #         val = False
+    #         invoice_type = rec.type
+    #         consumidor_final = rec.partner_id.fe_tipo_documento != '2'
+    #         if consumidor_final:  # eTicket
+    #             if invoice_type == 'out_invoice':  # Factura de cliente
+    #                 val = '101'
+    #             elif invoice_type == 'out_refund':  # NC de cliente
+    #                 val = '102'
+    #         else:  # eFactura
+    #             if invoice_type == 'out_invoice':  # Factura de cliente
+    #                 val = '111'
+    #             elif invoice_type == 'out_refund':  # NC de cliente
+    #                 val = '112'
+    #         rec.doct_type = val
+
 
     # se llama al action_post de super y antes de devolver el control, se envía la información de FE
     def action_post(self):
@@ -261,3 +281,15 @@ class AccountMove(models.Model):
     def report_get_DgiParam(self):
         resolucion_dgi = self.env["ir.config_parameter"].sudo().get_param("magna_fe_resolucion_DGI")
         return resolucion_dgi
+
+    def report_get_document_type(self):
+        value = dict(self._fields['fe_tipo_documento'].selection).get(self.fe_tipo_documento)
+        return value
+
+
+    def report_get_doct_type(self):
+        tipo_cfe = self.get_tipo_cfe()
+        value = dict(DOC_TYPE_DGI).get(tipo_cfe)
+        return value
+
+
