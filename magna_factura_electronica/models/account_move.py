@@ -74,7 +74,7 @@ class AccountMove(models.Model):
     fe_CAEFVD = fields.Date('CAE Vencimiento')
     fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True, default=False)
     # doct_type = fields.Selection(DOC_TYPE_DGI, compute='_compute_doct_type', string='Tipo de factura DGI')
-    forma_pago = fields.Char([('1','Contado'),('2','Crédito')], compute='_compute_forma_pago', string='Forma de pago', default='1')
+    forma_pago = fields.Selection([('1','Contado'),('2','Crédito')], compute='_compute_forma_pago', string='Forma de pago', default='1')
 
 
     @api.depends('fe_URLParaVerificarQR')
