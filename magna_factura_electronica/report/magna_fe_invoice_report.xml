@@ -2,14 +2,22 @@
 <odoo>
     <data>
         <!--Se agrega la opción de menú para imprimir el reporte-->
-        <report id="action_fe_invoice_report"
+        <!--<report id="action_fe_invoice_report"-->
+                <!--model="account.move"-->
+                <!--name="magna_factura_electronica.fe_invoice_report"-->
+                <!--string="e-Factura"-->
+                <!--report_type="qweb-pdf"-->
+                <!--file="magna_factura_electronica.fe_invoice_report"-->
+        <!--/>-->
+                <!--attachment="(object.state in ('open','paid')) and ('Factura '+(str(object.fe_Serie or ''))+(str(object.fe_DocNro or ''))+'.pdf')"-->
+
+                <report id="action_fe_invoice_report_2"
                 model="account.move"
-                name="magna_factura_electronica.fe_invoice_report"
+                name="magna_factura_electronica.fe_invoice_report_2"
                 string="e-Factura"
                 report_type="qweb-pdf"
-                file="magna_factura_electronica.fe_invoice_report"
+                file="magna_factura_electronica.fe_invoice_report_2"
         />
-                <!--attachment="(object.state in ('open','paid')) and ('Factura '+(str(object.fe_Serie or ''))+(str(object.fe_DocNro or ''))+'.pdf')"-->
 
     </data>
 </odoo>
