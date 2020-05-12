@@ -74,7 +74,8 @@ class AccountMove(models.Model):
     fe_CAEFVD = fields.Date('CAE Vencimiento')
     fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True, default=False)
     # doct_type = fields.Selection(DOC_TYPE_DGI, compute='_compute_doct_type', string='Tipo de factura DGI')
-    tipo_pago = fields.Char('Tipo de pago', default='Contado')
+    forma_pago = fields.Char([('1','Contado'),('2','Crédito')], compute='_compute_forma_pago', string='Forma de pago', default='1')
+
 
     @api.depends('fe_URLParaVerificarQR')
     def _generate_qr_code(self):
@@ -111,6 +112,18 @@ class AccountMove(models.Model):
     #             elif invoice_type == 'out_refund':  # NC de cliente
     #                 val = '112'
     #         rec.doct_type = val
+
+
+    @api.depends('invoice_payment_term_id','invoice_date_due')
+    def _compute_forma_pago(self):
+        for rec in self:
+            # 1-Contado, 2-Credito
+            today = fields.Date.context_today(self)
+            payment_term_contado = self.env.ref('account.account_payment_term_immediate').id
+            if rec.invoice_payment_term_id == payment_term_contado or rec.invoice_date_due == today:
+                rec.forma_pago = '1'
+            else:
+                rec.forma_pago = '2'
 
 
     # se llama al action_post de super y antes de devolver el control, se envía la información de FE
@@ -158,15 +171,8 @@ class AccountMove(models.Model):
             options._indicadorMontoBruto = False
             options._esContingencia = rec.fe_Contingencia
 
-
             # 1-Contado, 2-Credito
-            today = fields.Date.context_today(self)
-            payment_term_contado = self.env.ref('account.account_payment_term_immediate').id
-            if rec.invoice_payment_term_id == payment_term_contado or rec.invoice_date_due == today:
-                options._formaPago = 1
-            else:
-                options._formaPago = 2
-
+            options._formaPago = rec.forma_pago
 
             # EMISOR
             options._emisorRuc = rec.company_id.vat
@@ -289,7 +295,7 @@ class AccountMove(models.Model):
 
     def report_get_doct_type(self):
         tipo_cfe = self.get_tipo_cfe()
-        value = dict(DOC_TYPE_DGI).get(tipo_cfe)
+        value = dict(DOC_TYPE_DGI).get(str(tipo_cfe))
         return value
 
 

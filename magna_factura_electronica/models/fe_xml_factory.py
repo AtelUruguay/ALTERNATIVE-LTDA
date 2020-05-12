@@ -70,7 +70,7 @@ class cfeFactoryOptions():
     _receptorCiudad = ''
     _receptorDepartamento = False
 
-    _formaPago = 0
+    _formaPago = '0'
     _tipoMonedaTransaccion = ''
     _montoTotalNoGravado = 0
     _montoTotal = 0
@@ -127,7 +127,7 @@ class CfeFactory():
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFchEmis', str(self.opt._fechaComprobanteYYYYMMDD))
         if self.opt._indicadorMontoBruto:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocMntBruto', '1')
-        self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFmaPago', str(self.opt._formaPago))
+        self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFmaPago', self.opt._formaPago)
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFchVenc', str(self.opt._fechaVencimientoYYYYMMDD))
 
         # EMISOR

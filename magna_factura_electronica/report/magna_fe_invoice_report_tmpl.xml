@@ -10,7 +10,7 @@
         <!--<t t-debug="ipdb"/>-->
         <!--<div class="header">-->
         <!--</div>-->
-        <div class="page">
+<div class="page">
             <div t-if="o.state == 'draft'" style="position:absolute;opacity:0.40;z-index:1000;transform:rotate(300deg);-webkit-transform:rotate(300deg);width:150%;font-size:152px">
                 <p>BORRADOR</p>
             </div>
@@ -27,10 +27,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <!--<span t-field="o.company_id.logo"-->
-                                                  <!--t-field-options="{&quot;widget&quot;: &quot;image&quot;}"-->
-                                                  <!--width="200" height="40"/>-->
-                                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" width="40" height="40"/>
+                                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" width="80" height="80"/>
 
                                         </td>
                                     </tr>
@@ -113,15 +110,14 @@
                                             </span>
                                         </td>
                                         <td style="border: 1px solid black;text-align: center;">
-                                            <span t-if="o.invoice_payment_term_id">
-                                                <t t-esc="o.tipo_pago"/>
-                                            </span>
+                                            <span t-if="o.forma_pago == '1'">Contado</span>
+                                            <span t-if="o.forma_pago == '2'">Crédito</span>
                                         </td>
                                         <td style="border: 1px solid black;text-align: center;">
                                             <span t-field="o.currency_id.name"/>
                                         </td>
                                         <td style="border: 1px solid black;text-align: center;">
-                                            <t t-set="get_currency_value" t-value="o.currency_id.inverse_rate"/>
+                                            <t t-set="get_currency_value" t-value="(o.currency_id.inverse_rate)"/>
                                             <span>
                                                 <t t-esc="get_currency_value"/>
                                             </span>
@@ -130,7 +126,7 @@
                                     <tr t-if="o.partner_id.vat" style="border: 1px solid black;text-align: center;">
                                         <th style="border: 1px solid black;text-align: center;" colspan="5">
                                             <b><t t-esc="o.report_get_document_type()"/>
-                                            <span></span>
+                                            <span/>
                                             <t t-esc="o.partner_id.vat"/></b>
                                         </th>
                                     </tr>
@@ -286,8 +282,7 @@
                 <div class="row">
                     <div class="col-xs-push-8">
                         <span t-if="o.fe_qr_img">
-                            <!--<span t-field="o.fe_qr_img" t-field-options="{&quot;widget&quot;: &quot;image&quot;}"/>-->
-                            <img t-if="o.fe_qr_img" t-att-src="image_data_uri(o.fe_qr_img)" width="100" height="100"/>
+                            <img t-att-src="image_data_uri(o.fe_qr_img)" width="200" height="200"/>
                         </span>
                         <br>
                             <span t-if="o.fe_Hash">Código de Seguridad:
