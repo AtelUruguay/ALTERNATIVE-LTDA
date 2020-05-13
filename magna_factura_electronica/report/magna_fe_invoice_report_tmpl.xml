@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data>
+        <template id="magna_factura_electronica.fe_invoice_report">
 
-    <template id="magna_factura_electronica.fe_invoice_report">
         <t t-set="data_report_margin_top" t-value="8"/>
         <t t-set="data_report_header_spacing" t-value="9"/>
         <t t-set="data_report_dpi" t-value="100"/>
         <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="o">
+        <t t-foreach="docs" t-as="o">
         <!--<t t-debug="ipdb"/>-->
-        <!--<div class="header">-->
-        <!--</div>-->
-<div class="page">
+        <div class="page">
             <div t-if="o.state == 'draft'" style="position:absolute;opacity:0.40;z-index:1000;transform:rotate(300deg);-webkit-transform:rotate(300deg);width:150%;font-size:152px">
                 <p>BORRADOR</p>
             </div>
@@ -58,7 +57,8 @@
                                 </table>
                             </td>
                             <td>
-                                <table style="empty-cells: hide" cellspacing="10" width="100%" align="right" class="text-right">
+                                <!--<table style="empty-cells: hide" cellspacing="10" width="100%" align="right" class="text-right">-->
+                                <table width="100%" align="right" class="text-right">
                                     <tr>
                                         <th style="border: 1px solid black;text-align: center;" colspan="5">
                                             <b>
@@ -68,7 +68,7 @@
                                                 </span>
                                             </b>
                                         </th>
-                                    </tr> <!--tr> <th style="border: 1px solid black;text-align: center;" colspan="5"><span t-if="o.type == 'out_invoice' and o.partner_id.vat != '' ">E-FACTURA</span></th> </tr-->
+                                    </tr>
                                     <tr>
                                         <th style="border: 1px solid black;text-align: center;" colspan="5">
                                             <b>
@@ -90,7 +90,7 @@
                                                 <span t-field="o.num_orig"/>
                                             </b>
                                         </th>
-                                    </tr> <!--tr> <td>&#160;</td> </tr--> <!--<tr>--> <!--<td>&#160;</td>--> <!--<td>&#160;</td>--> <!--<td>&#160;</td>--> <!--<td>&#160;</td>--> <!--</tr>-->
+                                    </tr>
                                     <tr style="border: 1px solid black;">
                                         <td style="border: 1px solid black;text-align: center;">Serie</td>
                                         <td style="border: 1px solid black;text-align: center;">Numero</td>
@@ -131,7 +131,7 @@
                                         </th>
                                     </tr>
                                     <tr style="border: 1px solid black;text-align: center;">
-                                        <td tyle="border: 1px solid black;text-align: center;" colspan="5">
+                                        <td style="border: 1px solid black;text-align: center;" colspan="5">
                                             <br/>
                                             <span t-field="o.partner_id.name"/>
                                             <br/>
@@ -147,16 +147,17 @@
                         </tr>
                     </table>
                 </div>
-                <br/> <!--<table cellspacing="10" width="20%">--> <!--<tr>--> <!--<th>--> <!--Numero Interno: <span t-if="o.fe_DocNro"><t t-set="get_number" t-value="(o.number)[2:]"/> <t t-esc="get_number"/></span>--> <!--</th>--> <!--</tr>--> <!----> <!--</table>-->
                 <br/>
-                <table cellspacing="10" width="100%">
+                <br/>
+                <table width="100%">
                     <tr style="border: 1px solid black;">
-                        <th style="border: 1px solid black;text-align: center;" colspan="4">Fecha Factura:
+                        <th style="border: 1px solid black;text-align: center;" colspan="1">Fecha Factura:
                             <span t-field="o.invoice_date"/>
                         </th>
-                        <th style="border: 1px solid black;text-align: center;" colspan="1">Condición de Pago: <span t-if="o.type == 'out_refund' and (o.partner_id.vat != False)">Contado</span>
-                            <span t-if="o.type == 'out_invoice' and (o.invoice_payment_term_id.name == 'Contado')">Contado</span>
-                            <span t-if="o.type == 'out_invoice' and (o.invoice_payment_term_id.name != 'Contado')">
+                        <th style="border: 1px solid black;text-align: center;" colspan="1">Condición de Pago:
+                            <span t-if="o.type == 'out_refund' and (o.partner_id.vat != False)">Contado</span>
+                            <span t-if="o.type == 'out_invoice' and o.forma_pago == '1'">Contado</span>
+                            <span t-if="o.type == 'out_invoice' and o.forma_pago == '2' and o.invoice_payment_term_id">
                                 <span t-field="o.invoice_payment_term_id.name"/>
                             </span>
                         </th>
@@ -171,77 +172,70 @@
                     </tr>
                 </table>
                 <br/>
-                <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Descripción</th>
-                            <th>Cantidad</th>
-                            <th class="text-right">Precio Unitario</th>
-                            <th class="text-right" groups="sale.group_discount_per_so_line">Descuento (%)
-                            </th> <!--th class="text-right">Impuestos</th-->
-                            <th class="text-right">Importe</th>
-                        </tr>
-                    </thead>
-                    <tbody class="invoice_tbody">
-                        <tr t-foreach="o.invoice_line_ids" t-as="l">
-                            <td>
-                                <span t-field="l.name"/>
-                            </td>
-                            <td>
-                                <span t-field="l.quantity"/>
-                                <span t-field="l.uos_id" groups="product.group_uom"/>
-                            </td>
-                            <td class="text-right">
-                                <span t-field="l.price_unit" t-field-options="{'widget':'monetary'}"/>
-                            </td>
-                            <td class="text-right" groups="sale.group_discount_per_so_line">
-                                <span t-field="l.discount" t-field-options="{'widget':'monetary'}"/>
-                            </td>
-                            <td class="text-right">
-                                <span t-field="l.price_subtotal" t-field-options="{'widget':'monetary'}"/>
-                            </td>
-                        </tr>
-                    </tbody>
+                <table cellspacing="10" style="border-collapse: collapse; width: 100%;" class="table table-condensed">
+                  <thead>
+                    <tr style="border-bottom: 1px solid black">
+                          <th style="text-align: left;">Descripción</th>
+                          <th style="text-align: left;">Cantidad</th>
+                          <th style="text-align: right;">Precio Unitario</th>
+                          <th style="text-align: right;" groups="sale.group_discount_per_so_line">Descuento (%)</th>
+                          <th style="text-align: right;">Importe</th>
+                      </tr>
+                  </thead>
+                <tbody class="invoice_tbody">
+                  <t t-foreach="o.invoice_line_ids" t-as="l">
+                    <tr>
+                      <td style="text-align: left;"><span t-field="l.name"/></td>
+                      <td style="text-align: left;"><span t-field="l.quantity"/></td>
+                      <td style="text-align: right;"><span t-field="l.price_unit"/></td>
+                      <td style="text-align: right;" groups="sale.group_discount_per_so_line"><span t-field="l.discount"/></td>
+                      <td style="text-align: right;"><span t-field="l.price_subtotal"/></td>
+                    </tr>
+                    </t>
+                  </tbody>
                 </table>
+                <br/>
                 <div class="row">
                     <div class="col-xs-4 pull-right">
-                        <table class="table table-condensed">
-                            <tr class="border-black">
+                        <table cellspacing="10" class="table table-condensed" style="width: 40%; border-collapse: collapse; float: right;">
+                            <tr style="border-top: 1px solid black">
                                 <td>
                                     <strong>Total sin impuestos</strong>
                                 </td>
-                                <td class="text-right">
-                                    <span t-esc="o.currency_id.symbol"/>
+                                <td style="text-align: right;">
                                     <span t-field="o.amount_untaxed" t-field-options="{'widget':'monetary'}"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>IVA Tasa básica</td>
-                                <td class="text-right">
-                                    <span t-esc="o.currency_id.symbol"/>
+                                <td style="text-align: right;">
                                     <span t-field="o.amount_tax" t-field-options="{'widget':'monetary'}"/>
                                 </td>
                             </tr>
-                            <tr class="border-black">
+                            <tr style="border-top: 1px solid black">
                                 <td>
                                     <strong>Total</strong>
                                 </td>
-                                <td class="text-right">
-                                    <span t-esc="o.currency_id.symbol"/>
+                                <td style="text-align: right;">
                                     <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
                 <div class="col-xs-4 pull-right">
-                    <table width="100%" style="border: 1px solid black;text-align: right;">
+                    <table style="border: 1px solid black;text-align: right;float: right; width: 40%;">
                         <th>
                             <b>TIPO DE CAMBIO SOLO A EFECTOS FISCALES</b>
                         </th>
                     </table>
                 </div>
             </div>
+            <br/>
             <br/>
             <div style="border-top: 1px solid black;"/>
             <p align="center">
@@ -260,7 +254,7 @@
             <div style="border-top: 1px solid black;"/> <!--div class="footer"-->
             <div>
                 <div class="row">
-                    <span t-if="doct_type">Iva al dia |</span>
+                    <span>Iva al dia |</span>
                     <span t-if="o.fe_CAENA">Nro CAE:
                         <span t-field="o.fe_CAENA"/>
                         |
@@ -297,6 +291,7 @@
                         <span t-if="DgiParam">
                             <t t-esc="DgiParam"/>
                         </span>
+                        <t t-set="doct_type" t-esc="(o.report_get_doct_type())"/>
                         <span t-if="doct_type">
                             <t t-esc="doct_type"/>
                         </span>
@@ -311,7 +306,8 @@
                 </div>
                 <br/>
                 <div t-if="o.fe_CAEFVD">
-                    <table class="table table-condensed">
+                    <!--<table class="table table-condensed">-->
+                      <table cellspacing="10" style="border-collapse: collapse; width: 100%;">
                         <tr>
                             <td>
                                 <strong>Firma:</strong>
@@ -330,11 +326,10 @@
                         </tr>
                     </table>
                 </div>
-            </div> <!--/div-->
+            </div>
         </div>
-    </t>
         </t>
-
-    </template>
-
+        </t>
+        </template>
+    </data>
 </odoo>

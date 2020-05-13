@@ -289,7 +289,7 @@ class AccountMove(models.Model):
         return resolucion_dgi
 
     def report_get_document_type(self):
-        value = dict(self._fields['fe_tipo_documento'].selection).get(self.fe_tipo_documento)
+        value = dict(self.env['res.partner']._fields['fe_tipo_documento'].selection).get(self.partner_id.fe_tipo_documento)
         return value
 
 
