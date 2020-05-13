@@ -187,9 +187,9 @@
                     <tr>
                       <td style="text-align: left;"><span t-field="l.name"/></td>
                       <td style="text-align: left;"><span t-field="l.quantity"/></td>
-                      <td style="text-align: right;"><span t-field="l.price_unit" t-field-options="{'widget':'monetary'}"/></td>
-                      <td style="text-align: right;" groups="sale.group_discount_per_so_line"><span t-field="l.discount" t-field-options="{'widget':'monetary'}"/></td>
-                      <td style="text-align: right;"><span t-field="l.price_subtotal" t-field-options="{'widget':'monetary'}"/></td>
+                      <td style="text-align: right;"><span t-field="l.price_unit"/></td>
+                      <td style="text-align: right;" groups="sale.group_discount_per_so_line"><span t-field="l.discount"/></td>
+                      <td style="text-align: right;"><span t-field="l.price_subtotal"/></td>
                     </tr>
                     </t>
                   </tbody>
