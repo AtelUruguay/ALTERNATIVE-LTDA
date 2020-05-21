@@ -84,10 +84,12 @@
                                             </b>
                                         </th>
                                     </tr>
-                                    <tr t-if="o.type == 'out_refund' ">
+                                    <tr t-if="o.type == 'out_refund'">
                                         <th style="border: 1px solid black;text-align: center;" colspan="5">
                                             <b>Documento de Origen:
-                                                <span t-field="o.num_orig"/>
+                                                <span t-if="o.reversed_entry_id">
+                                                    <t t-field="o.reversed_entry_id.name"/>
+                                                </span>
                                             </b>
                                         </th>
                                     </tr>

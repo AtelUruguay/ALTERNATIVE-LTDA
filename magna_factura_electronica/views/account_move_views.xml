@@ -25,6 +25,11 @@
                 </div>
             </xpath>
 
+            <button name="button_draft" position="attributes">
+                <attribute name="attrs">{'invisible': ['|','|',('restrict_mode_hash_table', '=', True),('state', 'not in', ('posted', 'cancel')),
+                    ('fe_Estado','=','AS')]}</attribute>
+            </button>
+
             <notebook position="inside">
                 <page string="Factura Electrónica" attrs="{'invisible':[('state','=','draft')]}">
                     <group>

@@ -129,18 +129,19 @@ class AccountMove(models.Model):
     # se llama al action_post de super y antes de devolver el control, se envía la información de FE
     def action_post(self):
         res = super(AccountMove, self).action_post()
-        self.invoice_send_fe_proinfo()
+        if self.type in ('out_invoice', 'out_refund'):
+            self.invoice_send_fe_proinfo()
         return res
+
 
     def invoice_send_fe_proinfo(self):
         fe_activa = self.env["ir.config_parameter"].sudo().get_param("magna_fe_activa")
-        for rec in self:
-            if fe_activa == 'True':
-                if self.type in ('out_invoice', 'out_refund'):
-                    tipo_cfe = self.get_tipo_cfe()
-                    in_xml_entrada = self.gen_Inxmlentrada(tipo_cfe)
-                    vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(in_xml_entrada, tipo_cfe)
-                    rec.write(vals)
+        if fe_activa == 'True':
+            for rec in self:
+                tipo_cfe = self.get_tipo_cfe()
+                in_xml_entrada = self.gen_Inxmlentrada(tipo_cfe)
+                vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(in_xml_entrada, tipo_cfe)
+                rec.write(vals)
         return True
 
     def get_tipo_cfe(self):
