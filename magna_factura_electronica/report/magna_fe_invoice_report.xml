@@ -13,3 +13,15 @@
 
     </data>
 </odoo>
+    <!--Custom-->
+        <!--<report -->
+            <!--id="account_aangetekend"-->
+            <!--model="account.invoice"-->
+            <!--string="Aangetekende zending"-->
+            <!--report_type="qweb-pdf"-->
+            <!--name="account.report_aangetekend"-->
+            <!--attachment_use="True"-->
+           <!--&lt;!&ndash;This one has to have a different name then the other one. The magic happens here.&ndash;&gt;-->
+            <!--attachment="(object.state in ('open','paid')) and ('INV2'+(object.number or '').replace('/','')+'.pdf')"-->
+            <!--file="account.report_aangetekend"-->
+        <!--/>-->
