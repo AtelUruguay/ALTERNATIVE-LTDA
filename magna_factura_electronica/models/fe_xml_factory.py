@@ -243,8 +243,8 @@ class CfeFactory():
         """
         # Obtener las URL necesaria de los parámetros del sistema
         try:
-            # url_ws = tools.config[key_ws_FE_url]
-            url_ws = "https://fe-test.proinfo.uy:443/servlet/afegeneraryfirmardocumento"
+            # url_ws = "https://fe-test.proinfo.uy:443/servlet/afegeneraryfirmardocumento" #el str se usa en test
+            url_ws = tools.config[key_ws_FE_url] #prod toma url del parametro del sistema
             if not url_ws:
                 raise UserError(_(
                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio: %s ' %
