@@ -46,6 +46,10 @@ class cotizaciones_wizard(models.TransientModel):
 
     @api.model
     def date_range(self, start_date, end_date):
+        # ASM desde el cron llega como string y da error end_date - start_date
+        if isinstance(end_date, str):
+            end_date = datetime.strptime(self.env.context['end_date'], DEFAULT_SERVER_DATE_FORMAT).date()
+        # ASM Fin
         for n in range(int((end_date - start_date).days+1)):
             yield start_date + timedelta(days=n)
 
