@@ -175,16 +175,10 @@ class cotizaciones_wizard(models.TransientModel):
 
     def cotizacion_response(self, response):
         #Se reponen 1 día que se quitó porque el objetivo era obtener los resultados de 1 día antes siempre
-        start_date = self.env.context['start_date'] + timedelta(days=1)
-
-        logging.info('start_date_context: %s', type(self.env.context['start_date']))
-        logging.info('end_date_context: %s', type(self.env.context['end_date']))
-        logging.info('start_date: %s', type(start_date))
-        # logging.info('end_date: %s', end_date)
-        end_date = datetime.strptime(self.env.context['end_date'], DEFAULT_SERVER_DATE_FORMAT).date()
-
-
-        return self._execute(response, start_date, end_date)
+        # start_date = self.env.context['start_date'] + timedelta(days=1)
+        # end_date = datetime.strptime(self.env.context['end_date'], DEFAULT_SERVER_DATE_FORMAT).date()
+        # return self._execute(response, start_date, end_date)
+        return self._execute(response, self.env.context['start_date'] + timedelta(days=1), self.env.context['end_date'])
 
     @soap.cotizacion(request="execute", response="cotizacion_response", trigger_error=False, new_api=True)
     def _send_date_range(self):
