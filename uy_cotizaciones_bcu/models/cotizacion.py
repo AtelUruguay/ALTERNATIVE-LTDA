@@ -177,9 +177,9 @@ class cotizaciones_wizard(models.TransientModel):
         #Se reponen 1 día que se quitó porque el objetivo era obtener los resultados de 1 día antes siempre
         start_date = self.env.context['start_date'] + timedelta(days=1)
 
-        logging.info('start_date_context: %s', self.env.context['start_date'])
-        logging.info('end_date_context: %s', self.env.context['end_date'])
-        logging.info('start_date: %s', start_date)
+        logging.info('start_date_context: %s', type(self.env.context['start_date']))
+        logging.info('end_date_context: %s', type(self.env.context['end_date']))
+        logging.info('start_date: %s', type(start_date))
         # logging.info('end_date: %s', end_date)
         end_date = datetime.strptime(self.env.context['end_date'], DEFAULT_SERVER_DATE_FORMAT).date()
 
