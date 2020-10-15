@@ -175,9 +175,10 @@ class cotizaciones_wizard(models.TransientModel):
 
     def cotizacion_response(self, response):
         #Se reponen 1 día que se quitó porque el objetivo era obtener los resultados de 1 día antes siempre
-        start_date = self.env.context['start_date'] + timedelta(days=1)
-        end_date = datetime.strptime(self.env.context['end_date'], DEFAULT_SERVER_DATE_FORMAT).date()
-        return self._execute(response, start_date, end_date)
+        # start_date = self.env.context['start_date'] + timedelta(days=1)
+        # end_date = datetime.strptime(self.env.context['end_date'], DEFAULT_SERVER_DATE_FORMAT).date()
+        # return self._execute(response, start_date, end_date)
+        return self._execute(response, self.env.context['start_date'] + timedelta(days=1), self.env.context['end_date'])
 
     @soap.cotizacion(request="execute", response="cotizacion_response", trigger_error=False, new_api=True)
     def _send_date_range(self):
@@ -220,6 +221,9 @@ class cotizaciones_wizard(models.TransientModel):
         #Esto lo hace sin importar el UTC
         self.env.cr.execute("SELECT to_char(now(), 'YYYY-MM-DD')")
         end_date = self.env.cr.fetchone()[0]
+        # ASM Ini
+        end_date = datetime.strptime(end_date, DEFAULT_SERVER_DATE_FORMAT).date()
+        # ASM Fin
         for inter in int_conf_rows:
             start_date = end_date
             rate = cur_rate_obj.search([('currency_id','=',inter.currency_id.id),('name','<',start_date)], order='name DESC', limit=1)
