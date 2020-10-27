@@ -17,22 +17,21 @@ class ResPartner(models.Model):
 
     @api.model
     def _get_default_country(self):
-        # country = self.env['res.country'].search([('code', '=', 'HK')], limit=1)
         country = self.env.ref('base.uy').id
         return country
 
-    fe_tipo_documento = fields.Selection(DOCUMENT_TYPE_SELECTION, 'Tipo de Documento', default='3')
+    fe_tipo_documento = fields.Selection(DOCUMENT_TYPE_SELECTION, 'Tipo de Documento', default='4')
     fe_pais_documento = fields.Many2one('res.country',u'País del Documento', default=_get_default_country)
     fe_numero_doc = fields.Char(u'Número de Documento', size=32)
 
 
-    @api.model
-    def create(self, vals):
-        if vals.get('customer_rank') > 0 and vals.get('fe_tipo_documento') == '2':
-            vals['vat'] = vals.get('fe_numero_doc')
-        return super(ResPartner, self).create(vals)
-
-
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if 'customer_rank' in vals and vals.get('customer_rank') > 0 and \
+                            'fe_tipo_documento' in vals and vals.get('fe_tipo_documento') == '2':
+                vals['vat'] = vals.get('fe_numero_doc')
+        return super(ResPartner, self).create(vals_list)
 
 
     # Funcion que chequea el digito verificador de la cedula

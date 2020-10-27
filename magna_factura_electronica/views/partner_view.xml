@@ -7,12 +7,12 @@
             <field name="inherit_id" ref="account.view_partner_property_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//page[@name='accounting']" position="after">
-                    <page name="fe" string="Facturación Electrónica" attrs="{'invisible':[('customer_rank','=',0)]}">
+                    <page name="fe" string="Facturación Electrónica">
                         <group>
                             <field name="customer_rank" invisible="1"/>
                             <field name="fe_pais_documento"/>
                             <field name="fe_tipo_documento" attrs="{'required':[('fe_pais_documento','!=',False),('customer_rank','>',0)]}"/>
-                            <field name="fe_numero_doc" attrs="{'required':[('fe_tipo_documento','!=',False),('customer_rank','>',0)]}"/>
+                            <field name="fe_numero_doc" attrs="{'required':[('fe_tipo_documento','!=','4'),('customer_rank','>',0)]}"/>
                         </group>
                     </page>
                 </xpath>
