@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="account.view_partner_property_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//page[@name='accounting']" position="after">
-                    <page name="fe" string="Facturación Electrónica" attrs="{'invisible':[('customer_rank','=',0)]}">
+                    <page name="fe" string="Facturación Electrónica">
                         <group>
                             <field name="customer_rank" invisible="1"/>
                             <field name="fe_pais_documento"/>
