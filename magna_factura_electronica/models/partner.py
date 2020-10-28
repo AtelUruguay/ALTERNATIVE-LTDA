@@ -20,7 +20,7 @@ class ResPartner(models.Model):
         country = self.env.ref('base.uy').id
         return country
 
-    fe_tipo_documento = fields.Selection(DOCUMENT_TYPE_SELECTION, 'Tipo de Documento', default='4')
+    fe_tipo_documento = fields.Selection(DOCUMENT_TYPE_SELECTION, 'Tipo de Documento')
     fe_pais_documento = fields.Many2one('res.country',u'País del Documento', default=_get_default_country)
     fe_numero_doc = fields.Char(u'Número de Documento', size=32)
 
