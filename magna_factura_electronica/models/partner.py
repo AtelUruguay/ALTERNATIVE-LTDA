@@ -91,31 +91,31 @@ class ResPartner(models.Model):
             if numero:
                 numero = numero.strip()
                 if not numero.isdigit() and tipo_documento in (2,3):
-                    raise UserWarning(('Warning!'), ('El número de documento del cliente contiene caracteres que no son digitos para el tipo de documento ingresado'))
+                    raise UserError('El número de documento del cliente contiene caracteres que no son digitos para el tipo de documento ingresado')
             if (tipo_documento) and (numero):
                 if tipo_documento==3:
                     if len(str(numero))!= 8:
-                        raise UserWarning(('Warning!'), ('La C.I. ingresada no es correcta'))
+                        raise UserError('La C.I. ingresada no es correcta')
                     #el algoritmo toma todos los numeros menos el ultimo, por eso se le hace el casteo y 'acortamiento' del numero
                     ultimo_digito = self.chkdig(int(str(numero)[:7]))
                     if ultimo_digito!= int(str(numero)[-1:]):
-                        raise UserWarning(('Warning!'), ('La C.I. ingresada no es correcta'))
+                        raise UserError('La C.I. ingresada no es correcta')
                 if tipo_documento==2:
                     if len((numero))>= 11:
                         if int(numero[:2]) not in range(1,22):
-                            raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
+                            raise UserError('El RUT ingresado no es valido.')
                         if numero[2:8]=='000000':
-                            raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
+                            raise UserError('El RUT ingresado no es valido.')
                         if numero[8:10]!='00':
-                            raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
+                            raise UserError('El RUT ingresado no es valido.')
                         last_digit = self.check_rut(numero[:11])
                         if len(str(numero))== 12:
                             if last_digit!=int(str(numero)[-1]):
-                                raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
+                                raise UserError('El RUT ingresado no es valido.')
                         if len(str(numero))== 11 and last_digit != '-1':
-                            raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
+                            raise UserError('El RUT ingresado no es valido.')
                     else:
-                        raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
+                        raise UserError('El RUT ingresado no es valido.')
             return True
 
 
