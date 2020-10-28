@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError, ValidationError
 
 
 DOCUMENT_TYPE_SELECTION = [
@@ -125,7 +126,7 @@ class ResPartner(models.Model):
                 if (rec.fe_tipo_documento in ['2','3'] and rec.fe_pais_documento.code != 'UY') or \
                    (rec.fe_tipo_documento == '6' and rec.fe_pais_documento.code not in ['AR', 'BR', 'CL', 'PY']) or \
                    (rec.fe_tipo_documento in ['4','5'] and rec.fe_pais_documento.code == 'UY'):
-                    raise UserWarning(('Warning!'), (u'El tipo de documento no es válido para el país seleccionado.'))
+                    raise ValidationError(u'El tipo de documento no es válido para el país seleccionado.')
 
 
     # funcion que valida si los datos para DGI están correctamente cargados
