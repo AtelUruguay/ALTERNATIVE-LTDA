@@ -20,8 +20,8 @@ class ResPartner(models.Model):
         country = self.env.ref('base.uy').id
         return country
 
-    fe_tipo_documento = fields.Selection(DOCUMENT_TYPE_SELECTION, 'Tipo de Documento')
     fe_pais_documento = fields.Many2one('res.country',u'País del Documento', default=_get_default_country)
+    fe_tipo_documento = fields.Selection(DOCUMENT_TYPE_SELECTION, 'Tipo de Documento')
     fe_numero_doc = fields.Char(u'Número de Documento', size=32)
 
 
@@ -116,6 +116,17 @@ class ResPartner(models.Model):
                     else:
                         raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
             return True
+
+
+    @api.constrains('fe_pais_documento','fe_tipo_documento')
+    def _check_datos_documento(self):
+        for rec in self:
+            if rec.fe_pais_documento and rec.fe_tipo_documento:
+                if (rec.fe_tipo_documento in ['2','3'] and rec.fe_pais_documento.code != 'UY') or \
+                   (rec.fe_tipo_documento == '6' and rec.fe_pais_documento.code not in ['AR', 'BR', 'CL', 'PY']) or \
+                   (rec.fe_tipo_documento in ['4','5'] and rec.fe_pais_documento.code == 'UY'):
+                    raise UserWarning(('Warning!'), (u'El tipo de documento no es válido para el país seleccionado.'))
+
 
     # funcion que valida si los datos para DGI están correctamente cargados
     # cuando se indica que no es consumidor Final.
