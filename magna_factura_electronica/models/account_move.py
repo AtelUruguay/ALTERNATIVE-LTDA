@@ -205,8 +205,7 @@ class AccountMove(models.Model):
                                                                          ('fe_tax_codigo_dgi.code', '=', '3'),
                                                                          ('type_tax_use', '=', 'sale')], limit=1)
             if not account_tax_iva_minima_id:
-                raise UserError(
-                    'No existe configurado un impuesto con Código de DGI 2 (Iva tasa mínima)')
+                raise UserError('No existe configurado un impuesto con Código de DGI 2 (Iva tasa mínima)')
             if not account_tax_iva_basica_id:
                 raise UserError(u'No existe configurado un impuesto con Código de DGI 3 (Iva tasa basica)')
 

@@ -26,7 +26,7 @@ from datetime import timedelta, datetime
 from .soap import soap
 from .base import Dic2Object
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
-import logging
+
 
 class cotizaciones_wizard(models.TransientModel):
     _name = 'cotizaciones.wizard'
