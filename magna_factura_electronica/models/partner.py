@@ -120,7 +120,7 @@ class ResPartner(models.Model):
 
 
     @api.constrains('fe_pais_documento','fe_tipo_documento')
-    def _check_datos_documento(self):
+    def _check_tipo_documento(self):
         for rec in self:
             if rec.fe_pais_documento and rec.fe_tipo_documento:
                 if (rec.fe_tipo_documento in ['2','3'] and rec.fe_pais_documento.code != 'UY') or \
