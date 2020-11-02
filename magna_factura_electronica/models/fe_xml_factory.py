@@ -247,8 +247,9 @@ class CfeFactory():
             # AMBIENTE TEST
             param_name = 'magna_fe_ws_location_test'
             # AMBIENTE TEST
-
-            url_ws = self.env['ir.config_parameter'].sudo().get_param('magna_fe_ws_location_test')
+            print(param_name)
+            url_ws = self.env['ir.config_parameter'].sudo().get_param(param_name)
+            print(url_ws)
             if not url_ws:
                 raise UserError(_(
                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
@@ -257,7 +258,7 @@ class CfeFactory():
             #     'Error: No se encuentra configurado algun parametro: %s, %s o %s ' %
             #     (key_ws_FE_url, key_ws_FE_username,key_ws_FE_password)))
             raise UserError(_(
-                'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
+                'Exception: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
 
         # se usa archivo wsdl local al addon: FEGeneraryFirmarDocumento.wsdl'
         path_file = os.path.dirname(os.path.abspath(__file__))
