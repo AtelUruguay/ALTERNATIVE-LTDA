@@ -248,7 +248,7 @@ class CfeFactory():
             param_name = 'magna_fe_ws_location_test'
             # AMBIENTE TEST
 
-            url_ws = self.env['ir.config_parameter'].sudo().get_param(param_name)
+            url_ws = self.env['ir.config_parameter'].sudo().get_param('magna_fe_ws_location_test')
             if not url_ws:
                 raise UserError(_(
                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
