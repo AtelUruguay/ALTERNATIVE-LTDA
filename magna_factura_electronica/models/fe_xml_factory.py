@@ -243,14 +243,17 @@ class CfeFactory():
 
     def conectar_ws_FEGeneraryFirmarDocumento(self):
         # Obtener las URL necesaria de los parámetros del sistema
+        logging.info('ENTRA 1')
+
         try:
             # AMBIENTE TEST
             param_name = 'magna_fe_ws_location_test'
             # AMBIENTE TEST
-            print(param_name)
+            logging.info('PARAM_NAME: %s',param_name)
             url_ws = self.env['ir.config_parameter'].sudo().get_param(param_name)
-            print(url_ws)
+            logging.info('URL: %s', url_ws)
             if not url_ws:
+                logging.info('ENTRA 2')
                 raise UserError(_(
                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
         except Exception:
