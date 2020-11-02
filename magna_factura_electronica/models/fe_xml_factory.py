@@ -30,9 +30,9 @@ def loguear(text):
         logging.info(text)
 
 
-key_ws_FE_url = "magna_ws_fe.url"
-key_ws_FE_username = "magna_ws_fe.username"
-key_ws_FE_password = "magna_ws_fe.password"
+# key_ws_FE_url = "magna_ws_fe.url"
+# key_ws_FE_username = "magna_ws_fe.username"
+# key_ws_FE_password = "magna_ws_fe.password"
 
 
 
@@ -242,52 +242,34 @@ class CfeFactory():
 
 
     def conectar_ws_FEGeneraryFirmarDocumento(self):
-        """
-        Establece la conexión con el WS y crea el objeto SOAP cliente
-        de dicha conexión.
-        """
         # Obtener las URL necesaria de los parámetros del sistema
         try:
-            # url_ws = "https://fe-test.proinfo.uy:443/servlet/afegeneraryfirmardocumento" #el str se usa en test
-            url_ws = tools.config[key_ws_FE_url] #prod toma url del parametro del sistema
+            # AMBIENTE PROD
+            param_name = 'magna_fe_ws_location_prod'
+            # AMBIENTE PROD
+
+            url_ws = self.env['ir.config_parameter'].sudo().get_param(param_name)
             if not url_ws:
                 raise UserError(_(
-                    'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio: %s ' %
-                    key_ws_FE_url))
-
-            # username_ws = tools.config[key_ws_FE_username]
-            # if not username_ws:
-            #     raise UserError(_(
-            #         'Error TLK: No se encuentra configurado el Usuario para consumir el servicio: %s ' %
-            #         key_ws_FE_username))
-            #
-            # pass_ws = tools.config[key_ws_FE_password]
-            # if not pass_ws:
-            #     raise UserError(_(
-            #         'Error TLK: No se encuentra configurada la contraseña para consumir el servicio: %s ' %
-            #         key_ws_FE_password))
+                    'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
         except Exception:
+            # raise UserError(_(
+            #     'Error: No se encuentra configurado algun parametro: %s, %s o %s ' %
+            #     (key_ws_FE_url, key_ws_FE_username,key_ws_FE_password)))
             raise UserError(_(
-                'Error No se encuentra configurado algun parametro: %s, %s o %s ' %
-                (key_ws_FE_url, key_ws_FE_username,key_ws_FE_password)))
+                'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
 
         # se usa archivo wsdl local al addon: FEGeneraryFirmarDocumento.wsdl'
         path_file = os.path.dirname(os.path.abspath(__file__))
         wsdl_ws = 'file://' + path_file + '/wsdls/FEGeneraryFirmarDocumento.wsdl'
 
-        # Establecer las conexiones
         try:
+            # Establecer las conexiones
             client = Client(wsdl_ws, location=url_ws, timeout=10)
-            # security = Security()
-            # token = UsernameToken(username_ws, pass_ws)
-            # security.tokens.append(token)
-            # self.ws_FEGeneraryFirmarDocumento.set_options(retxml=True)
-            # self.ws_FEGeneraryFirmarDocumento.set_options(wsse=security)
-            # _logger.info('self.ws_FEGeneraryFirmarDocumento: %s', self.ws_FEGeneraryFirmarDocumento)
             return client
         except Exception as e:
-            raise UserError(
-                _(u'Error TLK: No se pudo cargar WSDL:') + tools.ustr(e) + ':' + url_ws)
+            raise UserError(_(u'Error: No se pudo cargar WSDL:') + tools.ustr(e) + ':' + url_ws)
+
 
     def invocar_generar_y_firmar_doc(self, str_xml_cfe, tipo_CFE):
         """
@@ -296,11 +278,11 @@ class CfeFactory():
         # Establecer la conexión
         client = self.conectar_ws_FEGeneraryFirmarDocumento()
         if not client:
-            logging.error(u"No se pudo establecer conexión WS")
+            logging.error(u"No se pudo establecer la conexión WS")
             return False
 
-        # Consumo de servicio
         try:
+            # Consumo de servicio
             respuesta_ws = client.service.Execute(Inxmlentrada=str_xml_cfe, Tipocfe=tipo_CFE, Fefacturaimportadaloteid=0)
             if respuesta_ws:
                 if respuesta_ws.Outxmlsalida:
