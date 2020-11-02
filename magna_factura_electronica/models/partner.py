@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError, ValidationError
 
 
 DOCUMENT_TYPE_SELECTION = [
@@ -17,22 +18,21 @@ class ResPartner(models.Model):
 
     @api.model
     def _get_default_country(self):
-        # country = self.env['res.country'].search([('code', '=', 'HK')], limit=1)
         country = self.env.ref('base.uy').id
         return country
 
-    fe_tipo_documento = fields.Selection(DOCUMENT_TYPE_SELECTION, 'Tipo de Documento', default='3')
     fe_pais_documento = fields.Many2one('res.country',u'País del Documento', default=_get_default_country)
+    fe_tipo_documento = fields.Selection(DOCUMENT_TYPE_SELECTION, 'Tipo de Documento')
     fe_numero_doc = fields.Char(u'Número de Documento', size=32)
 
 
-    @api.model
-    def create(self, vals):
-        if vals.get('customer_rank') > 0 and vals.get('fe_tipo_documento') == '2':
-            vals['vat'] = vals.get('fe_numero_doc')
-        return super(ResPartner, self).create(vals)
-
-
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if 'customer_rank' in vals and vals.get('customer_rank') > 0 and \
+                            'fe_tipo_documento' in vals and vals.get('fe_tipo_documento') == '2':
+                vals['vat'] = vals.get('fe_numero_doc')
+        return super(ResPartner, self).create(vals_list)
 
 
     # Funcion que chequea el digito verificador de la cedula
@@ -91,32 +91,43 @@ class ResPartner(models.Model):
             if numero:
                 numero = numero.strip()
                 if not numero.isdigit() and tipo_documento in (2,3):
-                    raise UserWarning(('Warning!'), ('El número de documento del cliente contiene caracteres que no son digitos para el tipo de documento ingresado'))
+                    raise UserError('El número de documento del cliente contiene caracteres que no son digitos para el tipo de documento ingresado')
             if (tipo_documento) and (numero):
                 if tipo_documento==3:
                     if len(str(numero))!= 8:
-                        raise UserWarning(('Warning!'), ('La C.I. ingresada no es correcta'))
+                        raise UserError('La C.I. ingresada no es correcta')
                     #el algoritmo toma todos los numeros menos el ultimo, por eso se le hace el casteo y 'acortamiento' del numero
                     ultimo_digito = self.chkdig(int(str(numero)[:7]))
                     if ultimo_digito!= int(str(numero)[-1:]):
-                        raise UserWarning(('Warning!'), ('La C.I. ingresada no es correcta'))
+                        raise UserError('La C.I. ingresada no es correcta')
                 if tipo_documento==2:
                     if len((numero))>= 11:
                         if int(numero[:2]) not in range(1,22):
-                            raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
+                            raise UserError('El RUT ingresado no es valido.')
                         if numero[2:8]=='000000':
-                            raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
+                            raise UserError('El RUT ingresado no es valido.')
                         if numero[8:10]!='00':
-                            raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
+                            raise UserError('El RUT ingresado no es valido.')
                         last_digit = self.check_rut(numero[:11])
                         if len(str(numero))== 12:
                             if last_digit!=int(str(numero)[-1]):
-                                raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
+                                raise UserError('El RUT ingresado no es valido.')
                         if len(str(numero))== 11 and last_digit != '-1':
-                            raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
+                            raise UserError('El RUT ingresado no es valido.')
                     else:
-                        raise UserWarning(('Warning!'),('El RUT ingresado no es valido.'))
+                        raise UserError('El RUT ingresado no es valido.')
             return True
+
+
+    @api.constrains('fe_pais_documento','fe_tipo_documento')
+    def _check_tipo_documento(self):
+        for rec in self:
+            if rec.fe_pais_documento and rec.fe_tipo_documento:
+                if (rec.fe_tipo_documento in ['2','3'] and rec.fe_pais_documento.code != 'UY') or \
+                   (rec.fe_tipo_documento == '6' and rec.fe_pais_documento.code not in ['AR', 'BR', 'CL', 'PY']) or \
+                   (rec.fe_tipo_documento in ['4','5'] and rec.fe_pais_documento.code == 'UY'):
+                    raise ValidationError(u'El tipo de documento no es válido para el país seleccionado.')
+
 
     # funcion que valida si los datos para DGI están correctamente cargados
     # cuando se indica que no es consumidor Final.

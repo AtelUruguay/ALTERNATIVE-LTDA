@@ -141,12 +141,17 @@ class CfeFactory():
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEEMIDepartamento', str(self.opt._emisorDepartamento))
 
         # RECEPTOR
-        self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECTipoDocRecep', str(self.opt._receptorTipoDocumento))
-        cod_pais_receptor = self.opt._receptorCodigoPais
-        if cod_pais_receptor:
-            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECCodPaisRecep', cod_pais_receptor)
-        if self.opt._receptorDocumento:
-            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDocRecep', self.opt._receptorDocumento)
+        tipo_doc_receptor = str(self.opt._receptorTipoDocumento)
+        if tipo_doc_receptor and self.opt._receptorCodigoPais and self.opt._receptorDocumento:
+            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECTipoDocRecep', tipo_doc_receptor)
+            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECCodPaisRecep', self.opt._receptorCodigoPais)
+            if tipo_doc_receptor in ('2','3'):
+                self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDocRecep', self.opt._receptorDocumento)
+            else: #tipo_doc_receptor in ('4','5','6','7'):
+                if self.opt._tipoComprobante in (111,112):
+                    self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDocRecepExt', "0")
+                else:
+                    self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDocRecepExt', self.opt._receptorDocumento)
         if self.opt._receptorRazonSocial:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECRznSocRecep', str(self.opt._receptorRazonSocial))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDirRecep', str(self.opt._receptorDireccion))
