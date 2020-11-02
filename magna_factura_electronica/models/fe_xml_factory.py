@@ -30,7 +30,7 @@ def loguear(text):
         logging.info(text)
 
 
-# key_ws_FE_url = "magna_ws_fe.url"
+key_ws_FE_url = "magna_ws_fe.url"
 # key_ws_FE_username = "magna_ws_fe.username"
 # key_ws_FE_password = "magna_ws_fe.password"
 
@@ -244,14 +244,11 @@ class CfeFactory():
     def conectar_ws_FEGeneraryFirmarDocumento(self):
         # Obtener las URL necesaria de los parámetros del sistema
         try:
-            # AMBIENTE PROD
-            param_name = 'magna_fe_ws_location_prod'
-            # AMBIENTE PROD
-
-            url_ws = self.env['ir.config_parameter'].sudo().get_param(param_name)
-            if not url_ws:
+            ws_location_url = tools.config[key_ws_FE_url]
+            if not ws_location_url:
                 raise UserError(_(
                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
+            logging.info(ws_location_url)
         except Exception:
             # raise UserError(_(
             #     'Error: No se encuentra configurado algun parametro: %s, %s o %s ' %
@@ -265,10 +262,10 @@ class CfeFactory():
 
         try:
             # Establecer las conexiones
-            client = Client(wsdl_ws, location=url_ws, timeout=10)
+            client = Client(wsdl_ws, location=ws_location_url, timeout=10)
             return client
         except Exception as e:
-            raise UserError(_(u'Error: No se pudo cargar WSDL:') + tools.ustr(e) + ':' + url_ws)
+            raise UserError(_(u'Error: No se pudo cargar WSDL:') + tools.ustr(e) + ':' + ws_location_url)
 
 
     def invocar_generar_y_firmar_doc(self, str_xml_cfe, tipo_CFE):
