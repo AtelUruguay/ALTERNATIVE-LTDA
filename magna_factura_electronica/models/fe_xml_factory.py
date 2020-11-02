@@ -248,6 +248,7 @@ class CfeFactory():
             if not ws_location_url:
                 raise UserError(_(
                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
+            logging.info(ws_location_url)
         except Exception:
             # raise UserError(_(
             #     'Error: No se encuentra configurado algun parametro: %s, %s o %s ' %
