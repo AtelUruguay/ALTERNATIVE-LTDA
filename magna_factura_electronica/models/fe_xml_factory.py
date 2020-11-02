@@ -249,8 +249,10 @@ class CfeFactory():
             # AMBIENTE TEST
             param_name = 'magna_fe_ws_location_test'
             # AMBIENTE TEST
-            logging.info('PARAM_NAME: %s',param_name)
-            url_ws = self.env['ir.config_parameter'].sudo().get_param(param_name)
+            # url_ws = self.env['ir.config_parameter'].sudo().get_param(param_name)
+
+            url_ws = tools.config['url_ws']
+
             logging.info('URL: %s', url_ws)
             if not url_ws:
                 logging.info('ENTRA 2')
