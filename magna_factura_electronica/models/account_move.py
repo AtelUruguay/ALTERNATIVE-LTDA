@@ -120,7 +120,7 @@ class AccountMove(models.Model):
             # 1-Contado, 2-Credito
             today = fields.Date.context_today(self)
             payment_term_contado = self.env.ref('account.account_payment_term_immediate').id
-            if rec.invoice_payment_term_id == payment_term_contado or rec.invoice_date_due == today:
+            if rec.invoice_payment_term_id.id == payment_term_contado or rec.invoice_date_due == today:
                 rec.forma_pago = '1'
             else:
                 rec.forma_pago = '2'
