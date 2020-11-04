@@ -214,7 +214,8 @@ class AccountMove(models.Model):
 
             # ADICIONAL
             options._adicionalTipoDocumentoId = tipo_CFE
-            options._adicionalDocComCodigo = rec.id
+            options._adicionalDocComSerie = rec.name[:-4]
+            options._adicionalDocComCodigo = rec.name[-4:]
             options._adicionalSucursalId = rec.company_id.fe_codigo_principal_sucursal
             options._adicionalAdenda = ''
             options._adicionalCorreoReceptor = ''
@@ -226,9 +227,9 @@ class AccountMove(models.Model):
                 options._adicionalCAENA = rec.fe_CAENA
                 options._adicionalCAEFA = rec.fe_CAEFA.strftime('%Y-%m-%d')
                 options._adicionalCAEFVD = rec.fe_CAEFVD.strftime('%Y-%m-%d')
-            else:
-                serie = self.env["ir.config_parameter"].sudo().get_param("magna_fe_serie")
-                options._adicionalDocComSerie = serie
+            # else:
+            #     serie = self.env["ir.config_parameter"].sudo().get_param("magna_fe_serie")
+            #     options._adicionalDocComSerie = serie
 
             # DETALLE
             monto_no_gravado = 0
