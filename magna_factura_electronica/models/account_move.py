@@ -227,9 +227,9 @@ class AccountMove(models.Model):
                 options._adicionalCAENA = rec.fe_CAENA
                 options._adicionalCAEFA = rec.fe_CAEFA.strftime('%Y-%m-%d')
                 options._adicionalCAEFVD = rec.fe_CAEFVD.strftime('%Y-%m-%d')
-            else:
-                serie = self.env["ir.config_parameter"].sudo().get_param("magna_fe_serie")
-                options._adicionalDocComSerie = serie
+            # else:
+            #     serie = self.env["ir.config_parameter"].sudo().get_param("magna_fe_serie")
+            #     options._adicionalDocComSerie = serie
 
             # DETALLE
             monto_no_gravado = 0
