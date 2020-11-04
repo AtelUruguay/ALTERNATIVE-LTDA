@@ -214,7 +214,8 @@ class AccountMove(models.Model):
 
             # ADICIONAL
             options._adicionalTipoDocumentoId = tipo_CFE
-            options._adicionalDocComCodigo = rec.id
+            options._adicionalDocComSerie = rec.name[:-4]
+            options._adicionalDocComCodigo = rec.name[-4:]
             options._adicionalSucursalId = rec.company_id.fe_codigo_principal_sucursal
             options._adicionalAdenda = ''
             options._adicionalCorreoReceptor = ''
