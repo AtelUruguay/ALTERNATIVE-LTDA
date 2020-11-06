@@ -76,6 +76,7 @@ class AccountMove(models.Model):
     # doct_type = fields.Selection(DOC_TYPE_DGI, compute='_compute_doct_type', string='Tipo de factura DGI')
     forma_pago = fields.Selection([('1','Contado'),('2','Crédito')], compute='_compute_forma_pago', string='Forma de pago', default='1')
 
+    fe_fact_export = fields.Boolean('Es e-Factura Exportación', default=False)
 
     @api.depends('fe_URLParaVerificarQR')
     def _generate_qr_code(self):
@@ -147,17 +148,23 @@ class AccountMove(models.Model):
     def get_tipo_cfe(self):
         for rec in self:
             invoice_type = rec.type
-            consumidor_final = rec.partner_id.fe_tipo_documento != '2'
-            if consumidor_final:  # eTicket
-                if invoice_type == 'out_invoice':  # Factura de cliente
-                    return 101
-                elif invoice_type == 'out_refund':  # NC de cliente
-                    return 102
-            else:  # eFactura
-                if invoice_type == 'out_invoice':  # Factura de cliente
-                    return 111
-                elif invoice_type == 'out_refund':  # NC de cliente
-                    return 112
+            if rec.fe_fact_export: # e-Factura Exportacion
+                if invoice_type == 'out_invoice':  # e-Factura Exportacion
+                    return 121
+                elif invoice_type == 'out_refund':  # NC de e-Factura Exportacion
+                    return 122
+            else:
+                consumidor_final = rec.partner_id.fe_tipo_documento != '2'
+                if consumidor_final:  # eTicket
+                    if invoice_type == 'out_invoice':  # Factura de cliente
+                        return 101
+                    elif invoice_type == 'out_refund':  # NC de cliente
+                        return 102
+                else:  # eFactura
+                    if invoice_type == 'out_invoice':  # Factura de cliente
+                        return 111
+                    elif invoice_type == 'out_refund':  # NC de cliente
+                        return 112
         return 0
 
     def gen_Inxmlentrada(self, tipo_CFE):

@@ -30,6 +30,10 @@
                     ('fe_Estado','=','AS')]}</attribute>
             </button>
 
+            <field name="ref" position="after">
+                <field name="fe_fact_export"/>
+            </field>
+
             <notebook position="inside">
                 <page string="Factura Electrónica" attrs="{'invisible':[('state','=','draft')]}">
                     <group>
