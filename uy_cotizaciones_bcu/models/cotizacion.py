@@ -92,13 +92,18 @@ class cotizaciones_wizard(models.TransientModel):
                 logging.info('cursor_date: %s', cursor_date)
                 for inter in int_conf_rows:
                     cursor_date_iter = cursor_date
+
+                    logging.info('inter.company_id.date_bcu: %s',inter.company_id.date_bcu)
                     if inter.company_id.date_bcu == '1':
                         cursor_date_iter = cursor_date + timedelta(days=-1)
                         cursor_date_find = cursor_date_iter
                     else:
                         cursor_date_find = cursor_date_iter + timedelta(days=-1)
+
                     cursor_date_str = cursor_date_iter.strftime(DEFAULT_SERVER_DATE_FORMAT)
                     cursor_date_find_str = cursor_date_find.strftime(DEFAULT_SERVER_DATE_FORMAT)
+
+                    logging.info('cursor_date_iter: %s', cursor_date_iter)
                     logging.info('cursor_date_str: %s', cursor_date_str)
                     logging.info('cursor_date_find_str: %s', cursor_date_find_str)
                     #Moneda Code
