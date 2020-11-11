@@ -121,7 +121,8 @@ class cotizaciones_wizard(models.TransientModel):
                             cur_rate_rows = cur_rate_obj.search([('currency_id','=',inter.currency_id.id),('name','=',date_rate_str)])
                             if cur_rate_rows:
                                 for cur_rate in cur_rate_rows:
-                                    cur_rate.write({'rate': rate})
+                                    # cur_rate.write({'rate': rate})
+                                    cur_rate.write({'inverse_rate': rate})
                             else:
                                 cur_rate_obj.create({
                                         # 'rate': rate,
@@ -148,11 +149,12 @@ class cotizaciones_wizard(models.TransientModel):
                         if cur_rate_row_prev:
                             if cur_rate_not_rows:
                                 for cur_rate in cur_rate_not_rows:
-                                    cur_rate.write({'rate': cur_rate_row_prev.rate})
+                                    # cur_rate.write({'rate': cur_rate_row_prev.rate})
+                                    cur_rate.write({'inverse_rate': cur_rate_row_prev.inverse_rate})
                             else:
                                 cur_rate_obj.create({
                                         # 'rate': cur_rate_row_prev.rate,
-                                        'inverse_rate': cur_rate_row_prev.rate,
+                                        'inverse_rate': cur_rate_row_prev.inverse_rate,
                                         'currency_id': _d.currency_id,
                                         'name': date_rate_str
                                 })
@@ -176,7 +178,7 @@ class cotizaciones_wizard(models.TransientModel):
                         if not cur_rate_not_rows:
                             cur_rate_obj.create({
                                     # 'rate': cur_rate_row_prev.rate,
-                                    'inverse_rate': cur_rate_row_prev.rate,
+                                    'inverse_rate': cur_rate_row_prev.inverse_rate,
                                     'currency_id': inter.currency_id.id,
                                     'name': date_rate_str
                             })
