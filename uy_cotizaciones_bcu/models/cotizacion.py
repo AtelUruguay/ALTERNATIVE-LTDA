@@ -57,6 +57,8 @@ class cotizaciones_wizard(models.TransientModel):
         #     raise ValidationError(u"No se obtuvo respuesta, vuelva a intentarlo más tarde")
         cur_rate_obj = self.env['res.currency.rate']
         int_conf_rows = self.env['interfaz.monedas'].search([('company_id','=',self.env.user.company_id.id)])
+        time_diff = ' 03:00:00'
+
         if response:
             logging.info('RESPONSE: %s', response)
             #Demo
@@ -109,8 +111,9 @@ class cotizaciones_wizard(models.TransientModel):
                             if inter.company_id.currency_id.symbol == 'USD':
                                 rate = _d.ArbAct
                             rate = round(1.0000 / rate, 6)
-                            ###############################
-                            cur_rate_rows = cur_rate_obj.search([('currency_id','=',inter.currency_id.id),('name','=',cursor_date_str)])
+
+                            date_rate_str = cursor_date_str + time_diff
+                            cur_rate_rows = cur_rate_obj.search([('currency_id','=',inter.currency_id.id),('name','=',date_rate_str)])
                             if cur_rate_rows:
                                 for cur_rate in cur_rate_rows:
                                     cur_rate.write({'rate': rate})
@@ -118,7 +121,7 @@ class cotizaciones_wizard(models.TransientModel):
                                 cur_rate_obj.create({
                                         'rate': rate,
                                         'currency_id': inter.currency_id.id,
-                                        'name': cursor_date_str
+                                        'name': date_rate_str
                                 })
                         else:
                             if code not in _date_not_found:
@@ -132,8 +135,10 @@ class cotizaciones_wizard(models.TransientModel):
             if _date_not_found:
                 for code, value in _date_not_found.items():
                     for _d in value.values():
+
+                        date_rate_str = _d.cursor_date_str + time_diff
                         cur_rate_row_prev = cur_rate_obj.search([('currency_id','=',_d.currency_id),('name','<',_d.cursor_date_str)], order='name DESC', limit=1)
-                        cur_rate_not_rows = cur_rate_obj.search([('currency_id','=',_d.currency_id),('name','=',_d.cursor_date_str)])
+                        cur_rate_not_rows = cur_rate_obj.search([('currency_id','=',_d.currency_id),('name','=',date_rate_str)])
                         if cur_rate_row_prev:
                             if cur_rate_not_rows:
                                 for cur_rate in cur_rate_not_rows:
@@ -142,7 +147,7 @@ class cotizaciones_wizard(models.TransientModel):
                                 cur_rate_obj.create({
                                         'rate': cur_rate_row_prev.rate,
                                         'currency_id': _d.currency_id,
-                                        'name': _d.cursor_date_str
+                                        'name': date_rate_str
                                 })
         else:
             #Se valida porque puede que no cumpla para ningún día del rango seleccionado
@@ -156,14 +161,16 @@ class cotizaciones_wizard(models.TransientModel):
                         cursor_date_find = cursor_date_iter + timedelta(days=-1)
                     cursor_date_str = cursor_date_iter.strftime(DEFAULT_SERVER_DATE_FORMAT)
                     cursor_date_find_str = cursor_date_find.strftime(DEFAULT_SERVER_DATE_FORMAT)
+
+                    date_rate_str = cursor_date_str + time_diff
                     cur_rate_row_prev = cur_rate_obj.search([('currency_id','=',inter.currency_id.id),('name','<',cursor_date_str)], order='name DESC', limit=1)
-                    cur_rate_not_rows = cur_rate_obj.search([('currency_id','=',inter.currency_id.id),('name','=',cursor_date_str)])
+                    cur_rate_not_rows = cur_rate_obj.search([('currency_id','=',inter.currency_id.id),('name','=',date_rate_str)])
                     if cur_rate_row_prev:
                         if not cur_rate_not_rows:
                             cur_rate_obj.create({
                                     'rate': cur_rate_row_prev.rate,
                                     'currency_id': inter.currency_id.id,
-                                    'name': cursor_date_str
+                                    'name': date_rate_str
                             })
                         #Esto se suspende porque puede introducir errores de datos al sistema.
                         #Solo se crea no se actualiza...
