@@ -124,7 +124,8 @@ class cotizaciones_wizard(models.TransientModel):
                                     cur_rate.write({'rate': rate})
                             else:
                                 cur_rate_obj.create({
-                                        'rate': rate,
+                                        # 'rate': rate,
+                                        'inverse_rate': rate,
                                         'currency_id': inter.currency_id.id,
                                         'name': date_rate_str
                                 })
@@ -150,7 +151,8 @@ class cotizaciones_wizard(models.TransientModel):
                                     cur_rate.write({'rate': cur_rate_row_prev.rate})
                             else:
                                 cur_rate_obj.create({
-                                        'rate': cur_rate_row_prev.rate,
+                                        # 'rate': cur_rate_row_prev.rate,
+                                        'inverse_rate': cur_rate_row_prev.rate,
                                         'currency_id': _d.currency_id,
                                         'name': date_rate_str
                                 })
@@ -173,7 +175,8 @@ class cotizaciones_wizard(models.TransientModel):
                     if cur_rate_row_prev:
                         if not cur_rate_not_rows:
                             cur_rate_obj.create({
-                                    'rate': cur_rate_row_prev.rate,
+                                    # 'rate': cur_rate_row_prev.rate,
+                                    'inverse_rate': cur_rate_row_prev.rate,
                                     'currency_id': inter.currency_id.id,
                                     'name': date_rate_str
                             })
