@@ -25,6 +25,7 @@ from odoo import models, fields
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
+    # Salvo excepciones, se debería utilizar el valor 1 (coincide con el funcionamiento estandar)
     date_bcu = fields.Selection([
             ('1', 'Restar 1 dia'),
-            ('2', 'Fecha actual'), ], 'Fecha BCU', default='2', help=u"Restar 1 dia: resta un día a la cotización del BCU")
+            ('2', 'Fecha actual'), ], 'Fecha BCU', default='1', help=u"Restar 1 dia: resta un día a la cotización del BCU")
