@@ -103,7 +103,7 @@ class cotizaciones_wizard(models.TransientModel):
                             rate = _d.TCC
                             if inter.company_id.currency_id.symbol == 'USD':
                                 rate = _d.ArbAct
-                            rate = round(1.0000 / rate, 6)
+                            # rate = round(1.0000 / rate, 6)
                             ###############################
                             cur_rate_rows = cur_rate_obj.search([('currency_id','=',inter.currency_id.id),('name','=',cursor_date_str)])
                             if cur_rate_rows:
@@ -173,11 +173,9 @@ class cotizaciones_wizard(models.TransientModel):
                         #     })
         return True
 
+    @api.multi
     def cotizacion_response(self, response):
         #Se reponen 1 día que se quitó porque el objetivo era obtener los resultados de 1 día antes siempre
-        # start_date = self.env.context['start_date'] + timedelta(days=1)
-        # end_date = datetime.strptime(self.env.context['end_date'], DEFAULT_SERVER_DATE_FORMAT).date()
-        # return self._execute(response, start_date, end_date)
         return self._execute(response, self.env.context['start_date'] + timedelta(days=1), self.env.context['end_date'])
 
     @soap.cotizacion(request="execute", response="cotizacion_response", trigger_error=False, new_api=True)
@@ -193,6 +191,7 @@ class cotizaciones_wizard(models.TransientModel):
                     'Grupo': 0
         }
 
+    @api.multi
     def action_update(self):
         self.ensure_one()
         self.with_context({
@@ -203,11 +202,13 @@ class cotizaciones_wizard(models.TransientModel):
 
     @soap.cotizacion(request="execute", response="cotizacion_response", trigger_error=False, new_api=True)
     def _cron_send_date_range(self):
-        items = self.env.context['items']
+        # items = self.env.context['items']
+        items = [item.codigo_bcu for item in self.env['interfaz.monedas'].search([])]
         if not items:
             return {}
         return {
-                    'Moneda': {'item': self.env.context['items']},
+                    # 'Moneda': {'item': self.env.context['items']},
+                    'Moneda': {'item': items},
                     'FechaDesde': self.env.context['start_date'],
                     'FechaHasta': self.env.context['end_date'],
                     'Grupo': 0
@@ -224,13 +225,15 @@ class cotizaciones_wizard(models.TransientModel):
         # ASM Ini
         end_date = datetime.strptime(end_date, DEFAULT_SERVER_DATE_FORMAT).date()
         # ASM Fin
+        start_date = end_date
         for inter in int_conf_rows:
-            start_date = end_date
+            # start_date = end_date
             rate = cur_rate_obj.search([('currency_id','=',inter.currency_id.id),('name','<',start_date)], order='name DESC', limit=1)
             if rate:
                 start_date = rate.name
+                start_date = start_date.split(' ')[0]
             self.with_context({
-                'items': [inter.codigo_bcu,],
+                # 'items': [inter.codigo_bcu,],
                 'start_date': start_date + timedelta(days=-1),
                 'end_date': end_date
             })._cron_send_date_range()
