@@ -26,7 +26,7 @@ from datetime import timedelta, datetime
 from .soap import soap
 from .base import Dic2Object
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
-
+import logging
 
 class cotizaciones_wizard(models.TransientModel):
     _name = 'cotizaciones.wizard'
@@ -58,6 +58,7 @@ class cotizaciones_wizard(models.TransientModel):
         cur_rate_obj = self.env['res.currency.rate']
         int_conf_rows = self.env['interfaz.monedas'].search([('company_id','=',self.env.user.company_id.id)])
         if response:
+            logging.info('RESPONSE: %s', response)
             #Demo
             # Fecha = 2017-05-03
             # Moneda = 9900
@@ -84,7 +85,9 @@ class cotizaciones_wizard(models.TransientModel):
                     'FormaArbitrar': data.FormaArbitrar
                 })
             _date_not_found = {}
+            logging.info('_soap_result: %s', _soap_result)
             for cursor_date in self.date_range(start_date, end_date):
+                logging.info('cursor_date: %s', cursor_date)
                 for inter in int_conf_rows:
                     cursor_date_iter = cursor_date
                     if inter.company_id.date_bcu == '1':
@@ -94,6 +97,8 @@ class cotizaciones_wizard(models.TransientModel):
                         cursor_date_find = cursor_date_iter + timedelta(days=-1)
                     cursor_date_str = cursor_date_iter.strftime(DEFAULT_SERVER_DATE_FORMAT)
                     cursor_date_find_str = cursor_date_find.strftime(DEFAULT_SERVER_DATE_FORMAT)
+                    logging.info('cursor_date_str: %s', cursor_date_str)
+                    logging.info('cursor_date_find_str: %s', cursor_date_find_str)
                     #Moneda Code
                     code = int(inter.codigo_bcu)
                     if code in _soap_result:
@@ -103,7 +108,7 @@ class cotizaciones_wizard(models.TransientModel):
                             rate = _d.TCC
                             if inter.company_id.currency_id.symbol == 'USD':
                                 rate = _d.ArbAct
-                            # rate = round(1.0000 / rate, 6)
+                            rate = round(1.0000 / rate, 6)
                             ###############################
                             cur_rate_rows = cur_rate_obj.search([('currency_id','=',inter.currency_id.id),('name','=',cursor_date_str)])
                             if cur_rate_rows:
@@ -223,12 +228,14 @@ class cotizaciones_wizard(models.TransientModel):
         end_date = datetime.strptime(end_date, DEFAULT_SERVER_DATE_FORMAT).date()
         # ASM Fin
         start_date = end_date
+        logging.info('start_date: %s',start_date)
         for inter in int_conf_rows:
             # start_date = end_date
             rate = cur_rate_obj.search([('currency_id','=',inter.currency_id.id),('name','<',start_date)], order='name DESC', limit=1)
             if rate:
+                logging.info('rate.name: %s', rate.name)
                 start_date = rate.name
-                start_date = start_date.split(' ')[0]
+                # start_date = start_date.split(' ')[0]
             self.with_context({
                 # 'items': [inter.codigo_bcu,],
                 'start_date': start_date + timedelta(days=-1),
