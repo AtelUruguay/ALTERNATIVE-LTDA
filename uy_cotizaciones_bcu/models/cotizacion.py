@@ -173,7 +173,6 @@ class cotizaciones_wizard(models.TransientModel):
                         #     })
         return True
 
-    @api.multi
     def cotizacion_response(self, response):
         #Se reponen 1 día que se quitó porque el objetivo era obtener los resultados de 1 día antes siempre
         return self._execute(response, self.env.context['start_date'] + timedelta(days=1), self.env.context['end_date'])
@@ -191,13 +190,11 @@ class cotizaciones_wizard(models.TransientModel):
                     'Grupo': 0
         }
 
-    @api.multi
     def action_update(self):
         self.ensure_one()
         self.with_context({
             'start_date': self.fecha_desde + timedelta(days=-1),
-            'end_date': self.fecha_hasta
-        })._send_date_range()
+            'end_date': self.fecha_hasta})._send_date_range()
         return True
 
     @soap.cotizacion(request="execute", response="cotizacion_response", trigger_error=False, new_api=True)
