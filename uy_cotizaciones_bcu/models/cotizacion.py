@@ -115,7 +115,7 @@ class cotizaciones_wizard(models.TransientModel):
                             rate = _d.TCC
                             if inter.company_id.currency_id.symbol == 'USD':
                                 rate = _d.ArbAct
-                            rate = round(1.0000 / rate, 6)
+                            # rate = round(1.0000 / rate, 6)
 
                             date_rate_str = cursor_date_str + time_diff
                             cur_rate_rows = cur_rate_obj.search([('currency_id','=',inter.currency_id.id),('name','=',date_rate_str)])
