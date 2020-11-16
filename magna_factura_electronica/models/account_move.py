@@ -99,20 +99,20 @@ class AccountMove(models.Model):
     @api.depends('type', 'partner_id')
     def _compute_doct_type_dgi(self):
         for rec in self:
-            value = 0
+            value = ''
             invoice_type = rec.type
             consumidor_final = rec.partner_id.fe_tipo_documento != '2'
             if consumidor_final:  # eTicket
                 if invoice_type == 'out_invoice':  # Factura de cliente
-                    value = 101
+                    value = '101'
                 elif invoice_type == 'out_refund':  # NC de cliente
-                    value = 102
+                    value = '102'
             else:  # eFactura
                 if invoice_type == 'out_invoice':  # Factura de cliente
-                    value = 111
+                    value = '111'
                 elif invoice_type == 'out_refund':  # NC de cliente
-                    value = 112
-            rec.fe_tipo_comprobante = str(value)
+                    value = '112'
+            rec.fe_tipo_comprobante = value
 
 
     @api.depends('invoice_payment_term_id','invoice_date_due')
