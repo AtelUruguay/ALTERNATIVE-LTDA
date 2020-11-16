@@ -286,8 +286,8 @@ class AccountMove(models.Model):
                 options._referenciaNumeroLinea = 1
                 if self.reversed_entry_id:
                     options._referenciaFechaCFE = self.reversed_entry_id.invoice_date.strftime('%Y-%m-%d')
-                    options._referenciaSerie = self.reversed_entry_id.fe_serie_factura
-                    options._referenciaNumeroCFE = self.reversed_entry_id.fe_numero_factura
+                    options._referenciaSerie = self.reversed_entry_id.fe_Serie
+                    options._referenciaNumeroCFE = self.reversed_entry_id.fe_DocNro
                     options._referenciaTipoDocumento = self.reversed_entry_id.fe_tipo_comprobante
 
 
