@@ -53,10 +53,6 @@ class cfeFactoryOptions():
     _serieComprobante = 'A'
     _numeroComprobante = 1
     _indicadorMontoBruto = False
-    _clausulaVenta = ''
-    _modalidadVenta = 1
-    _viaTransporte = 1
-
 
     _emisorRuc = ''
     _emisorNombre = ''
@@ -87,7 +83,6 @@ class cfeFactoryOptions():
     _montoIVATasaMinima = 0
     _montoIVATasaBasica = 0
     # _montoIVATasaOtra = 0
-    _montoTotalExportacionAsimiladas = 0
 
     _lineasDetalle = []
 
@@ -142,15 +137,7 @@ class CfeFactory():
         if self.opt._indicadorMontoBruto:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocMntBruto', '1')
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFmaPago', self.opt._formaPago)
-
-        if self.opt._fechaVencimientoYYYYMMDD:
-            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFchVenc', str(self.opt._fechaVencimientoYYYYMMDD))
-        if self.opt._clausulaVenta:
-            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocClauVenta', str(self.opt._clausulaVenta))
-        if self.opt._modoVenta:
-            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocModVenta', str(self.opt._modoVenta))
-        if self.opt._viaTransporte:
-            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocViaTransp', str(self.opt._viaTransporte))
+        self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEIDDocFchVenc', str(self.opt._fechaVencimientoYYYYMMDD))
 
         # EMISOR
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEEMIRUCEmisor', str(self.opt._emisorRuc))
@@ -194,9 +181,6 @@ class CfeFactory():
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntNetoIVATasaBasica', "{0:.3f}".format(self.opt._montoNetoIVATasaBasica).replace(".", "."))
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTIVATasaBasica', "{0:.3f}".format(self.opt._IVATasaBasica).replace(".", "."))
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntIVATasaBasica', "{0:.3f}".format(self.opt._montoIVATasaBasica).replace(".", "."))
-
-        if self.opt._montoTotalExportacionAsimiladas:
-            self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntExpoyAsim', "{0:.3f}".format(self.opt._montoTotalExportacionAsimiladas).replace(".", ".").replace('-', ''))
 
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTMntTotal',  "{0:.3f}".format(self.opt._montoTotal).replace(".", ".").replace('-',''))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FETOTCantLinDet', str(len(self.opt._lineasDetalle)))
