@@ -57,6 +57,7 @@ DOC_TYPE_DGI = [
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    fe_tipo_comprobante = fields.Selection(DOC_TYPE_DGI, compute='_compute_doct_type_dgi', string='Tipo de factura DGI', store=True)
     fe_Contingencia = fields.Boolean('Es Contingencia', default=False)
     fe_SerieContingencia = fields.Char('Serie')
     fe_DocNroContingencia = fields.Char(u'Número')
@@ -73,7 +74,6 @@ class AccountMove(models.Model):
     fe_CAEFA = fields.Date(u'CAE Fecha de autorización')
     fe_CAEFVD = fields.Date('CAE Vencimiento')
     fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True, default=False)
-    # doct_type = fields.Selection(DOC_TYPE_DGI, compute='_compute_doct_type', string='Tipo de factura DGI')
     forma_pago = fields.Selection([('1','Contado'),('2','Crédito')], compute='_compute_forma_pago', string='Forma de pago', default='1')
 
 
@@ -95,23 +95,24 @@ class AccountMove(models.Model):
                 qr_image = base64.b64encode(temp.getvalue())
                 rec.fe_qr_img = qr_image
 
-    # @api.depends('type', 'partner_id')
-    # def _compute_doct_type(self):
-    #     for rec in self:
-    #         val = False
-    #         invoice_type = rec.type
-    #         consumidor_final = rec.partner_id.fe_tipo_documento != '2'
-    #         if consumidor_final:  # eTicket
-    #             if invoice_type == 'out_invoice':  # Factura de cliente
-    #                 val = '101'
-    #             elif invoice_type == 'out_refund':  # NC de cliente
-    #                 val = '102'
-    #         else:  # eFactura
-    #             if invoice_type == 'out_invoice':  # Factura de cliente
-    #                 val = '111'
-    #             elif invoice_type == 'out_refund':  # NC de cliente
-    #                 val = '112'
-    #         rec.doct_type = val
+
+    @api.depends('type', 'partner_id')
+    def _compute_doct_type_dgi(self):
+        for rec in self:
+            value = 0
+            invoice_type = rec.type
+            consumidor_final = rec.partner_id.fe_tipo_documento != '2'
+            if consumidor_final:  # eTicket
+                if invoice_type == 'out_invoice':  # Factura de cliente
+                    value = 101
+                elif invoice_type == 'out_refund':  # NC de cliente
+                    value = 102
+            else:  # eFactura
+                if invoice_type == 'out_invoice':  # Factura de cliente
+                    value = 111
+                elif invoice_type == 'out_refund':  # NC de cliente
+                    value = 112
+            rec.fe_tipo_comprobante = str(value)
 
 
     @api.depends('invoice_payment_term_id','invoice_date_due')
@@ -138,34 +139,36 @@ class AccountMove(models.Model):
         fe_activa = self.env["ir.config_parameter"].sudo().get_param("magna_fe_activa")
         if fe_activa == 'True':
             for rec in self:
-                tipo_cfe = self.get_tipo_cfe()
-                in_xml_entrada = self.gen_Inxmlentrada(tipo_cfe)
-                vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(in_xml_entrada, tipo_cfe)
+                in_xml_entrada = self.gen_Inxmlentrada()
+                vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(in_xml_entrada, rec.fe_tipo_comprobante)
                 rec.write(vals)
         return True
 
-    def get_tipo_cfe(self):
-        for rec in self:
-            invoice_type = rec.type
-            consumidor_final = rec.partner_id.fe_tipo_documento != '2'
-            if consumidor_final:  # eTicket
-                if invoice_type == 'out_invoice':  # Factura de cliente
-                    return 101
-                elif invoice_type == 'out_refund':  # NC de cliente
-                    return 102
-            else:  # eFactura
-                if invoice_type == 'out_invoice':  # Factura de cliente
-                    return 111
-                elif invoice_type == 'out_refund':  # NC de cliente
-                    return 112
-        return 0
 
-    def gen_Inxmlentrada(self, tipo_CFE):
+    # def get_tipo_cfe(self):
+    #     for rec in self:
+    #         invoice_type = rec.type
+    #         consumidor_final = rec.partner_id.fe_tipo_documento != '2'
+    #         if consumidor_final:  # eTicket
+    #             if invoice_type == 'out_invoice':  # Factura de cliente
+    #                 return 101
+    #             elif invoice_type == 'out_refund':  # NC de cliente
+    #                 return 102
+    #         else:  # eFactura
+    #             if invoice_type == 'out_invoice':  # Factura de cliente
+    #                 return 111
+    #             elif invoice_type == 'out_refund':  # NC de cliente
+    #                 return 112
+    #     return 0
+
+
+    def gen_Inxmlentrada(self):
+        account_tax_obj = self.env['account.tax']
         for rec in self:
             options = fe_xml_factory.cfeFactoryOptions()
             options._lineasDetalle = []
 
-            options._tipoComprobante = tipo_CFE
+            options._tipoComprobante = rec.fe_tipo_comprobante
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y-%m-%d')
             options._fechaVencimientoYYYYMMDD = rec.invoice_date_due.strftime('%Y-%m-%d')
             # indica si los montos de las líneas de detalles se expresan con impuestos incluidos
@@ -197,7 +200,6 @@ class AccountMove(models.Model):
             options._tipoMonedaTransaccion = rec.currency_id.name
             options._tipoCambio = rec.currency_id.inverse_rate
 
-            account_tax_obj = self.env['account.tax']
             account_tax_iva_minima_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
                                                                          ('fe_tax_codigo_dgi.code', '=', '2'),
                                                                          ('type_tax_use', '=', 'sale')], limit=1)
@@ -213,7 +215,7 @@ class AccountMove(models.Model):
             options._IVATasaBasica = account_tax_iva_basica_id[0].amount
 
             # ADICIONAL
-            options._adicionalTipoDocumentoId = tipo_CFE
+            options._adicionalTipoDocumentoId = options._tipoComprobante
             options._adicionalDocComSerie = 'v13id' + str(rec.id)
             options._adicionalDocComCodigo = rec.name
             options._adicionalSucursalId = rec.company_id.fe_codigo_principal_sucursal
@@ -278,9 +280,19 @@ class AccountMove(models.Model):
             options._montoTotal = monto_no_gravado + monto_neto_iva_tasa_minima + monto_neto_iva_tasa_basica + monto_iva_tasa_minima + monto_iva_tasa_basica
             options._montoTotalAPagar = rec.amount_total
 
+            if rec.type == 'out_refund':
+                options._referenciaIndicadorGlobal = 1
+                options._referenciaRazon = self.ref
+                options._referenciaNumeroLinea = 1
+                if self.reversed_entry_id:
+                    options._referenciaFechaCFE = self.reversed_entry_id.invoice_date.strftime('%Y-%m-%d')
+                    options._referenciaSerie = self.reversed_entry_id.fe_serie_factura
+                    options._referenciaNumeroCFE = self.reversed_entry_id.fe_numero_factura
+                    options._referenciaTipoDocumento = self.reversed_entry_id.fe_tipo_comprobante
+
+
             xml_factory = fe_xml_factory.CfeFactory(options=options)
             XML = xml_factory.get_data_XML()
-
             return XML
 
 
@@ -294,9 +306,10 @@ class AccountMove(models.Model):
         return value
 
 
+    # def report_get_doct_type(self):
+    #     tipo_cfe = self.get_tipo_cfe()
+    #     value = dict(DOC_TYPE_DGI).get(str(tipo_cfe))
+    #     return value
     def report_get_doct_type(self):
-        tipo_cfe = self.get_tipo_cfe()
-        value = dict(DOC_TYPE_DGI).get(str(tipo_cfe))
+        value = dict(DOC_TYPE_DGI).get(self.fe_tipo_comprobante)
         return value
-
-
