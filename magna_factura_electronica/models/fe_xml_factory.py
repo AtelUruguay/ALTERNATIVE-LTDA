@@ -100,6 +100,15 @@ class cfeFactoryOptions():
     _adicionalCorreoReceptor = ''
     _adicionalEsReceptor = 'false'
 
+    _referenciaNumeroLinea = 0
+    _referenciaRazon = ''
+    _referenciaIndicadorGlobal = 0
+    _referenciaTipoDocumento = ''
+    _referenciaSerie = ''
+    _referenciaNumeroCFE = ''
+    _referenciaFechaCFE = ''
+
+
     def __init__(self):
         pass
 
@@ -145,13 +154,11 @@ class CfeFactory():
         if tipo_doc_receptor and self.opt._receptorCodigoPais and self.opt._receptorDocumento:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECTipoDocRecep', tipo_doc_receptor)
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECCodPaisRecep', self.opt._receptorCodigoPais)
-            if tipo_doc_receptor in ('2','3'):
+            if self.opt._receptorCodigoPais == 'UY':
                 self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDocRecep', self.opt._receptorDocumento)
-            else: #tipo_doc_receptor in ('4','5','6','7'):
-                if self.opt._tipoComprobante in (111,112):
-                    self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDocRecepExt', "0")
-                else:
-                    self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDocRecepExt', self.opt._receptorDocumento)
+            else:
+                self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDocRecepExt', self.opt._receptorDocumento)
+
         if self.opt._receptorRazonSocial:
             self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECRznSocRecep', str(self.opt._receptorRazonSocial))
         self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FERECDirRecep', str(self.opt._receptorDireccion))
@@ -199,6 +206,19 @@ class CfeFactory():
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETDescuentoMonto', "{0:.6f}".format(linea._descuentoMonto).replace(".", "."))
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETMontoItem', "{0:.2f}".format(linea._montoItem).replace(".", "."))
 
+
+        # NODO REFERENCIA
+        if self.opt._referenciaIndicadorGlobal > 0:
+            ZonaReferencia = doc.createElement("FEReferencias")
+            XMLEntradaNodoCFE.appendChild(ZonaReferencia)
+            SubZonaReferencia = doc.createElement("FEReferencia")
+            ZonaReferencia.appendChild(SubZonaReferencia)
+            self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFNroLinRef', str(self.opt._referenciaNumeroLinea))
+            self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoDocRef', str(self.opt._referenciaTipoDocumento))
+            self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFSerie', self.opt._referenciaSerie)
+            self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFNroCFERef', self.opt._referenciaNumeroCFE)
+
+
         # NODO ADICIONAL
         XMLEntradaNodoAdicional = doc.createElement("XMLEntradaNodoAdicional")
         CFEEntrada.appendChild(XMLEntradaNodoAdicional)
@@ -219,13 +239,13 @@ class CfeFactory():
             self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'CorreoReceptor', str(self.opt._adicionalCorreoReceptor))
         self._set_fe_node_data(doc, XMLEntradaNodoAdicional, 'EsReceptor', str(self.opt._adicionalEsReceptor))
 
+
         XML = doc.toprettyxml()
         # se quita el <?xml version="1.0" encoding="utf-8"?>
         XML = XML.split("?>")[1]
-
         logging.info('Inxmlentrada --> %s', XML)
-
         return XML
+
 
     @api.model
     def _set_fe_node_data(self, documento, area, elemento, dato):

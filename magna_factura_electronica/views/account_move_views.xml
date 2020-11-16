@@ -34,7 +34,7 @@
                 <page string="Factura Electrónica" attrs="{'invisible':[('state','=','draft')]}">
                     <group>
                         <group>
-                           <field name="fe_Contingencia" attrs="{'readonly':[('fe_Estado','=','AS')]}"/>
+                            <field name="fe_Contingencia" attrs="{'readonly':[('fe_Estado','=','AS')]}"/>
                             <field name="fe_SerieContingencia" attrs="{'invisible': [('fe_Contingencia','=',False)]}"/>
                             <field name="fe_DocNroContingencia" attrs="{'invisible': [('fe_Contingencia','=',False)]}"/>
                             <field name="fe_FechaHoraFirma" readonly="1"/>
@@ -46,6 +46,7 @@
                             <field name="fe_CAEFA" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
                             <field name="fe_CAEFVD" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
                             <field name="fe_Estado" attrs="{'invisible': True}"/>
+                            <field name="fe_tipo_comprobante" readonly="1"/>
                             <button name="invoice_send_fe_proinfo" type="object" string="Volver a enviar" attrs="{'invisible': ['|',('fe_Estado','=','AS'),('fe_Contingencia','=',False)]}"/>
                         </group>
                         <group>
