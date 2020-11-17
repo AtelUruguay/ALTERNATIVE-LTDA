@@ -146,21 +146,11 @@ class AccountMove(models.Model):
         return True
 
 
-    # def get_tipo_cfe(self):
-    #     for rec in self:
-    #         invoice_type = rec.type
-    #         consumidor_final = rec.partner_id.fe_tipo_documento != '2'
-    #         if consumidor_final:  # eTicket
-    #             if invoice_type == 'out_invoice':  # Factura de cliente
-    #                 return 101
-    #             elif invoice_type == 'out_refund':  # NC de cliente
-    #                 return 102
-    #         else:  # eFactura
-    #             if invoice_type == 'out_invoice':  # Factura de cliente
-    #                 return 111
-    #             elif invoice_type == 'out_refund':  # NC de cliente
-    #                 return 112
-    #     return 0
+    def get_fe_ws_url(self):
+        self.ensure_one()
+        # ********* TEST **********
+        return self.env["ir.config_parameter"].sudo().get_param("magna_fe_ws_location_test") or False
+        # ********* TEST **********
 
 
     def gen_Inxmlentrada(self):
@@ -168,6 +158,8 @@ class AccountMove(models.Model):
         for rec in self:
             options = fe_xml_factory.cfeFactoryOptions()
             options._lineasDetalle = []
+
+            options._ws_location_url = self.get_fe_ws_url()
 
             options._tipoComprobante = rec.fe_tipo_comprobante
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y-%m-%d')
@@ -291,11 +283,9 @@ class AccountMove(models.Model):
                     options._referenciaNumeroCFE = self.reversed_entry_id.fe_DocNro
                     options._referenciaTipoDocumento = self.reversed_entry_id.fe_tipo_comprobante
 
-
             xml_factory = fe_xml_factory.CfeFactory(options=options)
             XML = xml_factory.get_data_XML()
             return XML
-
 
 
     # def report_get_DgiParam(self):

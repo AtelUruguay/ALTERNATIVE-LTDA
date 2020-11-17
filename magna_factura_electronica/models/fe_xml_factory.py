@@ -30,7 +30,7 @@ def loguear(text):
         logging.info(text)
 
 
-key_ws_FE_url = "magna_ws_fe.url"
+# key_ws_FE_url = "magna_ws_fe.url"
 # key_ws_FE_username = "magna_ws_fe.username"
 # key_ws_FE_password = "magna_ws_fe.password"
 
@@ -108,6 +108,7 @@ class cfeFactoryOptions():
     _referenciaNumeroCFE = ''
     _referenciaFechaCFE = ''
 
+    _ws_location_url = ""
 
     def __init__(self):
         pass
@@ -265,9 +266,7 @@ class CfeFactory():
         # Obtener las URL necesaria de los parámetros del sistema
         try:
             # ws_location_url = tools.config[key_ws_FE_url]
-            # ********* TEST **********
-            ws_location_url = self.env["ir.config_parameter"].sudo().get_param("magna_fe_ws_location_test")
-            # ********* TEST **********
+            ws_location_url = self.opt._ws_location_url
             if not ws_location_url:
                 raise UserError(_(
                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
