@@ -338,7 +338,8 @@ class CfeFactory():
                 vals['fe_CAEFA'] = nodo.getElementsByTagName("CAEFA")[0].firstChild.data
                 vals['fe_CAEFVD'] = nodo.getElementsByTagName("CAEFVD")[0].firstChild.data
                 vals['fe_Hash'] = nodo.getElementsByTagName("Hash")[0].firstChild.data
-                vals['fe_DGIResolucion'] = nodo.getElementsByTagName("DGIResolucion")[0].firstChild.data
+                if nodo.getElementsByTagName("DGIResolucion"):
+                    vals['fe_DGIResolucion'] = nodo.getElementsByTagName("DGIResolucion")[0].firstChild.data
             elif estado == 'BS':
                 error_msg = nodo.getElementsByTagName("MensajeError")[0].firstChild.data
                 raise UserError(u'Ha habido un error en el envío de la factura al proveedor de FE: ' + error_msg)
