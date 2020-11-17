@@ -280,15 +280,14 @@ class AccountMove(models.Model):
             options._montoTotal = monto_no_gravado + monto_neto_iva_tasa_minima + monto_neto_iva_tasa_basica + monto_iva_tasa_minima + monto_iva_tasa_basica
             options._montoTotalAPagar = rec.amount_total
 
-            if rec.type == 'out_refund':
+            if rec.type == 'out_refund' and self.reversed_entry_id:
                 options._referenciaIndicadorGlobal = 1
                 options._referenciaRazon = self.ref
                 options._referenciaNumeroLinea = 1
-                if self.reversed_entry_id:
-                    options._referenciaFechaCFE = self.reversed_entry_id.invoice_date.strftime('%Y-%m-%d')
-                    options._referenciaSerie = self.reversed_entry_id.fe_Serie
-                    options._referenciaNumeroCFE = self.reversed_entry_id.fe_DocNro
-                    options._referenciaTipoDocumento = self.reversed_entry_id.fe_tipo_comprobante
+                # options._referenciaFechaCFE = self.reversed_entry_id.invoice_date.strftime('%Y-%m-%d')
+                options._referenciaSerie = self.reversed_entry_id.fe_Serie
+                options._referenciaNumeroCFE = self.reversed_entry_id.fe_DocNro
+                options._referenciaTipoDocumento = self.reversed_entry_id.fe_tipo_comprobante
 
 
             xml_factory = fe_xml_factory.CfeFactory(options=options)
