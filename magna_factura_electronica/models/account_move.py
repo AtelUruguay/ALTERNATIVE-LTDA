@@ -162,6 +162,7 @@ class AccountMove(models.Model):
             options._lineasDetalle = []
 
             options._ws_location_url = rec.get_fe_ws_url()
+            logging.info('_ws_location_url 2: %s', options._ws_location_url)
 
             options._tipoComprobante = rec.fe_tipo_comprobante
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y-%m-%d')
