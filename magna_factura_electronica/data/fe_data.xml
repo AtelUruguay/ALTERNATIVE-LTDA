@@ -14,7 +14,7 @@
 
         <record id="magna_fe_resolucion_DGI" model="ir.config_parameter">
             <field name="key">magna_fe_resolucion_DGI</field>
-            <field name="value">57/2016</field>
+            <field name="value">3942/2017</field>
         </record>
 
         <record id="magna_fe_activa" model="ir.config_parameter">
@@ -22,10 +22,10 @@
             <field name="value">False</field>
         </record>
 
-        <record id="magna_fe_serie" model="ir.config_parameter">
-            <field name="key">magna_fe_serie</field>
-            <field name="value">A</field>
-        </record>
+        <!--<record id="magna_fe_serie" model="ir.config_parameter">-->
+            <!--<field name="key">magna_fe_serie</field>-->
+            <!--<field name="value">A</field>-->
+        <!--</record>-->
 
         <record id="fe_ind_fact_dgi_1" model="fe_indicador_facturacion_dgi">
             <field name="name">Exento de IVA</field>

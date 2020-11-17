@@ -264,7 +264,10 @@ class CfeFactory():
     def conectar_ws_FEGeneraryFirmarDocumento(self):
         # Obtener las URL necesaria de los parámetros del sistema
         try:
-            ws_location_url = tools.config[key_ws_FE_url]
+            # ws_location_url = tools.config[key_ws_FE_url]
+            # ********* TEST **********
+            ws_location_url = self.env["ir.config_parameter"].sudo().get_param("magna_fe_ws_location_test")
+            # ********* TEST **********
             if not ws_location_url:
                 raise UserError(_(
                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
@@ -346,6 +349,7 @@ class CfeFactory():
                 vals['fe_CAEFA'] = nodo.getElementsByTagName("CAEFA")[0].firstChild.data
                 vals['fe_CAEFVD'] = nodo.getElementsByTagName("CAEFVD")[0].firstChild.data
                 vals['fe_Hash'] = nodo.getElementsByTagName("Hash")[0].firstChild.data
+                vals['fe_DGIResolucion'] = nodo.getElementsByTagName("DGIResolucion")[0].firstChild.data
             elif estado == 'BS':
                 error_msg = nodo.getElementsByTagName("MensajeError")[0].firstChild.data
                 raise UserError(u'Ha habido un error en el envío de la factura al proveedor de FE: ' + error_msg)

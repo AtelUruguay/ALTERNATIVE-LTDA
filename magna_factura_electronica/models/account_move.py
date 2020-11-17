@@ -73,6 +73,7 @@ class AccountMove(models.Model):
     fe_CAENA = fields.Char(u'CAE Autorización')
     fe_CAEFA = fields.Date(u'CAE Fecha de autorización')
     fe_CAEFVD = fields.Date('CAE Vencimiento')
+    fe_DGIResolucion = fields.Char(u'DGI Resolución')
     fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True, default=False)
     forma_pago = fields.Selection([('1','Contado'),('2','Crédito')], compute='_compute_forma_pago', string='Forma de pago', default='1')
 
@@ -297,19 +298,15 @@ class AccountMove(models.Model):
 
 
 
-    def report_get_DgiParam(self):
-        resolucion_dgi = self.env["ir.config_parameter"].sudo().get_param("magna_fe_resolucion_DGI")
-        return resolucion_dgi
+    # def report_get_DgiParam(self):
+    #     resolucion_dgi = self.env["ir.config_parameter"].sudo().get_param("magna_fe_resolucion_DGI")
+    #     return resolucion_dgi
+
 
     def report_get_document_type(self):
         value = dict(self.env['res.partner']._fields['fe_tipo_documento'].selection).get(self.partner_id.fe_tipo_documento)
         return value
 
-
-    # def report_get_doct_type(self):
-    #     tipo_cfe = self.get_tipo_cfe()
-    #     value = dict(DOC_TYPE_DGI).get(str(tipo_cfe))
-    #     return value
     def report_get_doct_type(self):
         value = dict(DOC_TYPE_DGI).get(self.fe_tipo_comprobante)
         return value

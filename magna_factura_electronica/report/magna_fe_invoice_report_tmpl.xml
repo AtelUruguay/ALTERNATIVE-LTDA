@@ -305,11 +305,14 @@
                             </span>
                         </br>
                         <br>
-                            <span t-if="o.fe_CAEFVD">Resolución DGI No.</span>
+                            <span t-if="o.fe_DGIResolucion">Resolución DGI No.</span>
                         </br>
-                        <t t-set="DgiParam" t-esc="(o.report_get_DgiParam())"/>
-                        <span t-if="DgiParam">
-                            <t t-esc="DgiParam"/>
+                        <!--<t t-set="DgiParam" t-esc="(o.report_get_DgiParam())"/>-->
+                        <!--<span t-if="DgiParam">-->
+                            <!--<t t-esc="DgiParam"/>-->
+                        <!--</span>-->
+                        <span t-if="o.fe_DGIResolucion">
+                            <t t-esc="o.fe_DGIResolucion"/>
                         </span>
                         <t t-set="doct_type" t-esc="(o.report_get_doct_type())"/>
                         <span t-if="doct_type">
