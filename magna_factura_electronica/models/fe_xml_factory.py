@@ -267,6 +267,7 @@ class CfeFactory():
         try:
             # ws_location_url = tools.config[key_ws_FE_url]
             ws_location_url = self.opt._ws_location_url
+            logging.info('self.opt._ws_location_url: %s',self.opt._ws_location_url)
             if not ws_location_url:
                 raise UserError(_(
                     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
