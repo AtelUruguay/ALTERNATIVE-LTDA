@@ -149,7 +149,9 @@ class AccountMove(models.Model):
     def get_fe_ws_url(self):
         self.ensure_one()
         # ********* TEST **********
-        return self.env["ir.config_parameter"].sudo().get_param("magna_fe_ws_location_test") or False
+        param = self.env["ir.config_parameter"].sudo().get_param("magna_fe_ws_location_test")
+        logging.info('magna_fe_ws_location: %s', param)
+        return param or False
         # ********* TEST **********
 
 
@@ -159,7 +161,7 @@ class AccountMove(models.Model):
             options = fe_xml_factory.cfeFactoryOptions()
             options._lineasDetalle = []
 
-            options._ws_location_url = self.get_fe_ws_url()
+            options._ws_location_url = rec.get_fe_ws_url()
 
             options._tipoComprobante = rec.fe_tipo_comprobante
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y-%m-%d')
@@ -273,15 +275,15 @@ class AccountMove(models.Model):
             options._montoTotal = monto_no_gravado + monto_neto_iva_tasa_minima + monto_neto_iva_tasa_basica + monto_iva_tasa_minima + monto_iva_tasa_basica
             options._montoTotalAPagar = rec.amount_total
 
-            if rec.type == 'out_refund':
+            if rec.type == 'out_refund' and self.reversed_entry_id:
                 options._referenciaIndicadorGlobal = 1
                 options._referenciaRazon = self.ref
                 options._referenciaNumeroLinea = 1
-                if self.reversed_entry_id:
-                    options._referenciaFechaCFE = self.reversed_entry_id.invoice_date.strftime('%Y-%m-%d')
-                    options._referenciaSerie = self.reversed_entry_id.fe_Serie
-                    options._referenciaNumeroCFE = self.reversed_entry_id.fe_DocNro
-                    options._referenciaTipoDocumento = self.reversed_entry_id.fe_tipo_comprobante
+                # options._referenciaFechaCFE = self.reversed_entry_id.invoice_date.strftime('%Y-%m-%d')
+                options._referenciaSerie = self.reversed_entry_id.fe_Serie
+                options._referenciaNumeroCFE = self.reversed_entry_id.fe_DocNro
+                options._referenciaTipoDocumento = self.reversed_entry_id.fe_tipo_comprobante
+
 
             xml_factory = fe_xml_factory.CfeFactory(options=options)
             XML = xml_factory.get_data_XML()
