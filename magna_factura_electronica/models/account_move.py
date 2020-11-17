@@ -283,16 +283,14 @@ class AccountMove(models.Model):
                 options._referenciaNumeroCFE = self.reversed_entry_id.fe_DocNro
                 options._referenciaTipoDocumento = self.reversed_entry_id.fe_tipo_comprobante
 
-
             xml_factory = fe_xml_factory.CfeFactory(options=options)
             XML = xml_factory.get_data_XML()
             return XML
 
 
-    # def report_get_DgiParam(self):
-    #     resolucion_dgi = self.env["ir.config_parameter"].sudo().get_param("magna_fe_resolucion_DGI")
-    #     return resolucion_dgi
-
+    def report_get_DgiParam(self):
+        resolucion_dgi = self.env["ir.config_parameter"].sudo().get_param("magna_fe_resolucion_DGI")
+        return resolucion_dgi
 
     def report_get_document_type(self):
         value = dict(self.env['res.partner']._fields['fe_tipo_documento'].selection).get(self.partner_id.fe_tipo_documento)
