@@ -262,20 +262,11 @@ class CfeFactory():
 
 
 
-    def conectar_ws_FEGeneraryFirmarDocumento(self):
+    def conectar_ws_FEGeneraryFirmarDocumento(self, ws_location_url):
         # Obtener las URL necesaria de los parámetros del sistema
-        try:
-            # ws_location_url = tools.config[key_ws_FE_url]
-            ws_location_url = self.opt._ws_location_url
-            logging.info('self.opt._ws_location_url: %s',self.opt._ws_location_url)
-            if not ws_location_url:
-                raise UserError(_(
-                    'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
-            logging.info(ws_location_url)
-        except Exception as e:
-            # raise UserError(_(
-            #     'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
-            raise UserError(e)
+
+        if not ws_location_url:
+            raise UserError('Error: No se pudo obtener la ruta del WSDL para consumir el servicio')
 
         # se usa archivo wsdl local al addon: FEGeneraryFirmarDocumento.wsdl'
         path_file = os.path.dirname(os.path.abspath(__file__))
@@ -289,12 +280,12 @@ class CfeFactory():
             raise UserError(_(u'Error: No se pudo cargar WSDL:') + tools.ustr(e) + ':' + ws_location_url)
 
 
-    def invocar_generar_y_firmar_doc(self, str_xml_cfe, tipo_CFE):
+    def invocar_generar_y_firmar_doc(self, ws_location_url, str_xml_cfe, tipo_CFE):
         """
         :return:
         """
         # Establecer la conexión
-        client = self.conectar_ws_FEGeneraryFirmarDocumento()
+        client = self.conectar_ws_FEGeneraryFirmarDocumento(ws_location_url)
         if not client:
             logging.error(u"No se pudo establecer la conexión WS")
             return False

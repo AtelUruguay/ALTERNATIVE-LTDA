@@ -136,23 +136,24 @@ class AccountMove(models.Model):
         return res
 
 
+    def get_fe_ws_url(self):
+        self.ensure_one()
+        # ********* TEST **********
+        ws_location_url = self.env["ir.config_parameter"].sudo().get_param("magna_fe_ws_location_test")
+        # ********* TEST **********
+        logging.info('ws_location_url: %s', ws_location_url)
+        return ws_location_url
+
+
     def invoice_send_fe_proinfo(self):
         fe_activa = self.env["ir.config_parameter"].sudo().get_param("magna_fe_activa")
         if fe_activa == 'True':
             for rec in self:
+                ws_location_url = self.get_fe_ws_url()
                 in_xml_entrada = self.gen_Inxmlentrada()
-                vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(in_xml_entrada, rec.fe_tipo_comprobante)
+                vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(ws_location_url, in_xml_entrada, rec.fe_tipo_comprobante)
                 rec.write(vals)
         return True
-
-
-    def get_fe_ws_url(self):
-        self.ensure_one()
-        # ********* TEST **********
-        param = self.env["ir.config_parameter"].sudo().get_param("magna_fe_ws_location_test")
-        logging.info('magna_fe_ws_location: %s', param)
-        return param or False
-        # ********* TEST **********
 
 
     def gen_Inxmlentrada(self):
@@ -160,9 +161,6 @@ class AccountMove(models.Model):
         for rec in self:
             options = fe_xml_factory.cfeFactoryOptions()
             options._lineasDetalle = []
-
-            options._ws_location_url = rec.get_fe_ws_url()
-            logging.info('_ws_location_url 2: %s', options._ws_location_url)
 
             options._tipoComprobante = rec.fe_tipo_comprobante
             options._fechaComprobanteYYYYMMDD = rec.invoice_date.strftime('%Y-%m-%d')
