@@ -108,7 +108,6 @@ class cfeFactoryOptions():
     _referenciaNumeroCFE = ''
     _referenciaFechaCFE = ''
 
-    _ws_location_url = ""
 
     def __init__(self):
         pass
