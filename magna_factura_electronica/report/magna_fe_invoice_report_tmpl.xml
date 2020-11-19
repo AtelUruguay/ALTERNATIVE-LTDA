@@ -95,7 +95,9 @@
                                         <th style="border: 1px solid black;text-align: center;" colspan="5">
                                             <b>Documento de Origen:
                                                 <span t-if="o.reversed_entry_id">
-                                                    <t t-esc="o.reversed_entry_id.name"/>
+                                                    <!--<t t-esc="o.reversed_entry_id.name"/>-->
+                                                    <t t-esc="o.reversed_entry_id.fe_Serie"/>
+                                                    <t t-esc="o.reversed_entry_id.fe_DocNro"/>
                                                 </span>
                                             </b>
                                         </th>
