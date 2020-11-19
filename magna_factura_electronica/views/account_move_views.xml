@@ -45,6 +45,7 @@
                             <field name="fe_CAENA" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
                             <field name="fe_CAEFA" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
                             <field name="fe_CAEFVD" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
+                            <field name="fe_DGIResolucion" readonly="1"/>
                             <field name="fe_Estado" attrs="{'invisible': True}"/>
                             <field name="fe_tipo_comprobante" readonly="1"/>
                             <button name="invoice_send_fe_proinfo" type="object" string="Volver a enviar" attrs="{'invisible': ['|',('fe_Estado','=','AS'),('fe_Contingencia','=',False)]}"/>

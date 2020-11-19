@@ -30,7 +30,7 @@ def loguear(text):
         logging.info(text)
 
 
-key_ws_FE_url = "magna_ws_fe.url"
+# key_ws_FE_url = "magna_ws_fe.url"
 # key_ws_FE_username = "magna_ws_fe.username"
 # key_ws_FE_password = "magna_ws_fe.password"
 
@@ -261,20 +261,11 @@ class CfeFactory():
 
 
 
-    def conectar_ws_FEGeneraryFirmarDocumento(self):
+    def conectar_ws_FEGeneraryFirmarDocumento(self, ws_location_url):
         # Obtener las URL necesaria de los parámetros del sistema
-        try:
-            ws_location_url = tools.config[key_ws_FE_url]
-            if not ws_location_url:
-                raise UserError(_(
-                    'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
-            logging.info(ws_location_url)
-        except Exception:
-            # raise UserError(_(
-            #     'Error: No se encuentra configurado algun parametro: %s, %s o %s ' %
-            #     (key_ws_FE_url, key_ws_FE_username,key_ws_FE_password)))
-            raise UserError(_(
-                'Error: No se encuentra configurada la ruta del WSDL para consumir el servicio'))
+
+        if not ws_location_url:
+            raise UserError('Error: No se pudo obtener la ruta del WSDL para consumir el servicio')
 
         # se usa archivo wsdl local al addon: FEGeneraryFirmarDocumento.wsdl'
         path_file = os.path.dirname(os.path.abspath(__file__))
@@ -288,12 +279,12 @@ class CfeFactory():
             raise UserError(_(u'Error: No se pudo cargar WSDL:') + tools.ustr(e) + ':' + ws_location_url)
 
 
-    def invocar_generar_y_firmar_doc(self, str_xml_cfe, tipo_CFE):
+    def invocar_generar_y_firmar_doc(self, ws_location_url, str_xml_cfe, tipo_CFE):
         """
         :return:
         """
         # Establecer la conexión
-        client = self.conectar_ws_FEGeneraryFirmarDocumento()
+        client = self.conectar_ws_FEGeneraryFirmarDocumento(ws_location_url)
         if not client:
             logging.error(u"No se pudo establecer la conexión WS")
             return False
@@ -346,6 +337,9 @@ class CfeFactory():
                 vals['fe_CAEFA'] = nodo.getElementsByTagName("CAEFA")[0].firstChild.data
                 vals['fe_CAEFVD'] = nodo.getElementsByTagName("CAEFVD")[0].firstChild.data
                 vals['fe_Hash'] = nodo.getElementsByTagName("Hash")[0].firstChild.data
+                # logging.info('nodo.getElementsByTagName("DGIResolucion")[0]: %', nodo.getElementsByTagName("DGIResolucion")[0])
+                # if nodo.getElementsByTagName("DGIResolucion")[0].firstChild:
+                #     vals['fe_DGIResolucion'] = nodo.getElementsByTagName("DGIResolucion")[0].firstChild.data
             elif estado == 'BS':
                 error_msg = nodo.getElementsByTagName("MensajeError")[0].firstChild.data
                 raise UserError(u'Ha habido un error en el envío de la factura al proveedor de FE: ' + error_msg)

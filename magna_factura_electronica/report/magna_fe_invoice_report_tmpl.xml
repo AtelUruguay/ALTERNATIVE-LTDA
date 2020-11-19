@@ -95,7 +95,9 @@
                                         <th style="border: 1px solid black;text-align: center;" colspan="5">
                                             <b>Documento de Origen:
                                                 <span t-if="o.reversed_entry_id">
-                                                    <t t-esc="o.reversed_entry_id.name"/>
+                                                    <!--<t t-esc="o.reversed_entry_id.name"/>-->
+                                                    <t t-esc="o.reversed_entry_id.fe_Serie"/>
+                                                    <t t-esc="o.reversed_entry_id.fe_DocNro"/>
                                                 </span>
                                             </b>
                                         </th>
@@ -311,6 +313,10 @@
                         <span t-if="DgiParam">
                             <t t-esc="DgiParam"/>
                         </span>
+                        <!--todo ojo con esto, en algunas facturas no vuelve la resolucion desde proinfo-->
+                        <!--<span t-if="o.fe_DGIResolucion">-->
+                            <!--<t t-esc="o.fe_DGIResolucion"/>-->
+                        <!--</span>-->
                         <t t-set="doct_type" t-esc="(o.report_get_doct_type())"/>
                         <span t-if="doct_type">
                             <t t-esc="doct_type"/>

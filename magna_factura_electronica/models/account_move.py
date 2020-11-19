@@ -73,6 +73,7 @@ class AccountMove(models.Model):
     fe_CAENA = fields.Char(u'CAE Autorización')
     fe_CAEFA = fields.Date(u'CAE Fecha de autorización')
     fe_CAEFVD = fields.Date('CAE Vencimiento')
+    fe_DGIResolucion = fields.Char(u'DGI Resolución')
     fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True, default=False)
     forma_pago = fields.Selection([('1','Contado'),('2','Crédito')], compute='_compute_forma_pago', string='Forma de pago', default='1')
 
@@ -135,31 +136,24 @@ class AccountMove(models.Model):
         return res
 
 
+    def get_fe_ws_url(self):
+        self.ensure_one()
+        # ********* PROD **********
+        ws_location_url = self.env["ir.config_parameter"].sudo().get_param("magna_fe_ws_location_prod")
+        # ********* PROD **********
+        logging.info('ws_location_url: %s', ws_location_url)
+        return ws_location_url
+
+
     def invoice_send_fe_proinfo(self):
         fe_activa = self.env["ir.config_parameter"].sudo().get_param("magna_fe_activa")
         if fe_activa == 'True':
             for rec in self:
+                ws_location_url = self.get_fe_ws_url()
                 in_xml_entrada = self.gen_Inxmlentrada()
-                vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(in_xml_entrada, rec.fe_tipo_comprobante)
+                vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(ws_location_url, in_xml_entrada, rec.fe_tipo_comprobante)
                 rec.write(vals)
         return True
-
-
-    # def get_tipo_cfe(self):
-    #     for rec in self:
-    #         invoice_type = rec.type
-    #         consumidor_final = rec.partner_id.fe_tipo_documento != '2'
-    #         if consumidor_final:  # eTicket
-    #             if invoice_type == 'out_invoice':  # Factura de cliente
-    #                 return 101
-    #             elif invoice_type == 'out_refund':  # NC de cliente
-    #                 return 102
-    #         else:  # eFactura
-    #             if invoice_type == 'out_invoice':  # Factura de cliente
-    #                 return 111
-    #             elif invoice_type == 'out_refund':  # NC de cliente
-    #                 return 112
-    #     return 0
 
 
     def gen_Inxmlentrada(self):
@@ -289,11 +283,9 @@ class AccountMove(models.Model):
                 options._referenciaNumeroCFE = self.reversed_entry_id.fe_DocNro
                 options._referenciaTipoDocumento = self.reversed_entry_id.fe_tipo_comprobante
 
-
             xml_factory = fe_xml_factory.CfeFactory(options=options)
             XML = xml_factory.get_data_XML()
             return XML
-
 
 
     def report_get_DgiParam(self):
@@ -304,11 +296,6 @@ class AccountMove(models.Model):
         value = dict(self.env['res.partner']._fields['fe_tipo_documento'].selection).get(self.partner_id.fe_tipo_documento)
         return value
 
-
-    # def report_get_doct_type(self):
-    #     tipo_cfe = self.get_tipo_cfe()
-    #     value = dict(DOC_TYPE_DGI).get(str(tipo_cfe))
-    #     return value
     def report_get_doct_type(self):
         value = dict(DOC_TYPE_DGI).get(self.fe_tipo_comprobante)
         return value
