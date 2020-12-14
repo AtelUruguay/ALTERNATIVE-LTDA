@@ -86,6 +86,7 @@ class account_line_beta_wzd(models.TransientModel):
                     _found = False
                     rut = ac_move_line.partner_id.vat if ac_move_line.partner_id.vat else ""
                     if hasattr(ac_move_line.partner_id, 'fe_numero_doc'):
+                        # todo asm ver que otros documentos
                         rut = ac_move_line.partner_id.fe_numero_doc.strip() if ac_move_line.partner_id.fe_numero_doc and ac_move_line.partner_id.fe_tipo_documento == "2" else ""
                     for _r in self._group_results:
                         if _r['vat'] == ac_move_line.company_id.vat and _r['rut'] == rut and _r['line_beta'] == line_beta:
@@ -163,33 +164,31 @@ class account_line_beta_wzd(models.TransientModel):
                         'not_result': not_result
                     })
             file_to_save.close()
-            return {
-                        'type':'ir.actions.act_window',
-                        'name': u'Factura Línea Beta',
-                        'res_model': 'account.line.beta.wzd',
-                        'view_type': 'form',
-                        'view_mode': 'form',
-                        'target': 'new',
-                        'res_id': row.id
-                    }
+
+            return {'type':'ir.actions.act_window',
+                    'name': u'Factura Línea Beta',
+                    'res_model': 'account.line.beta.wzd',
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                    'target': 'new',
+                    'res_id': row.id
+                }
 
 
     def action_back(self):
         for rec in self:
-            rec.write({
-                        'state':'init',
-                        'file_name': False,
-                        'file': False,
-                        'not_result': False
+            rec.write({'state':'init',
+                    'file_name': False,
+                    'file': False,
+                    'not_result': False
                 })
-            return {
-                        'type':'ir.actions.act_window',
-                        'name': u'Factura Línea Beta',
-                        'res_model': 'account.line.beta.wzd',
-                        'view_type': 'form',
-                        'view_mode': 'form',
-                        'target': 'new',
-                        'res_id': rec.id
+            return {'type':'ir.actions.act_window',
+                'name': u'Factura Línea Beta',
+                'res_model': 'account.line.beta.wzd',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'target': 'new',
+                'res_id': rec.id
                     }
 
     def _get_years(self):
@@ -199,19 +198,18 @@ class account_line_beta_wzd(models.TransientModel):
         return select
 
 
-    month = fields.Selection([
-                                ('01', 'January'),
-                                ('02', 'February'),
-                                ('03', 'March'),
-                                ('04', 'April'),
-                                ('05', 'May'),
-                                ('06', 'June'),
-                                ('07', 'July'),
-                                ('08', 'August'),
-                                ('09', 'September'),
-                                ('10', 'October'),
-                                ('11', 'November'),
-                                ('12', 'December')], string='Month', required=True, readonly=True, states={'init': [('readonly', False)]}, default=ustr(date.today().month) if date.today().month >= 10 else '0'+ustr(date.today().month))
+    month = fields.Selection([('01', 'January'),
+                            ('02', 'February'),
+                            ('03', 'March'),
+                            ('04', 'April'),
+                            ('05', 'May'),
+                            ('06', 'June'),
+                            ('07', 'July'),
+                            ('08', 'August'),
+                            ('09', 'September'),
+                            ('10', 'October'),
+                            ('11', 'November'),
+                            ('12', 'December')], string='Month', required=True, readonly=True, states={'init': [('readonly', False)]}, default=ustr(date.today().month) if date.today().month >= 10 else '0'+ustr(date.today().month))
     year = fields.Selection(_get_years, string='Year', required=True, readonly=True, states={'init': [('readonly', False)]}, default=ustr(date.today().year))
     file_format = fields.Selection([('txt','File (.txt)'),('csv','File (.csv)')], 'File format', required=True, readonly=True, states={'init': [('readonly', False)]})
     # 'tax_ids': fields.many2many('account.tax.code', 'account_line_beta_tax_code_wzd_rel', 'wzd_id', 'tax_code_id',
