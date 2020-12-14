@@ -71,10 +71,14 @@ class account_line_beta_wzd(models.TransientModel):
             not_result = True
             self._group_results = []
             ac_move_line_obj = self.env['account.move.line']
+            # ac_move_line_ids = ac_move_line_obj.search([
+            #     ('move_id.date','>=',datetime.strftime(_date, DATE_FORMAT)),
+            #     ('move_id.date','<',datetime.strftime(_date-delta, DATE_FORMAT)),
+            #     ('tax_code_id','in',[row_tax.id for row_tax in row.tax_ids if row_tax.line_beta])])
             ac_move_line_ids = ac_move_line_obj.search([
-                ('move_id.date','>=',datetime.strftime(_date, DATE_FORMAT)),
-                ('move_id.date','<',datetime.strftime(_date-delta, DATE_FORMAT)),
-                ('tax_code_id','in',[row_tax.id for row_tax in row.tax_ids if row_tax.line_beta])])
+                ('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
+                ('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
+                ('tax_line_id', 'in', [row_tax.id for row_tax in row.tax_ids if row_tax.line_beta])])
 
             if ac_move_line_ids:
                 def _do_action(self, ac_move_line, line_beta):
@@ -140,7 +144,9 @@ class account_line_beta_wzd(models.TransientModel):
                 for row_tax in row.tax_ids:
                     if row_tax.line_beta: #domain?
                         for ac_move_line in ac_move_line_ids:
-                            if ac_move_line.tax_code_id.id == row_tax.id:
+                            # todo asm
+                            # if ac_move_line.tax_code_id.id == row_tax.id:
+                            if ac_move_line.tax_line_id.id == row_tax.id:
                                 _do_action(self, ac_move_line, row_tax.line_beta)
                 if self._group_results:
                     file_to_save.write(";".join([ustr('RUT compañía'), 'Form', ustr('Año'), 'RUT cliente', 'Fecha', ustr('Código'), 'Monto'])+";\n")
@@ -207,7 +213,10 @@ class account_line_beta_wzd(models.TransientModel):
                                 ('12', 'December')], string='Month', required=True, readonly=True, states={'init': [('readonly', False)]}, default=ustr(date.today().month) if date.today().month >= 10 else '0'+ustr(date.today().month))
     year = fields.Selection(_get_years, string='Year', required=True, readonly=True, states={'init': [('readonly', False)]}, default=ustr(date.today().year))
     file_format = fields.Selection([('txt','File (.txt)'),('csv','File (.csv)')], 'File format', required=True, readonly=True, states={'init': [('readonly', False)]})
-    tax_ids = fields.Many2many('account.tax.code', 'account_line_beta_tax_code_wzd_rel', 'wzd_id', 'tax_code_id', string='Account Taxes', domain=[('line_beta','!=',False)], required=True, readonly=True, states={'init': [('readonly', False)]})
+    # 'tax_ids': fields.many2many('account.tax.code', 'account_line_beta_tax_code_wzd_rel', 'wzd_id', 'tax_code_id',
+    #                             string='Account Taxes', domain=[('line_beta', '!=', False)], required=True,
+    #                             readonly=True, states={'init': [('readonly', False)]}),
+    tax_ids = fields.Many2many('account.tax', 'account_line_beta_tax_code_wzd_rel', 'wzd_id', 'tax_id', string='Account Taxes', domain=[('line_beta','!=',False)], required=True, readonly=True, states={'init': [('readonly', False)]})
     file_name = fields.Char('File name', size=128)
     file = fields.Binary('File')
     state = fields.Selection([('init','Init'),('exported','Exported')],'State', default='init')
