@@ -23,7 +23,7 @@ from datetime import datetime, date
 from odoo.tools import ustr, DEFAULT_SERVER_DATE_FORMAT as DATE_FORMAT
 from dateutil.relativedelta import relativedelta
 # from cStringIO import StringIO
-from io import StringIO
+from io import StringIO, BytesIO
 import base64
 import codecs
 
@@ -64,7 +64,8 @@ class account_line_beta_wzd(models.TransientModel):
 
             delta = relativedelta(months=-1, day=1)
             _date = datetime.strptime("01-%s-%s"%(row['month'], row['year']), "%d-%m-%Y").date()
-            buffer = StringIO()
+            # buffer = StringIO()
+            buffer = BytesIO()
             codecinfo = codecs.lookup("utf8")
             file_to_save = codecs.StreamReaderWriter(buffer, codecinfo.streamreader, codecinfo.streamwriter)
 
