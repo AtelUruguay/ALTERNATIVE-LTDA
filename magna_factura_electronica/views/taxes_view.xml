@@ -8,8 +8,8 @@
             <field name="arch" type="xml">
                 <!--<field name="tax_group_id" position="after">-->
                 <group name="advanced_booleans" position="after">
-                    <group name="fe" string="Facturación Electrónica" attrs="{'invisible':[('type_tax_use','!=','sale')]}">
-                        <field name="fe_tax_codigo_dgi" attrs="{'required':[('type_tax_use','=','sale')]}"/>
+                    <group name="fe" string="Facturación Electrónica">
+                        <field name="fe_tax_codigo_dgi" attrs="{'required':[('type_tax_use','=','sale')], 'invisible':[('type_tax_use','!=','sale')]}"/>
                     </group>
                 </group>
             </field>
