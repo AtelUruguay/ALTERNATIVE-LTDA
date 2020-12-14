@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <record model="ir.ui.view" id="account_line_beta_wzd_form">
             <field name="name">account.line.beta.wzd.form</field>
@@ -56,7 +56,7 @@
         <record model="ir.actions.act_window" id="action_account_line_beta_wzd">
             <field name="name">Account Line Beta</field>
             <field name="res_model">account.line.beta.wzd</field>
-            <field name="view_type">form</field>
+            <!--<field name="view_type">form</field>-->
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
@@ -64,4 +64,4 @@
         <menuitem id="menu_line_beta_root" name="Line Beta" parent="account.menu_finance" sequence="3"/>
         <menuitem action="action_account_line_beta_wzd" id="menu_account_line_beta_wzd" parent="menu_line_beta_root" sequence="10"/>
     </data>
-</openerp>
+</odoo>
