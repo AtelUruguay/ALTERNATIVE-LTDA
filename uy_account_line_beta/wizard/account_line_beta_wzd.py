@@ -159,7 +159,7 @@ class account_line_beta_wzd(models.TransientModel):
                 not_result = False
 
             row.write({'state':'exported' if not not_result else 'init',
-                        'file_name': 'linea_beta'+'.'+row['file_format'] if not not_result else False,
+                        'file_name': 'linea_beta' + row['year'] + row['month'] +'.'+row['file_format'] if not not_result else False,
                         'file': base64.encodebytes(_value) if not not_result else False,
                         'not_result': not_result
                     })
@@ -211,7 +211,7 @@ class account_line_beta_wzd(models.TransientModel):
                             ('11', 'November'),
                             ('12', 'December')], string='Month', required=True, readonly=True, states={'init': [('readonly', False)]}, default=ustr(date.today().month) if date.today().month >= 10 else '0'+ustr(date.today().month))
     year = fields.Selection(_get_years, string='Year', required=True, readonly=True, states={'init': [('readonly', False)]}, default=ustr(date.today().year))
-    file_format = fields.Selection([('txt','File (.txt)'),('csv','File (.csv)')], 'File format', required=True, readonly=True, states={'init': [('readonly', False)]})
+    file_format = fields.Selection([('txt','File (.txt)'),('csv','File (.csv)')], 'File format', required=True, readonly=True, states={'init': [('readonly', False)]}, default='txt')
     # 'tax_ids': fields.many2many('account.tax.code', 'account_line_beta_tax_code_wzd_rel', 'wzd_id', 'tax_code_id',
     #                             string='Account Taxes', domain=[('line_beta', '!=', False)], required=True,
     #                             readonly=True, states={'init': [('readonly', False)]}),

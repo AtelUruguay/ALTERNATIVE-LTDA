@@ -60,7 +60,7 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem id="menu_informes_legales_root" name="Informes Legales" parent="account.menu_finance_reports" sequence="5"/>
+        <menuitem id="menu_informes_legales_root" name="Informes Legales" parent="account.menu_finance_reports" sequence="4"/>
         <menuitem action="action_account_line_beta_wzd" id="menu_account_line_beta_wzd" parent="menu_informes_legales_root" sequence="10"/>
 
     </data>

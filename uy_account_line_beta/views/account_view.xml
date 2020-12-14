@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="view_account_tax_form" model="ir.ui.view">
-            <field name="name">view.account.tax.form</field>
+        <record id="view_tax_form_uy_linea_beta" model="ir.ui.view">
+            <field name="name">view.tax.form.uy.linea.beta</field>
             <field name="model">account.tax</field>
-            <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="inherit_id" ref="magna_factura_electronica.view_tax_form_uy_fe"/>
             <field name="arch" type="xml">
-                <field name="company_id" position="after">
+                <field name="fe_tax_codigo_dgi" position="after">
                     <field name="line_beta"/>
                 </field>
             </field>
