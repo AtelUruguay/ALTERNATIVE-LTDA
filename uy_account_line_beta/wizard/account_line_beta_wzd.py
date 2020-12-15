@@ -107,11 +107,16 @@ class account_line_beta_wzd(models.TransientModel):
                         logging.info('ac_move_line.journal_id.type: %s', ac_move_line.journal_id.type)
 
                         if _r['vat'] == ac_move_line.company_id.vat and _r['rut'] == rut and _r['line_beta'] == line_beta:
+
                             if ac_move_line.debit:
                                 if ac_move_line.journal_id.type == 'purchase':
                                     _r['amount'] += ac_move_line.debit
                                 elif ac_move_line.journal_id.type == 'sale_refund':
-                                    if _r['amount'] < 0:
+                                    # if _r['amount'] < 0:
+                                    #     _r['amount'] += (ac_move_line.debit * (-1))
+                                    # else:
+                                    #     _r['amount'] -= ac_move_line.debit
+                                    if ac_move_line.debit < 0:
                                         _r['amount'] += (ac_move_line.debit * (-1))
                                     else:
                                         _r['amount'] -= ac_move_line.debit
@@ -121,7 +126,11 @@ class account_line_beta_wzd(models.TransientModel):
                                 if ac_move_line.journal_id.type == 'sale':
                                     _r['amount'] += ac_move_line.credit
                                 elif ac_move_line.journal_id.type == 'purchase_refund':
-                                    if _r['amount'] < 0:
+                                    # if _r['amount'] < 0:
+                                    #     _r['amount'] += (ac_move_line.credit * (-1))
+                                    # else:
+                                    #     _r['amount'] -= ac_move_line.credit
+                                    if ac_move_line.credit < 0:
                                         _r['amount'] += (ac_move_line.credit * (-1))
                                     else:
                                         _r['amount'] -= ac_move_line.credit
