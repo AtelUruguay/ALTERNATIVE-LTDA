@@ -168,6 +168,9 @@ class account_line_beta_wzd(models.TransientModel):
                         for ac_move_line in ac_move_line_ids:
                             # todo asm
                             # if ac_move_line.tax_code_id.id == row_tax.id:
+                            logging.info('ac_move_line.tax_ids.ids: %s', ac_move_line.tax_ids.ids)
+                            logging.info('row_tax.id: %s', row_tax.id)
+
                             if ac_move_line.tax_ids.ids in [row_tax.id]:
                                 _do_action(self, ac_move_line, row_tax.line_beta)
                 if self._group_results:
