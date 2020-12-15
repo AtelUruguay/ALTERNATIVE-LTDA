@@ -26,6 +26,7 @@ from dateutil.relativedelta import relativedelta
 from io import StringIO, BytesIO
 import base64
 import codecs
+import logging
 
 class account_line_beta_wzd(models.TransientModel):
     _name = 'account.line.beta.wzd'
@@ -61,6 +62,7 @@ class account_line_beta_wzd(models.TransientModel):
     def action_next(self):
         # self.ensure_one()
         for row in self:
+            logging.info('row.tax_ids: %s', row.tax_ids)
 
             delta = relativedelta(months=-1, day=1)
             _date = datetime.strptime("01-%s-%s"%(row['month'], row['year']), "%d-%m-%Y").date()
@@ -79,7 +81,9 @@ class account_line_beta_wzd(models.TransientModel):
             ac_move_line_ids = ac_move_line_obj.search([
                 ('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
                 ('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
-                ('tax_line_id', 'in', [row_tax.id for row_tax in row.tax_ids if row_tax.line_beta])])
+                ('tax_ids', 'in', row.tax_ids.ids)])
+
+            logging.info('len(ac_move_line_ids): %s', len(ac_move_line_ids))
 
             if ac_move_line_ids:
                 def _do_action(self, ac_move_line, line_beta):
@@ -89,6 +93,12 @@ class account_line_beta_wzd(models.TransientModel):
                         # todo asm ver que otros documentos
                         rut = ac_move_line.partner_id.fe_numero_doc.strip() if ac_move_line.partner_id.fe_numero_doc and ac_move_line.partner_id.fe_tipo_documento == "2" else ""
                     for _r in self._group_results:
+
+                        logging.info('_r: %s', _r)
+                        logging.info('ac_move_line.debit: %s', ac_move_line.debit)
+                        logging.info('ac_move_line.credit: %s', ac_move_line.credit)
+                        logging.info('ac_move_line.journal_id.type: %s', ac_move_line.journal_id.type)
+
                         if _r['vat'] == ac_move_line.company_id.vat and _r['rut'] == rut and _r['line_beta'] == line_beta:
                             if ac_move_line.debit:
                                 if ac_move_line.journal_id.type == 'purchase':
@@ -118,6 +128,11 @@ class account_line_beta_wzd(models.TransientModel):
                             break
                     if not _found:
                         am = 0
+
+                        logging.info('ac_move_line.debit: %s', ac_move_line.debit)
+                        logging.info('ac_move_line.credit: %s', ac_move_line.credit)
+                        logging.info('ac_move_line.journal_id.type: %s', ac_move_line.journal_id.type)
+
                         if ac_move_line.debit:
                             if ac_move_line.journal_id.type == 'purchase':
                                 am = ac_move_line.debit
@@ -143,6 +158,10 @@ class account_line_beta_wzd(models.TransientModel):
                                 'date_invoice': row['year'] + row['month'],
                                 'form': "02181"  # It's a hardcode always?
                             })
+
+                    logging.info('self._group_results: %s', self._group_results)
+
+
                 for row_tax in row.tax_ids:
                     if row_tax.line_beta: #domain?
                         for ac_move_line in ac_move_line_ids:
@@ -159,7 +178,7 @@ class account_line_beta_wzd(models.TransientModel):
                 not_result = False
 
             row.write({'state':'exported' if not not_result else 'init',
-                        'file_name': 'linea_beta' + row['year'] + row['month'] +'.'+row['file_format'] if not not_result else False,
+                        'file_name': 'linea_beta_' + row['year'] + row['month'] +'.'+row['file_format'] if not not_result else False,
                         'file': base64.encodebytes(_value) if not not_result else False,
                         'not_result': not_result
                     })

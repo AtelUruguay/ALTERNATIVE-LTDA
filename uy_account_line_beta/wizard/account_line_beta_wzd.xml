@@ -5,7 +5,7 @@
             <field name="name">account.line.beta.wzd.form</field>
             <field name="model">account.line.beta.wzd</field>
             <field name="arch" type="xml">
-                <form string="Account Line Beta">
+                <form string="Formulario 2/181">
                     <div attrs="{'invisible':[('not_result','=',False)]}" class="oe_text_left show_error" style="height: 30px; border-bottom: 1px solid #DD0000;border-top: 1px solid #DD0000; background-color: #FAD7D7; padding: 4px; margin-bottom: 30px;">
                         <div class="oe_inline" style="float: left;">
                             <span class="fa fa-warning" style="color: #DD0000;"/><span style="font-weight: bold !important;"> Not results found, please check the month, year and the line beta value of each account tax used.</span>
@@ -54,13 +54,13 @@
         </record>
 
         <record model="ir.actions.act_window" id="action_account_line_beta_wzd">
-            <field name="name">Account Line Beta</field>
+            <field name="name">Formulario 2/181</field>
             <field name="res_model">account.line.beta.wzd</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
 
-        <menuitem id="menu_informes_legales_root" name="Informes Legales" parent="account.menu_finance_reports" sequence="4"/>
+        <menuitem id="menu_informes_legales_root" name="Informes Legales" parent="account.menu_finance_reports" sequence="3"/>
         <menuitem action="action_account_line_beta_wzd" id="menu_account_line_beta_wzd" parent="menu_informes_legales_root" sequence="10"/>
 
     </data>

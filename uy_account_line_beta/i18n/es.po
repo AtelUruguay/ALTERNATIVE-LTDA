@@ -24,8 +24,8 @@ msgstr ""
 #: model:ir.actions.act_window,name:uy_account_line_beta.action_account_line_beta_wzd
 #: model:ir.ui.menu,name:uy_account_line_beta.menu_account_line_beta_wzd
 #, python-format
-msgid "Account Line Beta"
-msgstr "Factura Línea Beta"
+msgid "Formulario 2/181"
+msgstr "Formulario 2/181"
 
 #. module: uy_account_line_beta
 #: field:account.line.beta.wzd,tax_ids:0
