@@ -78,10 +78,16 @@ class account_line_beta_wzd(models.TransientModel):
             #     ('move_id.date','>=',datetime.strftime(_date, DATE_FORMAT)),
             #     ('move_id.date','<',datetime.strftime(_date-delta, DATE_FORMAT)),
             #     ('tax_code_id','in',[row_tax.id for row_tax in row.tax_ids if row_tax.line_beta])])
+
+            # ac_move_line_ids = ac_move_line_obj.search([
+            #     ('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
+            #     ('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
+            #     ('tax_ids', 'in', row.tax_ids.ids)])
+
             ac_move_line_ids = ac_move_line_obj.search([
                 ('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
                 ('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
-                ('tax_ids', '=', row.tax_ids.ids)])
+                ('tax_ids', 'in', row.tax_ids.ids), ('partner_id','=',33185)])
 
             logging.info('len(ac_move_line_ids): %s', len(ac_move_line_ids))
 
