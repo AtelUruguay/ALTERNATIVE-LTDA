@@ -90,7 +90,7 @@ class account_line_beta_wzd(models.TransientModel):
             ac_move_line_ids = ac_move_line_obj.search([
                 '&',('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
                 '&',('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
-                '&',('tag_ids', 'in', row.tax_ids.ids),
+                '&',('tax_line_id', 'in', row.tax_ids.ids),
                 '&',('partner_id', '=', 33185),
                 '|',
                 ('move_id.type', 'in', ['in_invoice', 'in_refund']),
@@ -169,7 +169,7 @@ class account_line_beta_wzd(models.TransientModel):
                             logging.info('ac_move_line.tax_ids.ids: %s', ac_move_line.tax_ids.ids)
                             logging.info('row_tax.id: %s', row_tax.id)
 
-                            if ac_move_line.tag_ids.ids == [row_tax.id]:
+                            if ac_move_line.tax_line_id.id == row_tax.id:
                                 _do_action(self, ac_move_line, row_tax.line_beta)
                 if self._group_results:
                     file_to_save.write(";".join([ustr('RUT compañía'), 'Form', ustr('Año'), 'RUT cliente', 'Fecha', ustr('Código'), 'Monto'])+";\n")
