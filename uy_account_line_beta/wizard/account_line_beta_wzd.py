@@ -84,89 +84,72 @@ class account_line_beta_wzd(models.TransientModel):
             #     ('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
             #     ('tax_ids', 'in', row.tax_ids.ids)])
 
-            ac_move_line_ids = ac_move_line_obj.search([
-                ('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
-                ('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
-                ('tax_ids', 'in', row.tax_ids.ids), ('partner_id','=',33185)])
+            # TODO FILTRAR POR TIPO DE MOVIMIENTO, QUE TENGA RUT EL REGISTRO????? (PARA VENTAS, NO CONSUMIDORES FINALES)
+            # todo tipo factura dgi: para ventas solo facturas y para compras también tickets
 
-            logging.info('len(ac_move_line_ids): %s', len(ac_move_line_ids))
+            ac_move_line_ids = ac_move_line_obj.search([
+                '&',('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
+                '&',('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
+                '&',('tag_ids', 'in', row.tax_ids.ids),
+                '&',('partner_id', '=', 33185),
+                '|',
+                ('move_id.type', 'in', ['in_invoice', 'in_refund']),
+                '&',('move_id.type', 'in', ['out_invoice','out_refund']),('partner_id.fe_tipo_documento','=', "2"),
+                ])
+
+            logging.info('ac_move_line_ids.ids: %s', ac_move_line_ids.ids)
 
             if ac_move_line_ids:
 
                 def _do_action(self, ac_move_line, line_beta):
                     _found = False
-                    rut = ac_move_line.partner_id.vat if ac_move_line.partner_id.vat else ""
-                    if hasattr(ac_move_line.partner_id, 'fe_numero_doc'):
-                        # todo asm ver que otros documentos
-                        rut = ac_move_line.partner_id.fe_numero_doc.strip() if ac_move_line.partner_id.fe_numero_doc and ac_move_line.partner_id.fe_tipo_documento == "2" else ""
-                    for _r in self._group_results:
+                    # rut = ac_move_line.partner_id.vat if ac_move_line.partner_id.vat else ""
+                    # if hasattr(ac_move_line.partner_id, 'fe_numero_doc'):
 
-                        logging.info('_r: %s', _r)
-                        logging.info('ac_move_line.debit: %s', ac_move_line.debit)
-                        logging.info('ac_move_line.credit: %s', ac_move_line.credit)
-                        logging.info('ac_move_line.journal_id.type: %s', ac_move_line.journal_id.type)
+                    rut = ac_move_line.partner_id.fe_numero_doc.strip() if ac_move_line.partner_id.fe_numero_doc else ""
+
+                    for _r in self._group_results:
 
                         if _r['vat'] == ac_move_line.company_id.vat and _r['rut'] == rut and _r['line_beta'] == line_beta:
 
-                            if ac_move_line.debit:
-                                if ac_move_line.journal_id.type == 'purchase':
-                                    _r['amount'] += ac_move_line.debit
-                                elif ac_move_line.journal_id.type == 'sale_refund':
-                                    # if _r['amount'] < 0:
-                                    #     _r['amount'] += (ac_move_line.debit * (-1))
-                                    # else:
-                                    #     _r['amount'] -= ac_move_line.debit
-                                    if ac_move_line.debit < 0:
-                                        _r['amount'] += (ac_move_line.debit * (-1))
-                                    else:
-                                        _r['amount'] -= ac_move_line.debit
-                                else:
-                                    _r['amount'] += ac_move_line.debit
-                            elif ac_move_line.credit:
-                                if ac_move_line.journal_id.type == 'sale':
-                                    _r['amount'] += ac_move_line.credit
-                                elif ac_move_line.journal_id.type == 'purchase_refund':
-                                    # if _r['amount'] < 0:
-                                    #     _r['amount'] += (ac_move_line.credit * (-1))
-                                    # else:
-                                    #     _r['amount'] -= ac_move_line.credit
-                                    if ac_move_line.credit < 0:
-                                        _r['amount'] += (ac_move_line.credit * (-1))
-                                    else:
-                                        _r['amount'] -= ac_move_line.credit
-                                else:
-                                    _r['amount'] += ac_move_line.credit
-                                    # if _r['amount'] < 0:
-                                    #     _r['amount'] = _r['amount'] + (ac_move_line.credit * (-1))
-                                    # else:
-                                    #     _r['amount'] -= ac_move_line.credit
+                            # ('entry', 'Journal Entry'), --> no se consideran
+                            # ('out_invoice', 'Customer Invoice'),
+                            # ('out_refund', 'Customer Credit Note'),
+                            # ('in_invoice', 'Vendor Bill'),
+                            # ('in_refund','Vendor Credit Note'),
+
+                            if ac_move_line.move_id.type in ['out_invoice']:
+                                _r['amount'] += ac_move_line.credit
+
+                            elif ac_move_line.move_id.type in ['out_refund']:
+                                _r['amount'] -= ac_move_line.debit
+
+                            elif ac_move_line.move_id.type in ['in_invoice']:
+                                _r['amount'] += ac_move_line.debit
+
+                            elif ac_move_line.move_id.type in ['in_refund']:
+                                _r['amount'] -= ac_move_line.credit
+
                             _found = True
                             break
                     if not _found:
                         am = 0
 
-                        logging.info('ac_move_line.debit: %s', ac_move_line.debit)
-                        logging.info('ac_move_line.credit: %s', ac_move_line.credit)
-                        logging.info('ac_move_line.journal_id.type: %s', ac_move_line.journal_id.type)
+                        if ac_move_line.move_id.type in ['out_invoice']:
+                            am = ac_move_line.credit
 
-                        if ac_move_line.debit:
-                            if ac_move_line.journal_id.type == 'purchase':
-                                am = ac_move_line.debit
-                            elif ac_move_line.journal_id.type == 'sale_refund':
-                                am = -ac_move_line.debit
-                            else:
-                                am = ac_move_line.debit
-                        elif ac_move_line.credit:
-                            if ac_move_line.journal_id.type == 'sale':
-                                am = ac_move_line.credit
-                            elif ac_move_line.journal_id.type == 'purchase_refund':
-                                am = -ac_move_line.credit
-                            else:
-                                am = ac_move_line.credit
-                                # am = -ac_move_line.credit
+                        elif ac_move_line.move_id.type in ['out_refund']:
+                            am = ac_move_line.debit * (-1)
+
+                        elif ac_move_line.move_id.type in ['in_invoice']:
+                            am = ac_move_line.debit
+
+                        elif ac_move_line.move_id.type in ['in_refund']:
+                            am = ac_move_line.credit * (-1)
+
                         if am:
                             self._group_results.append({
-                                'amount': am,
+                                'amount': round(am, 2),
                                 'line_beta': line_beta,
                                 'vat': ac_move_line.company_id.vat if ac_move_line.company_id.vat else "",
                                 'rut': rut,
@@ -186,7 +169,7 @@ class account_line_beta_wzd(models.TransientModel):
                             logging.info('ac_move_line.tax_ids.ids: %s', ac_move_line.tax_ids.ids)
                             logging.info('row_tax.id: %s', row_tax.id)
 
-                            if ac_move_line.tax_ids.ids == [row_tax.id]:
+                            if ac_move_line.tag_ids.ids == [row_tax.id]:
                                 _do_action(self, ac_move_line, row_tax.line_beta)
                 if self._group_results:
                     file_to_save.write(";".join([ustr('RUT compañía'), 'Form', ustr('Año'), 'RUT cliente', 'Fecha', ustr('Código'), 'Monto'])+";\n")
