@@ -148,8 +148,9 @@ class account_line_beta_wzd(models.TransientModel):
                 for row_tax in row.tax_ids:
                     if row_tax.line_beta: #domain?
                         for ac_move_line in ac_move_line_ids:
-                            if ac_move_line.tax_line_id.id == row_tax.id or ac_move_line.tax_ids[0].id == row_tax.id:
+                            if ac_move_line.tax_line_id.id == row_tax.id or ac_move_line.tax_ids.ids in [row_tax.id]:
                                 _do_action(self, ac_move_line, row_tax.line_beta)
+
                 if self._group_results:
                     file_to_save.write(";".join([ustr('RUT compañía'), 'Form', ustr('Año'), 'RUT cliente', 'Fecha', ustr('Código'), 'Monto'])+";\n")
                     for _r in self._group_results:
