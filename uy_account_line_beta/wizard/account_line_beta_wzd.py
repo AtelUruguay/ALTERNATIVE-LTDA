@@ -88,6 +88,7 @@ class account_line_beta_wzd(models.TransientModel):
                 ])
 
             logging.info('gravados ac_move_line_ids.ids: %s', ac_move_line_ids.ids)
+            logging.info('exentos_tax_ids: %s', exentos_tax_ids)
 
             # agregar los compras excentos
             # ir a buscar las lineas del mismo asiento que corresponde al valor base (tax_ids == row_tax.id)
@@ -95,7 +96,7 @@ class account_line_beta_wzd(models.TransientModel):
                 ('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
                 ('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
                 ('move_id.state', '=', 'posted'),
-                ('tax_ids', 'in', exentos_tax_ids),
+                ('tax_ids', 'in', exentos_tax_ids.ids),
                 ('move_id.type', 'in', ['in_invoice', 'in_refund'])
             ])
             logging.info('exentos ac_move_line_ids.ids: %s', ac_move_line_exentos_ids.ids)
