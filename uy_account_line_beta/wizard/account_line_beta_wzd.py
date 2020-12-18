@@ -75,32 +75,33 @@ class account_line_beta_wzd(models.TransientModel):
 
             # todo chequear que sea solo rut o cedula las compras? un proveedor no es siempre con rut? en qué caso es la ci?
             # todo que hago con iva compras base? eso no es un tipo de impuesto, cómo lo mapeo????
+            exentos_tax_ids = row.tax_ids.filtered(lambda x: x.tax_type_use == 'purchase' and x.tax_group_id.name == 'EXENTOS')
+            gravados_tax_ids = row.tax_ids.ids - exentos_tax_ids.ids
+
             ac_move_line_ids = ac_move_line_obj.search([
                 '&',('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
                 '&',('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
                 '&',('move_id.state', '=', 'posted'),
-                '&',('tax_line_id', 'in', row.tax_ids.ids),
-                # '&',('partner_id', '=', 33185),
+                '&',('tax_line_id', 'in', gravados_tax_ids),
                 '|',('move_id.type', 'in', ['in_invoice', 'in_refund']),
                 '&',('move_id.type', 'in', ['out_invoice','out_refund']),('partner_id.fe_tipo_documento','=', "2"),
                 ])
 
-            logging.info('ac_move_line_ids.ids: %s', ac_move_line_ids.ids)
+            logging.info('gravados ac_move_line_ids.ids: %s', ac_move_line_ids.ids)
 
             # agregar los compras excentos
-            # tax_ids = row.tax_ids.filtered(lambda x: x.tax_type_use == 'purchase' and x.tax_group_id.name == 'EXENTOS')
-            # ac_move_line_ids = ac_move_line_obj.search([
-            #     ('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
-            #     ('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
-            #     ('move_id.state', '=', 'posted'),
-            #     ('tax_ids', 'in', tax_ids.ids)
-            #     ('move_id.type', 'in', ['in_invoice', 'in_refund'])
-            # ])
-            # if row_tax.tax_type_use == 'purchase' and row_tax.tax_group_id.name == 'EXENTOS':
             # ir a buscar las lineas del mismo asiento que corresponde al valor base (tax_ids == row_tax.id)
+            ac_move_line_exentos_ids = ac_move_line_obj.search([
+                ('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
+                ('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
+                ('move_id.state', '=', 'posted'),
+                ('tax_ids', 'in', exentos_tax_ids),
+                ('move_id.type', 'in', ['in_invoice', 'in_refund'])
+            ])
+            logging.info('exentos ac_move_line_ids.ids: %s', ac_move_line_exentos_ids.ids)
 
 
-
+            ac_move_line_ids += ac_move_line_exentos_ids
             if ac_move_line_ids:
 
                 def _do_action(self, ac_move_line, line_beta):
