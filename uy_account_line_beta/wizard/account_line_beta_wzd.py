@@ -66,87 +66,69 @@ class account_line_beta_wzd(models.TransientModel):
 
             delta = relativedelta(months=-1, day=1)
             _date = datetime.strptime("01-%s-%s"%(row['month'], row['year']), "%d-%m-%Y").date()
-            # buffer = StringIO()
             buffer = BytesIO()
             codecinfo = codecs.lookup("utf8")
             file_to_save = codecs.StreamReaderWriter(buffer, codecinfo.streamreader, codecinfo.streamwriter)
-
             not_result = True
             self._group_results = []
             ac_move_line_obj = self.env['account.move.line']
-            # ac_move_line_ids = ac_move_line_obj.search([
-            #     ('move_id.date','>=',datetime.strftime(_date, DATE_FORMAT)),
-            #     ('move_id.date','<',datetime.strftime(_date-delta, DATE_FORMAT)),
-            #     ('tax_code_id','in',[row_tax.id for row_tax in row.tax_ids if row_tax.line_beta])])
 
-            # ac_move_line_ids = ac_move_line_obj.search([
-            #     ('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
-            #     ('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
-            #     ('tax_ids', 'in', row.tax_ids.ids)])
-
-            # TODO FILTRAR POR TIPO DE MOVIMIENTO, QUE TENGA RUT EL REGISTRO????? (PARA VENTAS, NO CONSUMIDORES FINALES)
-            # todo tipo factura dgi: para ventas solo facturas y para compras también tickets
-
+            # todo chequear que sea solo rut o cedula las compras? un proveedor no es siempre con rut? en qué caso es la ci?
+            # todo que hago con iva compras base? eso no es un tipo de impuesto, cómo lo mapeo????
             ac_move_line_ids = ac_move_line_obj.search([
                 '&',('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
                 '&',('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
+                '&',('move_id.state', '=', 'posted'),
                 '&',('tax_line_id', 'in', row.tax_ids.ids),
-                '&',('partner_id', '=', 33185),
-                '|',
-                ('move_id.type', 'in', ['in_invoice', 'in_refund']),
+                # '&',('partner_id', '=', 33185),
+                '|',('move_id.type', 'in', ['in_invoice', 'in_refund']),
                 '&',('move_id.type', 'in', ['out_invoice','out_refund']),('partner_id.fe_tipo_documento','=', "2"),
                 ])
 
             logging.info('ac_move_line_ids.ids: %s', ac_move_line_ids.ids)
 
+            # agregar los compras excentos
+            # tax_ids = row.tax_ids.filtered(lambda x: x.tax_type_use == 'purchase' and x.tax_group_id.name == 'EXENTOS')
+            # ac_move_line_ids = ac_move_line_obj.search([
+            #     ('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
+            #     ('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
+            #     ('move_id.state', '=', 'posted'),
+            #     ('tax_ids', 'in', tax_ids.ids)
+            #     ('move_id.type', 'in', ['in_invoice', 'in_refund'])
+            # ])
+            # if row_tax.tax_type_use == 'purchase' and row_tax.tax_group_id.name == 'EXENTOS':
+            # ir a buscar las lineas del mismo asiento que corresponde al valor base (tax_ids == row_tax.id)
+
+
+
             if ac_move_line_ids:
 
                 def _do_action(self, ac_move_line, line_beta):
                     _found = False
-                    # rut = ac_move_line.partner_id.vat if ac_move_line.partner_id.vat else ""
-                    # if hasattr(ac_move_line.partner_id, 'fe_numero_doc'):
-
                     rut = ac_move_line.partner_id.fe_numero_doc.strip() if ac_move_line.partner_id.fe_numero_doc else ""
 
                     for _r in self._group_results:
-
                         if _r['vat'] == ac_move_line.company_id.vat and _r['rut'] == rut and _r['line_beta'] == line_beta:
-
-                            # ('entry', 'Journal Entry'), --> no se consideran
-                            # ('out_invoice', 'Customer Invoice'),
-                            # ('out_refund', 'Customer Credit Note'),
-                            # ('in_invoice', 'Vendor Bill'),
-                            # ('in_refund','Vendor Credit Note'),
-
                             if ac_move_line.move_id.type in ['out_invoice']:
                                 _r['amount'] += ac_move_line.credit
-
                             elif ac_move_line.move_id.type in ['out_refund']:
                                 _r['amount'] -= ac_move_line.debit
-
                             elif ac_move_line.move_id.type in ['in_invoice']:
                                 _r['amount'] += ac_move_line.debit
-
                             elif ac_move_line.move_id.type in ['in_refund']:
                                 _r['amount'] -= ac_move_line.credit
-
                             _found = True
                             break
                     if not _found:
                         am = 0
-
                         if ac_move_line.move_id.type in ['out_invoice']:
                             am = ac_move_line.credit
-
                         elif ac_move_line.move_id.type in ['out_refund']:
                             am = ac_move_line.debit * (-1)
-
                         elif ac_move_line.move_id.type in ['in_invoice']:
                             am = ac_move_line.debit
-
                         elif ac_move_line.move_id.type in ['in_refund']:
                             am = ac_move_line.credit * (-1)
-
                         if am:
                             self._group_results.append({
                                 'amount': round(am, 2),
@@ -164,11 +146,6 @@ class account_line_beta_wzd(models.TransientModel):
                 for row_tax in row.tax_ids:
                     if row_tax.line_beta: #domain?
                         for ac_move_line in ac_move_line_ids:
-                            # todo asm
-                            # if ac_move_line.tax_code_id.id == row_tax.id:
-                            logging.info('ac_move_line.tax_ids.ids: %s', ac_move_line.tax_ids.ids)
-                            logging.info('row_tax.id: %s', row_tax.id)
-
                             if ac_move_line.tax_line_id.id == row_tax.id:
                                 _do_action(self, ac_move_line, row_tax.line_beta)
                 if self._group_results:
