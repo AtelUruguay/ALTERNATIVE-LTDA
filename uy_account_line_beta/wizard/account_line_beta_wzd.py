@@ -159,7 +159,7 @@ class account_line_beta_wzd(models.TransientModel):
                             logging.info('ac_move_line.tax_line_id.id: %s', ac_move_line.tax_line_id.id)
                             logging.info('ac_move_line.tax_ids.ids: %s', ac_move_line.tax_ids.ids)
 
-                            if ac_move_line.tax_line_id.id == row_tax.id or ac_move_line.tax_ids.ids in [row_tax.id]:
+                            if (ac_move_line.tax_line_id.id == row_tax.id) or (ac_move_line.tax_ids and ac_move_line.tax_ids.ids[0] == row_tax.id):
                                 _do_action(self, ac_move_line, row_tax.line_beta)
 
                 if self._group_results:
