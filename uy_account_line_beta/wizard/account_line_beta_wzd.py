@@ -78,7 +78,7 @@ class account_line_beta_wzd(models.TransientModel):
             exentos_tax_ids = row.tax_ids.filtered(lambda x: x.type_tax_use == 'purchase' and x.tax_group_id.name == 'EXENTOS')
             gravados_tax_ids = list(set(row.tax_ids.ids) - set(exentos_tax_ids.ids))
 
-            ac_move_line_ids = ac_move_line_obj.search([
+            ac_move_line_gravados_ids = ac_move_line_obj.search([
                 '&',('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
                 '&',('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
                 '&',('move_id.state', '=', 'posted'),
@@ -87,7 +87,7 @@ class account_line_beta_wzd(models.TransientModel):
                 '&',('move_id.type', 'in', ['out_invoice','out_refund']),('partner_id.fe_tipo_documento','=', "2"),
                 ])
 
-            logging.info('gravados ac_move_line_ids.ids: %s', ac_move_line_ids.ids)
+            logging.info('gravados ac_move_line_ids.ids: %s', ac_move_line_gravados_ids.ids)
             logging.info('exentos_tax_ids: %s', exentos_tax_ids)
 
             # agregar los compras excentos
@@ -102,7 +102,7 @@ class account_line_beta_wzd(models.TransientModel):
             logging.info('exentos ac_move_line_ids.ids: %s', ac_move_line_exentos_ids.ids)
 
 
-            ac_move_line_ids += ac_move_line_exentos_ids
+            ac_move_line_ids = ac_move_line_gravados_ids + ac_move_line_exentos_ids
             if ac_move_line_ids:
 
                 def _do_action(self, ac_move_line, line_beta):
