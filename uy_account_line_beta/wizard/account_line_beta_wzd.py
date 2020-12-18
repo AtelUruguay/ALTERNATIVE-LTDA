@@ -103,6 +103,9 @@ class account_line_beta_wzd(models.TransientModel):
 
 
             ac_move_line_ids = ac_move_line_gravados_ids + ac_move_line_exentos_ids
+
+            logging.info('todos ac_move_line_ids.ids: %s', ac_move_line_ids.ids)
+
             if ac_move_line_ids:
 
                 def _do_action(self, ac_move_line, line_beta):
@@ -146,8 +149,16 @@ class account_line_beta_wzd(models.TransientModel):
 
 
                 for row_tax in row.tax_ids:
+                    logging.info('row_tax.line_beta: %s', row_tax.line_beta)
                     if row_tax.line_beta: #domain?
+
+                        logging.info('row_tax.id: %s', row_tax.id)
                         for ac_move_line in ac_move_line_ids:
+
+
+                            logging.info('ac_move_line.tax_line_id.id: %s', ac_move_line.tax_line_id.id)
+                            logging.info('ac_move_line.tax_ids.ids: %s', ac_move_line.tax_ids.ids)
+
                             if ac_move_line.tax_line_id.id == row_tax.id or ac_move_line.tax_ids.ids in [row_tax.id]:
                                 _do_action(self, ac_move_line, row_tax.line_beta)
 
