@@ -75,7 +75,7 @@ class account_line_beta_wzd(models.TransientModel):
 
             # todo chequear que sea solo rut o cedula las compras? un proveedor no es siempre con rut? en qué caso es la ci?
             # todo que hago con iva compras base? eso no es un tipo de impuesto, cómo lo mapeo????
-            exentos_tax_ids = row.tax_ids.filtered(lambda x: x.tax_type_use == 'purchase' and x.tax_group_id.name == 'EXENTOS')
+            exentos_tax_ids = row.tax_ids.filtered(lambda x: x.type_tax_use == 'purchase' and x.tax_group_id.name == 'EXENTOS')
             gravados_tax_ids = row.tax_ids.ids - exentos_tax_ids.ids
 
             ac_move_line_ids = ac_move_line_obj.search([
