@@ -73,11 +73,10 @@ class account_line_beta_wzd(models.TransientModel):
             self._group_results = []
             ac_move_line_obj = self.env['account.move.line']
 
-            # todo chequear que sea solo rut o cedula las compras? un proveedor no es siempre con rut? en qué caso es la ci?
-            # todo que hago con iva compras base? eso no es un tipo de impuesto, cómo lo mapeo????
             exentos_tax_ids = row.tax_ids.filtered(lambda x: x.type_tax_use == 'purchase' and x.tax_group_id.name == 'EXENTOS')
             gravados_tax_ids = list(set(row.tax_ids.ids) - set(exentos_tax_ids.ids))
 
+            #se obtienen las lineas de ventas y compras gravadas
             ac_move_line_gravados_ids = ac_move_line_obj.search([
                 '&',('move_id.date', '>=', datetime.strftime(_date, DATE_FORMAT)),
                 '&',('move_id.date', '<', datetime.strftime(_date - delta, DATE_FORMAT)),
@@ -87,8 +86,8 @@ class account_line_beta_wzd(models.TransientModel):
                 '&',('move_id.type', 'in', ['out_invoice','out_refund']),('partner_id.fe_tipo_documento','=', "2"),
                 ])
 
-            logging.info('gravados ac_move_line_ids.ids: %s', ac_move_line_gravados_ids.ids)
-            logging.info('exentos_tax_ids: %s', exentos_tax_ids)
+            #logging.info('gravados ac_move_line_ids.ids: %s', ac_move_line_gravados_ids.ids)
+            #logging.info('exentos_tax_ids: %s', exentos_tax_ids)
 
             # agregar los compras excentos
             # ir a buscar las lineas del mismo asiento que corresponde al valor base (tax_ids == row_tax.id)
@@ -99,12 +98,11 @@ class account_line_beta_wzd(models.TransientModel):
                 ('tax_ids', 'in', exentos_tax_ids.ids),
                 ('move_id.type', 'in', ['in_invoice', 'in_refund'])
             ])
-            logging.info('exentos ac_move_line_ids.ids: %s', ac_move_line_exentos_ids.ids)
-
+            #logging.info('exentos ac_move_line_ids.ids: %s', ac_move_line_exentos_ids.ids)
 
             ac_move_line_ids = ac_move_line_gravados_ids + ac_move_line_exentos_ids
 
-            logging.info('todos ac_move_line_ids.ids: %s', ac_move_line_ids.ids)
+            #logging.info('todos ac_move_line_ids.ids: %s', ac_move_line_ids.ids)
 
             if ac_move_line_ids:
 
@@ -145,20 +143,16 @@ class account_line_beta_wzd(models.TransientModel):
                                 'form': "02181"  # It's a hardcode always?
                             })
 
-                    logging.info('self._group_results: %s', self._group_results)
+                    #logging.info('self._group_results: %s', self._group_results)
 
 
                 for row_tax in row.tax_ids:
-                    logging.info('row_tax.line_beta: %s', row_tax.line_beta)
+                    #logging.info('row_tax.line_beta: %s', row_tax.line_beta)
                     if row_tax.line_beta: #domain?
-
-                        logging.info('row_tax.id: %s', row_tax.id)
+                        #logging.info('row_tax.id: %s', row_tax.id)
                         for ac_move_line in ac_move_line_ids:
-
-
-                            logging.info('ac_move_line.tax_line_id.id: %s', ac_move_line.tax_line_id.id)
-                            logging.info('ac_move_line.tax_ids.ids: %s', ac_move_line.tax_ids.ids)
-
+                            #logging.info('ac_move_line.tax_line_id.id: %s', ac_move_line.tax_line_id.id)
+                            #logging.info('ac_move_line.tax_ids.ids: %s', ac_move_line.tax_ids.ids)
                             if (ac_move_line.tax_line_id.id == row_tax.id) or (ac_move_line.tax_ids and ac_move_line.tax_ids.ids[0] == row_tax.id):
                                 _do_action(self, ac_move_line, row_tax.line_beta)
 
@@ -224,9 +218,6 @@ class account_line_beta_wzd(models.TransientModel):
                             ('12', 'December')], string='Month', required=True, readonly=True, states={'init': [('readonly', False)]}, default=ustr(date.today().month) if date.today().month >= 10 else '0'+ustr(date.today().month))
     year = fields.Selection(_get_years, string='Year', required=True, readonly=True, states={'init': [('readonly', False)]}, default=ustr(date.today().year))
     file_format = fields.Selection([('txt','File (.txt)'),('csv','File (.csv)')], 'File format', required=True, readonly=True, states={'init': [('readonly', False)]}, default='txt')
-    # 'tax_ids': fields.many2many('account.tax.code', 'account_line_beta_tax_code_wzd_rel', 'wzd_id', 'tax_code_id',
-    #                             string='Account Taxes', domain=[('line_beta', '!=', False)], required=True,
-    #                             readonly=True, states={'init': [('readonly', False)]}),
     tax_ids = fields.Many2many('account.tax', 'account_line_beta_tax_code_wzd_rel', 'wzd_id', 'tax_id', string='Account Taxes', domain=[('line_beta','!=',False)], required=True, readonly=True, states={'init': [('readonly', False)]})
     file_name = fields.Char('File name', size=128)
     file = fields.Binary('File')
