@@ -132,6 +132,9 @@ class AccountMove(models.Model):
     def action_post(self):
         res = super(AccountMove, self).action_post()
         if self.type in ('out_invoice', 'out_refund'):
+            logging.info('------------- type: %s', self.type)
+            logging.info('------------- name: %s', self.name)
+            #todo ver por que en NC de eefactura, si esta conciliada (paga?) manda / en el name
             self.invoice_send_fe_proinfo()
         return res
 
@@ -211,6 +214,7 @@ class AccountMove(models.Model):
             # ADICIONAL
             options._adicionalTipoDocumentoId = options._tipoComprobante
             options._adicionalDocComSerie = 'v13id' + str(rec.id)
+            #todo ver cuando se setea el name
             options._adicionalDocComCodigo = rec.name
             options._adicionalSucursalId = rec.company_id.fe_codigo_principal_sucursal
             options._adicionalAdenda = ''
