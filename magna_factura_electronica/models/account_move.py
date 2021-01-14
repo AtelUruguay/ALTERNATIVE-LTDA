@@ -130,10 +130,12 @@ class AccountMove(models.Model):
 
     # se llama al action_post de super y antes de devolver el control, se envía la información de FE
     def action_post(self):
+        logging.info('EXEC__action_post_before')
         res = super(AccountMove, self).action_post()
+        logging.info('EXEC__action_post_after')
+        logging.info('------------- type: %s', self.type)
+        logging.info('------------- name: %s', self.name)
         if self.type in ('out_invoice', 'out_refund'):
-            logging.info('------------- type: %s', self.type)
-            logging.info('------------- name: %s', self.name)
             #todo ver por que en NC de eefactura, si esta conciliada (paga?) manda / en el name
             self.invoice_send_fe_proinfo()
         return res
@@ -149,11 +151,18 @@ class AccountMove(models.Model):
 
 
     def invoice_send_fe_proinfo(self):
+        logging.info('EXEC__invoice_send_fe_proinfo')
         fe_activa = self.env["ir.config_parameter"].sudo().get_param("magna_fe_activa")
         if fe_activa == 'True':
             for rec in self:
+                logging.info('------------- type 1: %s', rec.type)
+                logging.info('------------- name 1: %s', rec.name)
                 ws_location_url = self.get_fe_ws_url()
+                logging.info('------------- type 2: %s', rec.type)
+                logging.info('------------- name 2: %s', rec.name)
                 in_xml_entrada = self.gen_Inxmlentrada()
+                logging.info('------------- type 3: %s', rec.type)
+                logging.info('------------- name 3: %s', rec.name)
                 vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(ws_location_url, in_xml_entrada, rec.fe_tipo_comprobante)
                 rec.write(vals)
         return True
