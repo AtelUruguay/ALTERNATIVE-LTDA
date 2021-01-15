@@ -128,27 +128,10 @@ class AccountMove(models.Model):
                 rec.forma_pago = '2'
 
 
-    # # se llama al action_post de super y antes de devolver el control, se envía la información de FE
-    # def action_post(self):
-    #     logging.info('EXEC__action_post_before')
-    #     res = super(AccountMove, self).action_post()
-    #     logging.info('EXEC__action_post_after')
-    #     logging.info('------------- type: %s', self.type)
-    #     logging.info('------------- name: %s', self.name)
-    #     if self.type in ('out_invoice', 'out_refund'):
-    #         #todo ver por que en NC de eefactura, si esta conciliada (paga?) manda / en el name
-    #         self.invoice_send_fe_proinfo()
-    #     return res
-
-    # se llama al action_post de super y antes de devolver el control, se envía la información de FE
+    # se llama al post de super y luego se envía la información de FE
     def post(self):
-        logging.info('EXEC__POST_before')
         res = super(AccountMove, self).post()
-        logging.info('EXEC__POST_after')
-        logging.info('------------- type: %s', self.type)
-        logging.info('------------- name: %s', self.name)
         if self.type in ('out_invoice', 'out_refund'):
-            #todo ver por que en NC de eefactura, si esta conciliada (paga?) manda / en el name
             self.invoice_send_fe_proinfo()
         return res
 
@@ -163,18 +146,11 @@ class AccountMove(models.Model):
 
 
     def invoice_send_fe_proinfo(self):
-        logging.info('EXEC__invoice_send_fe_proinfo')
         fe_activa = self.env["ir.config_parameter"].sudo().get_param("magna_fe_activa")
         if fe_activa == 'True':
             for rec in self:
-                logging.info('------------- type 1: %s', rec.type)
-                logging.info('------------- name 1: %s', rec.name)
                 ws_location_url = self.get_fe_ws_url()
-                logging.info('------------- type 2: %s', rec.type)
-                logging.info('------------- name 2: %s', rec.name)
                 in_xml_entrada = self.gen_Inxmlentrada()
-                logging.info('------------- type 3: %s', rec.type)
-                logging.info('------------- name 3: %s', rec.name)
                 vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(ws_location_url, in_xml_entrada, rec.fe_tipo_comprobante)
                 rec.write(vals)
         return True
@@ -235,7 +211,6 @@ class AccountMove(models.Model):
             # ADICIONAL
             options._adicionalTipoDocumentoId = options._tipoComprobante
             options._adicionalDocComSerie = 'v13id' + str(rec.id)
-            #todo ver cuando se setea el name
             options._adicionalDocComCodigo = rec.name
             options._adicionalSucursalId = rec.company_id.fe_codigo_principal_sucursal
             options._adicionalAdenda = ''
@@ -270,9 +245,9 @@ class AccountMove(models.Model):
                     # if line.product_id.tax_ids[0].price_include:
                     #     options._indicadorMontoBruto = True
 
-                    fe_tax_codigo_dgi_code = line.tax_ids[0].fe_tax_codigo_dgi.code # todo ojo,esta asumiendo que hay 1 solo impuesto por linea...
+                    fe_tax_codigo_dgi_code = line.tax_ids[0].fe_tax_codigo_dgi.code # todo cuidado,esta asumiendo que hay 1 solo impuesto por linea...
                     type_tax_use = line.tax_ids[0].type_tax_use
-                    #todo si el indicador es true, ojo que tendria que "desarmar" los montos para esta linea...
+                    #todo si el indicador es true, cuidado que tendria que "desarmar" los montos para esta linea...
                     line_aux._indicadorFacturacion = fe_tax_codigo_dgi_code
 
                     if fe_tax_codigo_dgi_code == '1' and type_tax_use == 'sale':
