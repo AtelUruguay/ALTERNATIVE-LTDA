@@ -128,11 +128,23 @@ class AccountMove(models.Model):
                 rec.forma_pago = '2'
 
 
+    # # se llama al action_post de super y antes de devolver el control, se envía la información de FE
+    # def action_post(self):
+    #     logging.info('EXEC__action_post_before')
+    #     res = super(AccountMove, self).action_post()
+    #     logging.info('EXEC__action_post_after')
+    #     logging.info('------------- type: %s', self.type)
+    #     logging.info('------------- name: %s', self.name)
+    #     if self.type in ('out_invoice', 'out_refund'):
+    #         #todo ver por que en NC de eefactura, si esta conciliada (paga?) manda / en el name
+    #         self.invoice_send_fe_proinfo()
+    #     return res
+
     # se llama al action_post de super y antes de devolver el control, se envía la información de FE
-    def action_post(self):
-        logging.info('EXEC__action_post_before')
-        res = super(AccountMove, self).action_post()
-        logging.info('EXEC__action_post_after')
+    def post(self):
+        logging.info('EXEC__POST_before')
+        res = super(AccountMove, self).post()
+        logging.info('EXEC__POST_after')
         logging.info('------------- type: %s', self.type)
         logging.info('------------- name: %s', self.name)
         if self.type in ('out_invoice', 'out_refund'):
