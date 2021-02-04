@@ -4,13 +4,11 @@
 
         <record id="magna_fe_url_ws_location_test" model="ir.config_parameter">
             <field name="key">magna_fe_ws_location_test</field>
-            <!--<field name="value">https://fe-test.proinfo.uy:443/servlet/afegeneraryfirmardocumento</field>-->
-            <field name="value">https://fe.proinfo.uy/servlet/afegeneraryfirmardocumento</field>
+            <field name="value">https://fe-test.proinfo.uy/servlet/afegeneraryfirmardocumento</field>
         </record>
 
         <record id="magna_fe_url_ws_location_prod" model="ir.config_parameter">
             <field name="key">magna_fe_ws_location_prod</field>
-            <!--<field name="value">https://fe.proinfo.uy/fe/servlet/afegeneraryfirmardocumento</field>-->
             <field name="value">https://fe.proinfo.uy/servlet/afegeneraryfirmardocumento</field>
         </record>
 

@@ -128,9 +128,9 @@ class AccountMove(models.Model):
                 rec.forma_pago = '2'
 
 
-    # se llama al action_post de super y antes de devolver el control, se envía la información de FE
-    def action_post(self):
-        res = super(AccountMove, self).action_post()
+    # se llama al post de super y luego se envía la información de FE
+    def post(self):
+        res = super(AccountMove, self).post()
         if self.type in ('out_invoice', 'out_refund'):
             self.invoice_send_fe_proinfo()
         return res
@@ -245,9 +245,9 @@ class AccountMove(models.Model):
                     # if line.product_id.tax_ids[0].price_include:
                     #     options._indicadorMontoBruto = True
 
-                    fe_tax_codigo_dgi_code = line.tax_ids[0].fe_tax_codigo_dgi.code # todo ojo,esta asumiendo que hay 1 solo impuesto por linea...
+                    fe_tax_codigo_dgi_code = line.tax_ids[0].fe_tax_codigo_dgi.code # todo cuidado,esta asumiendo que hay 1 solo impuesto por linea...
                     type_tax_use = line.tax_ids[0].type_tax_use
-                    #todo si el indicador es true, ojo que tendria que "desarmar" los montos para esta linea...
+                    #todo si el indicador es true, cuidado que tendria que "desarmar" los montos para esta linea...
                     line_aux._indicadorFacturacion = fe_tax_codigo_dgi_code
 
                     if fe_tax_codigo_dgi_code == '1' and type_tax_use == 'sale':
