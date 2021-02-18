@@ -3,7 +3,7 @@
 import qrcode
 import base64
 from io import BytesIO
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from . import fe_xml_factory
 from odoo.exceptions import UserError
 import logging
@@ -299,3 +299,12 @@ class AccountMove(models.Model):
     def report_get_doct_type(self):
         value = dict(DOC_TYPE_DGI).get(self.fe_tipo_comprobante)
         return value
+
+
+    # se redefine para que imprima la e-factura desde Enviar e Imprimir
+    def action_invoice_print(self):
+        if any(not move.is_invoice(include_receipts=True) for move in self):
+            raise UserError(_("Only invoices could be printed."))
+        self.filtered(lambda inv: not inv.invoice_sent).write({'invoice_sent': True})
+        return self.env.ref('magna_factura_electronica.action_fe_invoice_report').report_action(self)
+
