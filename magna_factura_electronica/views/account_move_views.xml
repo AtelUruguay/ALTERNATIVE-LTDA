@@ -64,11 +64,12 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_invoice_tree"/>
         <field name="arch" type="xml">
-            <field name="amount_residual_signed" position="after"/>
+            <field name="amount_residual_signed" position="after">
                 <field name="amount_untaxed" string="Tax Excluded" sum="Total" optional="show"/>
                 <field name="amount_tax" string="Tax" sum="Total" optional="hide"/>
                 <field name="amount_total" string="Total" sum="Total" optional="show"/>
                 <field name="amount_residual" string="Amount Due" sum="Amount Due" optional="show"/>
+            </field>
         </field>
     </record>
 
