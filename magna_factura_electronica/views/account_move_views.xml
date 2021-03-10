@@ -58,5 +58,20 @@
             </notebook>
         </field>
     </record>
+
+    <record id="magna_fe_view_move_tree" model="ir.ui.view">
+        <field name="name">magna.fe_account_move_tree</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <field name="amount_residual_signed" position="after">
+                <field name="amount_untaxed" string="Impuestos excluidos origen" sum="Total" optional="show"/>
+                <field name="amount_tax" string="Impuesto origen" sum="Total" optional="hide"/>
+                <field name="amount_total" string="Total origen" sum="Total" optional="show"/>
+                <field name="amount_residual" string="Importe adeudado origen" sum="Importe adeudado origen" optional="show"/>
+            </field>
+        </field>
+    </record>
+
 </data>
 </odoo>
