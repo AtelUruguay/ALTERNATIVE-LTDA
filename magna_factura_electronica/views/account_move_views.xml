@@ -65,10 +65,10 @@
         <field name="inherit_id" ref="account.view_invoice_tree"/>
         <field name="arch" type="xml">
             <field name="amount_residual_signed" position="after">
-                <field name="amount_untaxed" string="Impuestos excluidos (orig)" sum="Total" optional="show"/>
-                <field name="amount_tax" string="Impuesto" sum="Total (orig)" optional="hide"/>
-                <field name="amount_total" string="Total" sum="Total (orig)" optional="show"/>
-                <field name="amount_residual" string="Importe adeudado (orig)" sum="Amount Due" optional="show"/>
+                <field name="amount_untaxed" string="Impuestos excluidos origen" sum="Total" optional="show"/>
+                <field name="amount_tax" string="Impuesto origen" sum="Total" optional="hide"/>
+                <field name="amount_total" string="Total origen" sum="Total" optional="show"/>
+                <field name="amount_residual" string="Importe adeudado origen" sum="Importe adeudado origen" optional="show"/>
             </field>
         </field>
     </record>
