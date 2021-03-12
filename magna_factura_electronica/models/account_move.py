@@ -103,6 +103,10 @@ class AccountMove(models.Model):
             value = ''
             invoice_type = rec.type
             consumidor_final = rec.partner_id.fe_tipo_documento != '2'
+            logging.info('invoice_type: %s', invoice_type)
+            logging.info('rec.partner_id.fe_tipo_documento: %s', rec.partner_id.fe_tipo_documento)
+            logging.info('consumidor_final: %s', consumidor_final)
+
             if consumidor_final:  # eTicket
                 if invoice_type == 'out_invoice':  # Factura de cliente
                     value = '101'
@@ -113,6 +117,7 @@ class AccountMove(models.Model):
                     value = '111'
                 elif invoice_type == 'out_refund':  # NC de cliente
                     value = '112'
+            logging.info('fe_tipo_comprobante: %s', value)
             rec.fe_tipo_comprobante = value
 
 
