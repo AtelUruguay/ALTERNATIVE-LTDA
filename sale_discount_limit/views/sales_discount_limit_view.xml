@@ -12,10 +12,9 @@
         </field>
     </record>
 
-        <record id="sales_discount_limit_action" model="ir.actions.act_window">
+    <record id="sales_discount_limit_action" model="ir.actions.act_window">
         <field name="name">Sales Discount Limit</field>
         <field name="res_model">sales.discount.limit</field>
-<!--        <field name="view_type">form</field>-->
         <field name="view_mode">tree</field>s
     </record>
 
