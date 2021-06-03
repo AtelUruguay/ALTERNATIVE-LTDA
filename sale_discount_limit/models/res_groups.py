@@ -8,7 +8,7 @@ class Groups(models.Model):
 
     _inherit = "res.groups"
 
-    @api.multi
+    # @api.multi
     def unlink(self):
         """While delete group, Sale Discount Limit should be delete."""
         for group in self:
