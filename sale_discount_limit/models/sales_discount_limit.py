@@ -17,9 +17,13 @@ class SalesDiscountLimit(models.Model):
             'Group already exists!'),
     ]
 
+    # group_id = fields.Many2one(
+    #     'res.groups', "Group", domain=lambda self: [
+    #         ('category_id.id', '=',
+    #             self.env.ref('base.module_category_sales_management').id)])
     group_id = fields.Many2one(
         'res.groups', "Group", domain=lambda self: [
             ('category_id.id', '=',
-                self.env.ref('base.module_category_sales_management').id)])
+             self.env.ref('base.module_category_sales').id)])
     discount = fields.Float("Discount (%)",
                             digits=dp.get_precision('Discount'), default=10.0)
