@@ -7,19 +7,18 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
-
-<!--            invoice_line_ids-->
-
-<!--            <xpath expr="//notebook/page[@name='invoice_tab']" position="inside">-->
-            <field name="invoice_line_ids" position="before">
-                <field name="discount"/>
-            </field>
-
-<!--            <button name="button_draft" position="attributes">-->
-<!--                <attribute name="attrs">{'invisible': ['|','|',('restrict_mode_hash_table', '=', True),('state', 'not in', ('posted', 'cancel')),-->
-<!--                    ('fe_Estado','=','AS')]}</attribute>-->
-<!--            </button>-->
-
+            <xpath expr="//field[@name='invoice_line_ids']" position="before">
+                <group>
+                    <group>
+                        <label for="my_discount"/>
+                        <div class="o_row">
+                            <field name="my_discount"/>
+                            <button name="button_apply_discount" type="object" string="Aplicar"
+                                    attrs="{'readonly':[('my_discount','=',0)]}"/>
+                        </div>
+                    </group>
+                </group>
+            </xpath>
         </field>
     </record>
 
