@@ -9,7 +9,7 @@
 
 <!--            invoice_line_ids-->
 
-            <xpath expr="//notebook//page[@name='order_lines']" position="inside">
+            <xpath expr="//notebook/page[@name='order_lines']" position="inside">
                 <field name="discount"/>
             </xpath>
 
