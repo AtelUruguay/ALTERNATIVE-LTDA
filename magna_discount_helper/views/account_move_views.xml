@@ -10,9 +10,10 @@
 
 <!--            invoice_line_ids-->
 
-            <xpath expr="//notebook/page[@name='invoice_tab']" position="inside">
+<!--            <xpath expr="//notebook/page[@name='invoice_tab']" position="inside">-->
+            <field name="invoice_line_ids" position="before">
                 <field name="discount"/>
-            </xpath>
+            </field>
 
 <!--            <button name="button_draft" position="attributes">-->
 <!--                <attribute name="attrs">{'invisible': ['|','|',('restrict_mode_hash_table', '=', True),('state', 'not in', ('posted', 'cancel')),-->
