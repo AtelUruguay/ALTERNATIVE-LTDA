@@ -9,12 +9,7 @@
             <xpath expr="//field[@name='order_line']" position="before">
                 <group>
                     <group>
-                        <label for="my_discount"/>
-                        <div class="o_row">
-                            <field name="my_discount"/>
-                            <button name="button_apply_discount" type="object" string="Aplicar"
-                                    attrs="{'readonly':[('my_discount','=',0)]}"/>
-                        </div>
+                        <field name="my_discount"/>
                     </group>
                 </group>
             </xpath>

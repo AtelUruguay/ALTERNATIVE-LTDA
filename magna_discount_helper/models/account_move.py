@@ -10,16 +10,10 @@ class AccountMove(models.Model):
 
     my_discount = fields.Float(string='Descuento a aplicar')
 
-    def button_apply_discount(self):
+    @api.onchange('my_discount')
+    def apply_discount(self):
         for rec in self:
             for line in rec.invoice_line_ids:
                 line.discount = rec.my_discount
-            rec.my_discount = 0
-
-    # @api.onchange('my_discount')
-    # def apply_discount(self):
-    #     for rec in self:
-    #         for line in rec.invoice_line_ids:
-    #             line.discount = rec.my_discount
 
 
