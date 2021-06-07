@@ -9,7 +9,11 @@
             <xpath expr="//field[@name='order_line']" position="before">
                 <group>
                     <group>
-                        <field name="my_discount"/>
+                        <label for="my_discount"/>
+                        <div class="o_row">
+                            <field name="my_discount"/>
+                            <button name="button_apply_discount" type="object" string="Aplicar"/>
+                        </div>
                     </group>
                 </group>
             </xpath>
