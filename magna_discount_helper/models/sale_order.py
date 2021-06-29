@@ -8,9 +8,14 @@ class SaleOrder(models.Model):
 
     my_discount = fields.Float(string='Descuento a aplicar')
 
-    def button_apply_discount(self):
-        for rec in self:
-            for line in rec.order_line:
-                line.discount = rec.my_discount
+    @api.onchange('my_discount')
+    def onchange_my_discount(self):
+        for line in self.order_line:
+            line.discount = self.my_discount
+
+    # def button_apply_discount(self):
+    #     for rec in self:
+    #         for line in rec.order_line:
+    #             line.discount = rec.my_discount
 
 
