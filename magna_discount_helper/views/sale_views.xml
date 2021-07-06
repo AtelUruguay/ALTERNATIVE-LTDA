@@ -12,7 +12,6 @@
                         <label for="my_discount"/>
                         <div class="o_row">
                             <field name="my_discount" attrs="{'readonly':[('state','!=','draft')]}"/>
-<!--                            <button name="button_apply_discount" type="object" string="Aplicar" attrs="{'invisible':[('state','!=','draft')]}"/>-->
                         </div>
                     </group>
                 </group>
