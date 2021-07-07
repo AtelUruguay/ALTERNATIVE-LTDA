@@ -15,4 +15,5 @@ class AccountMove(models.Model):
         for rec in self:
             for line in rec.invoice_line_ids:
                 line.discount = rec.my_discount
+                line._onchange_price_subtotal()
         return {'value': {'my_discount': 0}}
