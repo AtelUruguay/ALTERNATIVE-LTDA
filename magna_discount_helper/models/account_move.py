@@ -12,6 +12,7 @@ class AccountMove(models.Model):
 
     @api.onchange('my_discount')
     def onchange_my_discount(self):
-        for line in self.invoice_line_ids:
-            line.discount = self.my_discount
+        for rec in self:
+            for line in rec.invoice_line_ids:
+                line.discount = rec.my_discount
         return {'value': {'my_discount': 0}}
