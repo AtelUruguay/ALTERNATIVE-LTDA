@@ -16,4 +16,4 @@ class AccountMove(models.Model):
             line.discount = self.my_discount
         self.invoice_line_ids._onchange_price_subtotal()
         self._recompute_dynamic_lines(recompute_all_taxes=True)
-        return {'value': {'my_discount': 0}}
+        return {'value': {'my_discount': False}}
