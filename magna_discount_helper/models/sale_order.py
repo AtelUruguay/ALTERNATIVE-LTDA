@@ -12,6 +12,5 @@ class SaleOrder(models.Model):
     def onchange_my_discount(self):
         for line in self.order_line:
             line.discount = self.my_discount
-        return {'value': {'my_discount': 0}}
 
 
