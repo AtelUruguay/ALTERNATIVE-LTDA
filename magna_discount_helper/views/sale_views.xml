@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="magna_view_order_form_discount" model="ir.ui.view">
+        <field name="name">magna.view_order_form_discount</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']" position="before">
+                <group>
+                    <group>
+                        <label for="my_discount"/>
+                        <div class="o_row">
+                            <field name="my_discount" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        </div>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
