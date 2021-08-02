@@ -20,4 +20,4 @@ class SaleOrderLine(models.Model):
                         break
                 if discount_amt and rec.discount > discount_amt:
                     raise UserError(
-                        _('You are not eligible to give discount more than %s %%.' % group.discount))
+                        _('You are not eligible to give discount more than %s %%.') % group.discount)
