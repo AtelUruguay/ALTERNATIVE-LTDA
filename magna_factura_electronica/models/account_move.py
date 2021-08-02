@@ -138,9 +138,9 @@ class AccountMove(models.Model):
 
     def get_fe_ws_url(self):
         self.ensure_one()
-        # ********* PROD **********
-        ws_location_url = self.env["ir.config_parameter"].sudo().get_param("magna_fe_ws_location_prod")
-        # ********* PROD **********
+        # ********* TEST **********
+        ws_location_url = self.env["ir.config_parameter"].sudo().get_param("magna_fe_ws_location_test")
+        # ********* TEST **********
         logging.info('ws_location_url: %s', ws_location_url)
         return ws_location_url
 
