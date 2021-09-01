@@ -213,7 +213,10 @@ class AccountMove(models.Model):
             options._adicionalDocComSerie = 'v13id' + str(rec.id)
             options._adicionalDocComCodigo = rec.name
             options._adicionalSucursalId = rec.company_id.fe_codigo_principal_sucursal
-            options._adicionalAdenda = ''
+            adenda = "Nro Interno ERP: " + rec.name
+            if rec.narration:
+                adenda += "\nInformación adicional: " + rec.narration
+            options._adicionalAdenda = adenda
             options._adicionalCorreoReceptor = ''
             if rec.fe_Contingencia:
                 options._serieComprobante = rec.fe_SerieContingencia
