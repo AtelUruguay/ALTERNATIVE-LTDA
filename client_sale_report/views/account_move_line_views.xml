@@ -1,0 +1,48 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="account_move_line_list">
+      <field name="name">Client report sale tree</field>
+      <field name="model">account.move.line</field>
+      <field name="arch" type="xml">
+        <tree create="0" edit="0" delete="0">
+          <field name="partner_id"/>
+          <field name="partner_id_email_related"/>
+          <field name="product_id"/>
+          <field name="move_name"/>
+          <field name="move_id_invoice_origin_related"/>
+          <field name="parent_state"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_account_move_line_filter_inherit" model="ir.ui.view">
+       <field name="name">Filter Account move line</field>
+       <field name="model">account.move.line</field>
+      <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+        <field name="arch" type="xml">
+            <filter name="groupby_date" position="after">
+               <filter string="Product" name="groupby_product_id" domain="[]" context="{'group_by': 'product_id'}"/>
+            </filter>
+       </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="action_account_move_line_list">
+        <field name="name">client_sale_report window</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="account_move_line_list"/>
+    </record>
+
+    <!-- actions -->
+
+    <menuitem name="Report client sale" id="menu_1_list" parent="account.menu_finance_receivables"
+              groups="account.group_account_manager"
+              action="action_account_move_line_list" sequence="22"/>
+
+  </data>
+</odoo>
