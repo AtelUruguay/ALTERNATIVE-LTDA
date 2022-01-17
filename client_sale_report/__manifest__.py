@@ -11,7 +11,7 @@
 
     'category': 'Accounting/Accounting',
     'version': '0.1',
-    'depends': ['account'],
+    'depends': ['account', 'sale'],
 
     # always loaded
     'data': [

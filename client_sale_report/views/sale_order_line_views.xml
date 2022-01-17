@@ -8,7 +8,9 @@
                 <tree create="0" edit="0" delete="0">
                     <field name="order_partner_id"/>
                     <field name="partner_id_email_related"/>
-                    <field name="name"/>
+                    <field name="product_id"/>
+                    <field name="order_id"/>
+                    <field name="date_order" string="Quotation Date"/>
                     <field name="state"/>
                 </tree>
             </field>
@@ -17,7 +19,7 @@
         <!-- actions opening views on models -->
 
     <record model="ir.actions.act_window" id="action_sale_order_line_view_tree">
-        <field name="name">client_sale_report window</field>
+        <field name="name">Quotation client</field>
         <field name="res_model">sale.order.line</field>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="sale_order_line_view_tree"/>
@@ -25,8 +27,8 @@
 
     <!-- actions -->
 
-    <menuitem name="Report quotation client" id="menu_2_list" parent="sale.menu_sale_report"
+    <menuitem name="Quotation client" id="menu_2_list" parent="sale.menu_sale_report"
               groups="account.group_account_manager"
-              action="action_account_move_line_list" sequence="22"/>
+              action="action_sale_order_line_view_tree" sequence="22"/>
     </data>
 </odoo>
