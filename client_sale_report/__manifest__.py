@@ -16,5 +16,6 @@
     # always loaded
     'data': [
         'views/account_move_line_views.xml',
+        'views/sale_order_line_views.xml',
     ],
 }
