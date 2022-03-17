@@ -1,4 +1,4 @@
-from odoo import fields, models, api
+from odoo import fields, models, api, _
 from odoo.tools.misc import formatLang, get_lang
 
 class SaleOrderLine(models.Model):
