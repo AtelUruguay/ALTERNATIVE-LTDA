@@ -244,7 +244,10 @@ class AccountMove(models.Model):
                 monto_item = (line.quantity * line.price_unit) - monto_descuento
                 line_aux._descuentoMonto = monto_descuento
                 line_aux._montoItem = monto_item
-                if line.tax_ids:
+
+                if monto_item == 0:
+                    line_aux._indicadorFacturacion = self.env.ref('conector_fe_proinfo.fe_ind_fact_dgi_5').code
+                elif line.tax_ids:
                     # if line.product_id.tax_ids[0].price_include:
                     #     options._indicadorMontoBruto = True
 
