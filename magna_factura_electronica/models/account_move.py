@@ -246,7 +246,7 @@ class AccountMove(models.Model):
                 line_aux._montoItem = monto_item
 
                 if monto_item == 0:
-                    line_aux._indicadorFacturacion = self.env.ref('conector_fe_proinfo.fe_ind_fact_dgi_5').code
+                    line_aux._indicadorFacturacion = self.env.ref('magna_factura_electronica.fe_ind_fact_dgi_5').code
                 elif line.tax_ids:
                     # if line.product_id.tax_ids[0].price_include:
                     #     options._indicadorMontoBruto = True
