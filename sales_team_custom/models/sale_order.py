@@ -11,7 +11,9 @@ class SaleOrderLine(models.Model):
 
     def _compute_is_group_sale_salesman(self, is_default=False):
         result = self.user_has_groups(
-            'sales_team.group_sale_salesman,sales_team.group_sale_salesman_all_leads,!sale.group_sale_manager')
+            'sales_team.group_sale_salesman,'
+            'sales_team.group_sale_salesman_all_leads,'
+            '!sales_team.group_sale_manager')
         if is_default:
             return result
         for rec in self:
