@@ -10,7 +10,7 @@ sales_team.group_sale_salesman_all_leads ó 	sales_team.group_sale_salesman
 ===========================================================================
  """,
     'website': 'https://www.odoo.com/page/crm',
-    'depends': ['sales_team', 'sales'],
+    'depends': ['sales_team', 'sale'],
     'data': ['views/sale_order_views.xml',
              ],
     'installable': True,
