@@ -234,6 +234,8 @@ class AccountMove(models.Model):
             monto_no_gravado = 0
             monto_neto_iva_tasa_basica = 0
             monto_neto_iva_tasa_minima = 0
+            monto_iva_tasa_basica = 0
+            monto_iva_tasa_minima = 0
             for line in rec.invoice_line_ids:
                 line_aux = fe_xml_factory.cfeFactoryOptionsProductLineDetail()
                 line_aux._cantidad = line.quantity
@@ -260,16 +262,18 @@ class AccountMove(models.Model):
                         monto_no_gravado += monto_item
                     if fe_tax_codigo_dgi_code == '2' and type_tax_use == 'sale':
                         monto_neto_iva_tasa_minima += monto_item
+                        monto_iva_tasa_minima += line.price_total - monto_item
                     if fe_tax_codigo_dgi_code == '3' and type_tax_use == 'sale':
                         monto_neto_iva_tasa_basica += monto_item
+                        monto_iva_tasa_basica += line.price_total - monto_item
                 else:
                     monto_no_gravado += monto_item
                     line_aux._indicadorFacturacion = self.env.ref('magna_factura_electronica.fe_ind_fact_dgi_1').code
 
                 options._lineasDetalle.append(line_aux)
 
-            monto_iva_tasa_minima = monto_neto_iva_tasa_minima * account_tax_iva_minima_id[0].amount /100
-            monto_iva_tasa_basica = monto_neto_iva_tasa_basica * account_tax_iva_basica_id[0].amount / 100
+            # monto_iva_tasa_minima = monto_neto_iva_tasa_minima * account_tax_iva_minima_id[0].amount /100
+            # monto_iva_tasa_basica = monto_neto_iva_tasa_basica * account_tax_iva_basica_id[0].amount / 100
             options._montoTotalNoGravado = monto_no_gravado
             options._montoNetoIVATasaMinima = monto_neto_iva_tasa_minima
             options._montoIVATasaMinima = monto_iva_tasa_minima
