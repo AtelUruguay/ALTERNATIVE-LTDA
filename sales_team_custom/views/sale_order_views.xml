@@ -6,20 +6,18 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-
                 <xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_unit']" position="attributes">
-                    <attribute name="attrs">{'readonly': ['|',('is_group_sale_salesman', '=', True)]}</attribute>
+                    <attribute name="readonly">is_group_sale_salesman == True</attribute>
                 </xpath>
                 <xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_unit']" position="after">
-                    <field name="is_group_sale_salesman" invisible="1"/>
+                    <field invisible="1" name="is_group_sale_salesman"/>
                 </xpath>
                 <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="attributes">
-                    <attribute name="attrs">{'readonly': ['|',('is_group_sale_salesman', '=', True)]}</attribute>
+                    <attribute name="readonly">is_group_sale_salesman == True</attribute>
                 </xpath>
                 <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
-                    <field name="is_group_sale_salesman" invisible="1"/>
-                </xpath>
-            </field>
+                    <field invisible="1" name="is_group_sale_salesman"/>
+                </xpath></field>
         </record>
     </data>
 </odoo>

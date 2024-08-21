@@ -10,7 +10,7 @@
     'website': "http://www.quanam.com",
 
     'category': 'Accounting/Accounting',
-    'version': '0.1',
+    'version': '17.0.1.0.0',
     'depends': ['account', 'sale'],
 
     # always loaded

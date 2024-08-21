@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name' : 'Magna - Factura electrónica',
-    'version' : '0.1',
+    'version': '17.0.1.0.0',
     'summary': 'Realiza el envío de los datos de factura al proveedor de factura electrónica',
     'description': """
     """,

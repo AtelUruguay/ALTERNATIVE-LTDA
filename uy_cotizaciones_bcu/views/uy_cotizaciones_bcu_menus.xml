@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <menuitem name="Cotizaciones" id="menu_root_interfaz_coti" parent="account.menu_finance" sequence="16"/>
+    <menuitem name="Monedas Interfaz" id="menu_moneda_interfaz" parent="menu_root_interfaz_coti" sequence="16"
+              action="action_interfaz_monedas"/>
+    <menuitem action="action_cotizaciones" name="Actualizar Cotizaciones" id="menu_cotizaciones"
+              parent="menu_root_interfaz_coti" sequence="26"/>
+
+</odoo>

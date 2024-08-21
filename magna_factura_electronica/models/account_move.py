@@ -97,11 +97,11 @@ class AccountMove(models.Model):
                 rec.fe_qr_img = qr_image
 
 
-    @api.depends('type', 'partner_id', 'partner_id.fe_tipo_documento')
+    @api.depends('move_type', 'partner_id', 'partner_id.fe_tipo_documento')
     def _compute_doct_type_dgi(self):
         for rec in self:
             value = ''
-            invoice_type = rec.type
+            invoice_type = rec.move_type
             consumidor_final = rec.partner_id.fe_tipo_documento != '2'
             if consumidor_final:  # eTicket
                 if invoice_type == 'out_invoice':  # Factura de cliente

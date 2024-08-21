@@ -22,7 +22,7 @@
 
 {
     'name': 'Account Invoice Line Beta',
-    'version': '1.0',
+    'version': '17.0.1.0.0',
     'category': 'Accounting & Finance',
     # 'sequence': 7,
     'summary': 'Account Invoice Line Beta',

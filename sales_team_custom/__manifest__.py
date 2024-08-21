@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Sales Teams Custom',
-    'version': '1.0',
+    'version': '17.0.1.0.0',
     'category': 'Sales/Sales',
     'summary': 'Sales Teams Custom',
     'description': """
