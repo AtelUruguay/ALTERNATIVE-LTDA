@@ -2,6 +2,7 @@ from openupgradelib import openupgrade
 
 
 @openupgrade.migrate(use_env=True)
+@openupgrade.logging(args_details=True)
 def migrate(env, version):
     """
     The objective of this is delete the original view form the module how bring the functionality
@@ -19,3 +20,4 @@ def migrate(env, version):
         ],
         delete_childs=True
     )
+    env['ir.ui.view'].search([('arch_db', 'like', 'revaluation_to_reverse')]).unlink()
