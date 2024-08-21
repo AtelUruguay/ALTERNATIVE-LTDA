@@ -1,23 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-        <data>
-            <!-- CAMBIOS EN LA COMPAÑIA -->
-            <record model='ir.ui.view' id='res_company_uy_FE'>
-                <field name='name'>uy.fe.form.company</field>
-                <field name='model'>res.company</field>
-                <field name='inherit_id' ref='base.view_company_form'/>
-                <field name='type'>form</field>
-                <field name='arch' type='xml'>
-                    <notebook position="inside">
-                        <page string="Facturación Electrónica">
-                            <group>
-                                <field name="fe_nombre_fantasia"/>
-                                <field name="fe_codigo_principal_sucursal" attrs="{'required':[('parent_id','=',False)]}"/>
-                            </group>
-                        </page>
-                    </notebook>
-                </field>
-            </record>
-        </data>
+    <data>
+        <!-- CAMBIOS EN LA COMPAÑIA -->
+        <record id="res_company_uy_FE" model="ir.ui.view">
+            <field name="name">uy.fe.form.company</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Facturación Electrónica">
+                        <group>
+                            <field name="fe_nombre_fantasia"/>
+                            <field name="fe_codigo_principal_sucursal" required="parent_id == False"/>
+                        </group>
+                    </page>
+                </notebook></field>
+        </record>
+    </data>
 </odoo>

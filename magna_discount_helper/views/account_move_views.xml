@@ -1,24 +1,21 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
-    <record id="magna_view_move_form_discount" model="ir.ui.view">
-        <field name="name">magna.view_move_form_discount</field>
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='invoice_line_ids']" position="before">
-                <group>
+        <record id="magna_view_move_form_discount" model="ir.ui.view">
+            <field name="name">magna.view_move_form_discount</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line_ids']" position="before">
                     <group>
-                        <label for="my_discount"/>
-                        <div class="o_row">
-                            <field name="my_discount" attrs="{'readonly':[('state','!=','draft')]}"/>
-                        </div>
+                        <group>
+                            <label for="my_discount"/>
+                            <div class="o_row">
+                                <field name="my_discount" readonly="state != 'draft'"/>
+                            </div>
+                        </group>
                     </group>
-                </group>
-            </xpath>
-        </field>
-    </record>
-
-</data>
+                </xpath></field>
+        </record>
+    </data>
 </odoo>

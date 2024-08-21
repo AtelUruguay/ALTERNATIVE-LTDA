@@ -37,5 +37,3 @@ class account_tax(models.Model):
                 except:
                     raise exceptions.ValidationError(_("The field 'Line Beta' must be a number of 3 digits"))
 
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

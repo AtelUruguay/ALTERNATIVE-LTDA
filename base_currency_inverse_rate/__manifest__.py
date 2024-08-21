@@ -18,8 +18,8 @@
 #
 ##############################################################################
 {
-    'name': 'Base Currency Inverse Rate',
-    'version': '12.0.1.0.0',
+    'name': 'Skeleton addon of Base Currency Inverse Rate',
+    'version': '17.0.1.0.0',
     'category': 'Accounting',
     'sequence': 14,
     'author': 'ADHOC SA',
@@ -32,8 +32,6 @@
     'external_dependencies': {
     },
     'data': [
-        'views/res_currency_views.xml',
-        'views/res_currency_rate_views.xml',
     ],
     'demo': [
     ],

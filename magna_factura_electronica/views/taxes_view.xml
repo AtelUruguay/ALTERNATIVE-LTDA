@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-      <record id="view_tax_form_uy_fe" model="ir.ui.view">
+        <record id="view_tax_form_uy_fe" model="ir.ui.view">
             <field name="name">account.tax.form.inherit</field>
             <field name="model">account.tax</field>
             <field name="inherit_id" ref="account.view_tax_form"/>
@@ -9,10 +9,9 @@
                 <!--<field name="tax_group_id" position="after">-->
                 <group name="advanced_booleans" position="after">
                     <group name="fe" string="Facturación Electrónica">
-                        <field name="fe_tax_codigo_dgi" attrs="{'required':[('type_tax_use','=','sale')], 'invisible':[('type_tax_use','!=','sale')]}"/>
+                        <field invisible="type_tax_use != 'sale'" name="fe_tax_codigo_dgi" required="type_tax_use == 'sale'"/>
                     </group>
-                </group>
-            </field>
-      </record>
+                </group></field>
+        </record>
     </data>
 </odoo>

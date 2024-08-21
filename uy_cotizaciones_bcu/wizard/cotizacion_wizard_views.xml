@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <record id="cotizaciones_wizard_view" model="ir.ui.view">
+        <field name="name">cotizaciones.wizard.view</field>
+        <field name="model">cotizaciones.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cotizaciones">
+                <group>
+                    <p string="Al hacer click en el boton 'Actualizar' se obtendrán las cotizaciones de las monedas definidas en el menu 'Monedas Interfaz' desde Banco Central del Uruguay para
+                        el rango de fechas definido"/>
+                </group>
+                <group>
+                    <group>
+                        <field name="fecha_desde"/>
+                    </group>
+                    <group>
+                        <field name="fecha_hasta"/>
+                    </group>
+                </group>
+                <separator/>
+                <footer>
+                    <button class="oe_highlight" name="action_update" type="object" string="Actualizar"/>
+                    <button class="oe_link" string='Cancelar' special='cancel'/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cotizaciones" model="ir.actions.act_window">
+        <field name="name">Actualizar las Cotizaciones</field>
+        <field name="res_model">cotizaciones.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="cotizaciones_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

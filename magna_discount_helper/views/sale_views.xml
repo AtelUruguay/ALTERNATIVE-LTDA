@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
     <record id="magna_view_order_form_discount" model="ir.ui.view">
         <field name="name">magna.view_order_form_discount</field>
         <field name="model">sale.order</field>
@@ -11,12 +10,10 @@
                     <group>
                         <label for="my_discount"/>
                         <div class="o_row">
-                            <field name="my_discount" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="my_discount" readonly="state != 'draft'"/>
                         </div>
                     </group>
                 </group>
-            </xpath>
-        </field>
+            </xpath></field>
     </record>
-
 </odoo>

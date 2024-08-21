@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <record id="interfaz_monedas_form" model="ir.ui.view">
+        <field name="name">interfaz.monedas.form</field>
+        <field name="model">interfaz.monedas</field>
+        <field name="arch" type="xml">
+            <form string="Interfaz Monedas">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="codigo_bcu"/>
+                        </group>
+                        <group>
+                            <!--                            TODO res.currency no tiene la domain="[('company_id','=',company_id)]"-->
+                            <field name="currency_id" options="{'no_create':true}"/>
+                            <field name="company_id" options="{'no_create':true}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="interfaz_monedas_tree" model="ir.ui.view">
+        <field name="name">interfaz.monedas.tree</field>
+        <field name="model">interfaz.monedas</field>
+        <field name="arch" type="xml">
+            <tree string="Interfaz Monedas">
+                <field name="currency_id"/>
+                <field name="codigo_bcu"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_interfaz_monedas" model="ir.actions.act_window">
+        <field name="name">Monedas Interfaz</field>
+        <field name="res_model">interfaz.monedas</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="interfaz_monedas_tree"/>
+    </record>
+</odoo>

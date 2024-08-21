@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from . import cotizacion
+from . import base
 from . import interfaz_monedas
-from . import company
+from . import res_company
 from . import soap
+from . import soap_request

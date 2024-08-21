@@ -1,77 +1,67 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
-    <record id="magna_fe_view_move_form" model="ir.ui.view">
-        <field name="name">magna.fe_account_move_form</field>
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_form"/>
-        <field name="arch" type="xml">
-
-            <xpath expr="//h1//field[@name='name']" position="after">
-                <div class="oe_right oe_button_box" style="width: 350px; margin-top: -17px; margin-right: -14px;" name="buttons">
-                    <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', False)]}" icon="fa-bolt" string="CFE Activa"></button>-->
-                    <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', True)]}" icon="fa fa-exclamation-triangle" string="CFE Desactivada"></button>-->
-                    <group col="5" attrs="{'invisible':[('state','==','draft')]}">
-                        <div/>
-                        <group col="3" colspan="1">
+        <record id="magna_fe_view_move_form" model="ir.ui.view">
+            <field name="name">magna.fe_account_move_form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//h1//field[@name='name']" position="after">
+                    <div class="oe_right oe_button_box" name="buttons" style="width: 350px; margin-top: -17px; margin-right: -14px;">
+                        <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', False)]}" icon="fa-bolt" string="CFE Activa"></button>-->
+                        <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', True)]}" icon="fa fa-exclamation-triangle" string="CFE Desactivada"></button>-->
+                        <group col="5" invisible="state == 'draft'">
                             <div/>
-                            <field name="fe_Serie" nolabel="1" readonly="1" attrs="{'invisible': [('fe_Serie', '=', False)]}"/>
-                            <field name="fe_DocNro" nolabel="1" readonly="1" attrs="{'invisible': [('fe_DocNro', '=', False)]}"/>
+                            <group col="3" colspan="1">
+                                <div/>
+                                <field invisible="fe_Serie == False" name="fe_Serie" nolabel="1" readonly="1"/>
+                                <field invisible="fe_DocNro == False" name="fe_DocNro" nolabel="1" readonly="1"/>
+                            </group>
+                            <div/>
                         </group>
-                        <div/>
-                    </group>
-                    <!--<field name="fe_activa" invisible="1" nolabel="1"/>-->
-                </div>
-            </xpath>
-
-            <button name="button_draft" position="attributes">
-                <attribute name="attrs">{'invisible': ['|','|',('restrict_mode_hash_table', '=', True),('state', 'not in', ('posted', 'cancel')),
-                    ('fe_Estado','=','AS')]}</attribute>
-            </button>
-
-            <notebook position="inside">
-                <page string="Factura Electrónica" attrs="{'invisible':[('state','=','draft')]}">
-                    <group>
+                        <!--<field name="fe_activa" invisible="1" nolabel="1"/>-->
+                    </div>
+                </xpath>
+                <button name="button_draft" position="attributes">
+                    <attribute name="invisible">restrict_mode_hash_table == True or state not in ('posted', 'cancel') or fe_Estado == 'AS'</attribute>
+                </button>
+                <notebook position="inside">
+                    <page invisible="state == 'draft'" string="Factura Electrónica">
                         <group>
-                            <field name="fe_Contingencia" attrs="{'readonly':[('fe_Estado','=','AS')]}"/>
-                            <field name="fe_SerieContingencia" attrs="{'invisible': [('fe_Contingencia','=',False)]}"/>
-                            <field name="fe_DocNroContingencia" attrs="{'invisible': [('fe_Contingencia','=',False)]}"/>
-                            <field name="fe_FechaHoraFirma" readonly="1"/>
-                            <field name="fe_URLParaVerificarQR" widget="url" readonly="1"/>
-                            <field name="fe_URLParaVerificarTexto" widget="url" readonly="1"/>
-                            <field name="fe_CAEDNro" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
-                            <field name="fe_CAEHNro" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
-                            <field name="fe_CAENA" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
-                            <field name="fe_CAEFA" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
-                            <field name="fe_CAEFVD" attrs="{'readonly': [('fe_Contingencia','=',False)]}"/>
-                            <field name="fe_DGIResolucion" readonly="1"/>
-                            <field name="fe_Estado" attrs="{'invisible': True}"/>
-                            <field name="fe_tipo_comprobante" readonly="1"/>
-                            <button name="invoice_send_fe_proinfo" type="object" string="Volver a enviar" attrs="{'invisible': ['|',('fe_Estado','=','AS'),('fe_Contingencia','=',False)]}"/>
+                            <group>
+                                <field name="fe_Contingencia" readonly="fe_Estado == 'AS'"/>
+                                <field invisible="fe_Contingencia == False" name="fe_SerieContingencia"/>
+                                <field invisible="fe_Contingencia == False" name="fe_DocNroContingencia"/>
+                                <field name="fe_FechaHoraFirma" readonly="1"/>
+                                <field name="fe_URLParaVerificarQR" readonly="1" widget="url"/>
+                                <field name="fe_URLParaVerificarTexto" readonly="1" widget="url"/>
+                                <field name="fe_CAEDNro" readonly="fe_Contingencia == False"/>
+                                <field name="fe_CAEHNro" readonly="fe_Contingencia == False"/>
+                                <field name="fe_CAENA" readonly="fe_Contingencia == False"/>
+                                <field name="fe_CAEFA" readonly="fe_Contingencia == False"/>
+                                <field name="fe_CAEFVD" readonly="fe_Contingencia == False"/>
+                                <field name="fe_DGIResolucion" readonly="1"/>
+                                <field invisible="True" name="fe_Estado"/>
+                                <field name="fe_tipo_comprobante" readonly="1"/>
+                                <button invisible="fe_Estado == 'AS' or fe_Contingencia == False" name="invoice_send_fe_proinfo" string="Volver a enviar" type="object"/>
+                            </group>
+                            <group>
+                                <field invisible="fe_qr_img == False" name="fe_qr_img" nolabel="1" style="width:130px;height:130px;" widget="image"/>
+                            </group>
                         </group>
-                        <group>
-                            <field name="fe_qr_img" widget="image" nolabel="1" attrs="{'invisible': [('fe_qr_img', '=', False)]}" style="width:130px;height:130px;"/>
-                        </group>
-                    </group>
-                </page>
-            </notebook>
-        </field>
-    </record>
-
-    <record id="magna_fe_view_move_tree" model="ir.ui.view">
-        <field name="name">magna.fe_account_move_tree</field>
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_invoice_tree"/>
-        <field name="arch" type="xml">
-            <field name="amount_residual_signed" position="after">
-                <field name="amount_untaxed" string="Impuestos excluidos origen" sum="Total" optional="show"/>
-                <field name="amount_tax" string="Impuesto origen" sum="Total" optional="hide"/>
-                <field name="amount_total" string="Total origen" sum="Total" optional="show"/>
-                <field name="amount_residual" string="Importe adeudado origen" sum="Importe adeudado origen" optional="show"/>
-            </field>
-        </field>
-    </record>
-
-</data>
+                    </page>
+                </notebook></field>
+        </record>
+        <record id="magna_fe_view_move_tree" model="ir.ui.view">
+            <field name="name">magna.fe_account_move_tree</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <field name="amount_residual_signed" position="after">
+                    <field name="amount_untaxed" optional="show" string="Impuestos excluidos origen" sum="Total"/>
+                    <field name="amount_tax" optional="hide" string="Impuesto origen" sum="Total"/>
+                    <field name="amount_total" optional="show" string="Total origen" sum="Total"/>
+                    <field name="amount_residual" optional="show" string="Importe adeudado origen" sum="Importe adeudado origen"/></field></field>
+        </record>
+    </data>
 </odoo>
