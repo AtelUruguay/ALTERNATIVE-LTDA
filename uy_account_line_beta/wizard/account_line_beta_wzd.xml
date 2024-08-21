@@ -10,7 +10,7 @@
                         <div class="oe_inline" style="float: left;">
                             <span class="fa fa-warning" style="color: #DD0000;"/>
                             <span style="font-weight: bold !important;">
-                                Not results found, please check the month, year and the line beta value of each account tax used.
+                                No hay resultado, por favor verfique el mes, año y valor de la línea beta de cada cuenta de impuestos utilizada.
                             </span>
                         </div>
                         <div class="oe_right fa fa-close" onclick="javascript:$($.find('.show_error')).slideUp();" style="font-weight: bold !important; cursor: pointer; color: #DD0000;"/>

@@ -16,19 +16,6 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: uy_account_line_beta
-#: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
-msgid ""
-"<span class=\"fa fa-warning\" style=\"color: #DD0000;\"/>\n"
-"                            <span style=\"font-weight: bold !important;\">\n"
-"                                Not results found, please check the month, year and the line beta value of each account tax used.\n"
-"                            </span>"
-msgstr ""
-"<span class=\"fa fa-warning\" style=\"color: #DD0000;\"/>\n"
-"                            <span style=\"font-weight: bold !important;\">\n"
-"                                No hay resultado, por favor verfique el mes, año y valor de la línea beta de cada cuenta de impuestos utilizada.\n"
-"                            </span>"
-
-#. module: uy_account_line_beta
 #: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__tax_ids
 msgid "Account Taxes"
 msgstr "Cuenta Impuestos"
@@ -152,21 +139,6 @@ msgid "June"
 msgstr ""
 
 #. module: uy_account_line_beta
-#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__write_uid
-msgid "Last Updated by"
-msgstr "Última actualización por"
-
-#. module: uy_account_line_beta
-#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__write_date
-msgid "Last Updated on"
-msgstr "Última actualización el"
-
-#. module: uy_account_line_beta
-#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_tax__line_beta
-msgid "Line Beta"
-msgstr "Línea Beta"
-
-#. module: uy_account_line_beta
 #: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__03
 msgid "March"
 msgstr "Marzo"
@@ -177,20 +149,9 @@ msgid "May"
 msgstr "Mayo"
 
 #. module: uy_account_line_beta
-#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__month
-#: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
-msgid "Month"
-msgstr "Mes"
-
-#. module: uy_account_line_beta
 #: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
 msgid "Next"
 msgstr "Siguiente"
-
-#. module: uy_account_line_beta
-#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__not_result
-msgid "Not result"
-msgstr "Sin resultados"
 
 #. module: uy_account_line_beta
 #: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__11
