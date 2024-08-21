@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Skeleton addon of Base Currency Inverse Rate',
-    'version': '17.0.1.0.1',
+    'version': '17.0.1.0.2',
     'category': 'Accounting',
     'sequence': 14,
     'author': 'ADHOC SA',
