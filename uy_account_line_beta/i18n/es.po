@@ -1,14 +1,14 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* uy_account_line_beta
+# 	* uy_account_line_beta
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0-20151027\n"
+"Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-13 20:24+0000\n"
-"PO-Revision-Date: 2017-02-13 20:24+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2024-08-21 10:18+0000\n"
+"PO-Revision-Date: 2024-08-21 10:18+0000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,222 +16,231 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: uy_account_line_beta
-#: view:account.line.beta.wzd:uy_account_line_beta.account_line_beta_wzd_form
-#: code:addons/uy_account_line_beta/wizard/account_line_beta_wzd.py:140
-#: code:addons\uy_account_line_beta\wizard\account_line_beta_wzd.py:140
-#: code:addons/uy_account_line_beta/wizard/account_line_beta_wzd.py:158
-#: code:addons\uy_account_line_beta\wizard\account_line_beta_wzd.py:158
-#: model:ir.actions.act_window,name:uy_account_line_beta.action_account_line_beta_wzd
-#: model:ir.ui.menu,name:uy_account_line_beta.menu_account_line_beta_wzd
-#, python-format
-msgid "Formulario 2/181"
-msgstr "Formulario 2/181"
+#: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
+msgid ""
+"<span class=\"fa fa-warning\" style=\"color: #DD0000;\"/>\n"
+"                            <span style=\"font-weight: bold !important;\">\n"
+"                                Not results found, please check the month, year and the line beta value of each account tax used.\n"
+"                            </span>"
+msgstr ""
+"<span class=\"fa fa-warning\" style=\"color: #DD0000;\"/>\n"
+"                            <span style=\"font-weight: bold !important;\">\n"
+"                                No hay resultado, por favor verfique el mes, año y valor de la línea beta de cada cuenta de impuestos utilizada.\n"
+"                            </span>"
 
 #. module: uy_account_line_beta
-#: field:account.line.beta.wzd,tax_ids:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__tax_ids
 msgid "Account Taxes"
 msgstr "Cuenta Impuestos"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,month:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__04
 msgid "April"
 msgstr "Abril"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,month:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__08
 msgid "August"
 msgstr "Agosto"
 
 #. module: uy_account_line_beta
-#: view:account.line.beta.wzd:uy_account_line_beta.account_line_beta_wzd_form
+#: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
 msgid "Back"
 msgstr "Atrás"
 
 #. module: uy_account_line_beta
-#: view:account.line.beta.wzd:uy_account_line_beta.account_line_beta_wzd_form
+#: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
 msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: uy_account_line_beta
-#: view:account.line.beta.wzd:uy_account_line_beta.account_line_beta_wzd_form
+#: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
 msgid "Close"
 msgstr "Cerrar"
 
 #. module: uy_account_line_beta
-#: field:account.line.beta.wzd,create_uid:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__create_uid
 msgid "Created by"
-msgstr "Created by"
+msgstr "Creado por"
 
 #. module: uy_account_line_beta
-#: field:account.line.beta.wzd,create_date:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__create_date
 msgid "Created on"
-msgstr "Created on"
+msgstr "Creado el"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,month:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__12
 msgid "December"
 msgstr "Diciembre"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,state:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__display_name
+msgid "Display Name"
+msgstr "Nombre"
+
+#. module: uy_account_line_beta
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__state__exported
 msgid "Exported"
 msgstr "Exportado"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,month:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__02
 msgid "February"
 msgstr "Febrero"
 
 #. module: uy_account_line_beta
-#: field:account.line.beta.wzd,file:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__file
 msgid "File"
 msgstr "Archivo"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,file_format:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__file_format__csv
 msgid "File (.csv)"
 msgstr "Archivo (.csv)"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,file_format:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__file_format__txt
 msgid "File (.txt)"
 msgstr "Archivo (.txt)"
 
 #. module: uy_account_line_beta
-#: view:account.line.beta.wzd:uy_account_line_beta.account_line_beta_wzd_form
-#: field:account.line.beta.wzd,file_format:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__file_format
+#: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
 msgid "File format"
-msgstr "Formato de archivo"
+msgstr "Formato"
 
 #. module: uy_account_line_beta
-#: field:account.line.beta.wzd,file_name:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__file_name
 msgid "File name"
-msgstr "Nombre de archivo"
+msgstr "Nombre"
 
 #. module: uy_account_line_beta
-#: field:account.line.beta.wzd,id:0
+#: model:ir.actions.act_window,name:uy_account_line_beta.action_account_line_beta_wzd
+#: model:ir.ui.menu,name:uy_account_line_beta.menu_account_line_beta_wzd
+#: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
+msgid "Formulario 2/181"
+msgstr ""
+
+#. module: uy_account_line_beta
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,state:0
+#: model:ir.ui.menu,name:uy_account_line_beta.menu_informes_legales_root
+msgid "Informes Legales"
+msgstr ""
+
+#. module: uy_account_line_beta
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__state__init
 msgid "Init"
 msgstr "Inicio"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,month:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__01
 msgid "January"
 msgstr "Enero"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,month:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__07
 msgid "July"
 msgstr "Julio"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,month:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__06
 msgid "June"
-msgstr "Junio"
+msgstr ""
 
 #. module: uy_account_line_beta
-#: field:account.line.beta.wzd,write_uid:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__write_uid
 msgid "Last Updated by"
-msgstr "Last Updated by"
+msgstr "Última actualización por"
 
 #. module: uy_account_line_beta
-#: field:account.line.beta.wzd,write_date:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__write_date
 msgid "Last Updated on"
-msgstr "Last Updated on"
+msgstr "Última actualización el"
 
 #. module: uy_account_line_beta
-#: field:account.tax.code,line_beta:0
-#: model:ir.ui.menu,name:uy_account_line_beta.menu_line_beta_root
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_tax__line_beta
 msgid "Line Beta"
 msgstr "Línea Beta"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,month:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__03
 msgid "March"
 msgstr "Marzo"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,month:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__05
 msgid "May"
 msgstr "Mayo"
 
 #. module: uy_account_line_beta
-#: view:account.line.beta.wzd:uy_account_line_beta.account_line_beta_wzd_form
-#: field:account.line.beta.wzd,month:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__month
+#: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
 msgid "Month"
 msgstr "Mes"
 
 #. module: uy_account_line_beta
-#: view:account.line.beta.wzd:uy_account_line_beta.account_line_beta_wzd_form
+#: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
 msgid "Next"
 msgstr "Siguiente"
 
 #. module: uy_account_line_beta
-#: field:account.line.beta.wzd,not_result:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__not_result
 msgid "Not result"
-msgstr "Sin resultado"
+msgstr "Sin resultados"
 
 #. module: uy_account_line_beta
-#: view:account.line.beta.wzd:uy_account_line_beta.account_line_beta_wzd_form
-msgid "Not results found, please check the month, year and the line beta value of each account tax used."
-msgstr "No hay resultado, por favor verfique el mes, año y valor de la línea beta de cada cuenta de impuestos utilizada."
-
-#. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,month:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__11
 msgid "November"
 msgstr "Noviembre"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,month:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__10
 msgid "October"
-msgstr "Octubre"
+msgstr "Octubr"
 
 #. module: uy_account_line_beta
-#: selection:account.line.beta.wzd,month:0
+#: model:ir.model.fields.selection,name:uy_account_line_beta.selection__account_line_beta_wzd__month__09
 msgid "September"
 msgstr "Septiembre"
 
 #. module: uy_account_line_beta
-#: field:account.line.beta.wzd,show_all:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__show_all
 msgid "Show all"
-msgstr "Mostrar Todo"
+msgstr "Mostrar todos"
 
 #. module: uy_account_line_beta
-#: field:account.line.beta.wzd,state:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__state
 msgid "State"
 msgstr "Estado"
 
 #. module: uy_account_line_beta
-#: model:ir.model,name:uy_account_line_beta.model_account_tax_code
-msgid "Tax Code"
-msgstr "Código impuesto"
+#: model:ir.model,name:uy_account_line_beta.model_account_tax
+msgid "Tax"
+msgstr "Impuesto"
 
 #. module: uy_account_line_beta
-#: view:account.line.beta.wzd:uy_account_line_beta.account_line_beta_wzd_form
+#: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
 msgid "Taxes"
 msgstr "Impuestos"
 
 #. module: uy_account_line_beta
-#: code:addons/uy_account_line_beta/account_invoice.py:36
-#: code:addons\uy_account_line_beta\account_invoice.py:36
+#. odoo-python
+#: code:addons/uy_account_line_beta/models/account.py:0
 #, python-format
 msgid "The field 'Line Beta' must be a number of 3 digits"
 msgstr "El campo 'Línea Beta' debe ser un número de 3 dígitos"
 
 #. module: uy_account_line_beta
-#: view:account.line.beta.wzd:uy_account_line_beta.account_line_beta_wzd_form
-#: field:account.line.beta.wzd,year:0
+#: model:ir.model.fields,field_description:uy_account_line_beta.field_account_line_beta_wzd__year
+#: model_terms:ir.ui.view,arch_db:uy_account_line_beta.account_line_beta_wzd_form
 msgid "Year"
 msgstr "Año"
 
 #. module: uy_account_line_beta
-#: code:addons/uy_account_line_beta/wizard/account_line_beta_wzd.py:133
-#: code:addons\uy_account_line_beta\wizard\account_line_beta_wzd.py:133
-#, python-format
-msgid "line_beta"
-msgstr "linea_beta"
-
+#: model:ir.model,name:uy_account_line_beta.model_account_line_beta_wzd
+msgid "account.line.beta.wzd"
+msgstr ""
