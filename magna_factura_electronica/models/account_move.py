@@ -129,9 +129,9 @@ class AccountMove(models.Model):
 
 
     # se llama al post de super y luego se envía la información de FE
-    def post(self):
-        res = super(AccountMove, self).post()
-        if self.type in ('out_invoice', 'out_refund'):
+    def action_post(self):
+        res = super(AccountMove, self).action_post()
+        if self.move_type in ('out_invoice', 'out_refund'):
             self.invoice_send_fe_proinfo()
         return res
 
@@ -284,7 +284,7 @@ class AccountMove(models.Model):
             options._montoTotal = monto_no_gravado + monto_neto_iva_tasa_minima + monto_neto_iva_tasa_basica + monto_iva_tasa_minima + monto_iva_tasa_basica
             options._montoTotalAPagar = rec.amount_total
 
-            if rec.type == 'out_refund' and self.reversed_entry_id:
+            if rec.move_type == 'out_refund' and self.reversed_entry_id:
                 options._referenciaIndicadorGlobal = 1
                 options._referenciaRazon = self.ref
                 options._referenciaNumeroLinea = 1
