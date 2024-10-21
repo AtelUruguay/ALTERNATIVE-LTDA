@@ -2,13 +2,27 @@
 <odoo>
     <data>
         <!--Se agrega la opción de menú para imprimir el reporte-->
-        <report id="action_fe_invoice_report"
-                model="account.move"
-                name="magna_factura_electronica.fe_invoice_report"
-                string="e-Factura"
-                report_type="qweb-pdf"
-                file="magna_factura_electronica.fe_invoice_report"
-        />
+<!--        <report id="action_fe_invoice_report"-->
+<!--                model="account.move"-->
+<!--                name="magna_factura_electronica.fe_invoice_report"-->
+<!--                string="e-Factura"-->
+<!--                report_type="qweb-pdf"-->
+<!--                file="magna_factura_electronica.fe_invoice_report"-->
+<!--        />-->
+
+        <record id="action_fe_invoice_report" model="ir.actions.report">
+            <field name="name">e-Factura</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">magna_factura_electronica.fe_invoice_report</field>
+            <field name="report_file">magna_factura_electronica.fe_invoice_report</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="attachment"/>
+            <field name="binding_model_id" ref="model_account_move"/>
+            <field name="binding_type">report</field>
+            <field name="groups_id" eval="[(4, ref('account.group_account_invoice')),
+ (4, ref('account.group_account_readonly'))]"/>
+        </record>
                 <!--attachment="(object.state in ('open','paid')) and ('Factura '+(str(object.fe_Serie or ''))+(str(object.fe_DocNro or ''))+'.pdf')"-->
 
     </data>

@@ -91,7 +91,7 @@
                                             </b>
                                         </th>
                                     </tr>
-                                    <tr t-if="o.type == 'out_refund'">
+                                    <tr t-if="o.move_type == 'out_refund'">
                                         <th style="border: 1px solid black;text-align: center;" colspan="5">
                                             <b>Documento de Origen:
                                                 <span t-if="o.reversed_entry_id">
@@ -173,19 +173,19 @@
                             <span t-field="o.invoice_date"/>
                         </th>
                         <th style="border: 1px solid black;text-align: center;" colspan="1">Condición de Pago:
-                            <!--<span t-if="o.type == 'out_refund' and (o.partner_id.vat != False)">Contado</span>-->
-                            <span t-if="o.type == 'out_refund' and (o.partner_id.fe_tipo_documento == '2')">Contado</span>
-                            <span t-if="o.type == 'out_invoice' and o.forma_pago == '1'">Contado</span>
-                            <span t-if="o.type == 'out_invoice' and o.forma_pago == '2' and o.invoice_payment_term_id">
+                            <!--<span t-if="o.move_type == 'out_refund' and (o.partner_id.vat != False)">Contado</span>-->
+                            <span t-if="o.move_type == 'out_refund' and (o.partner_id.fe_tipo_documento == '2')">Contado</span>
+                            <span t-if="o.move_type == 'out_invoice' and o.forma_pago == '1'">Contado</span>
+                            <span t-if="o.move_type == 'out_invoice' and o.forma_pago == '2' and o.invoice_payment_term_id">
                                 <span t-field="o.invoice_payment_term_id.name"/>
                             </span>
                         </th>
                         <th style="border: 1px solid black;text-align: center;" colspan="1">Vencimiento:
-                            <!--<span t-if="o.type == 'out_refund' and (o.partner_id.vat != False)">-->
-                            <span t-if="o.type == 'out_refund' and (o.partner_id.fe_tipo_documento == '2')">
+                            <!--<span t-if="o.move_type == 'out_refund' and (o.partner_id.vat != False)">-->
+                            <span t-if="o.move_type == 'out_refund' and (o.partner_id.fe_tipo_documento == '2')">
                                 <span t-field="o.invoice_date"/>
                             </span>
-                            <span t-if="o.type == 'out_invoice'">
+                            <span t-if="o.move_type == 'out_invoice'">
                                 <span t-field="o.invoice_date_due"/>
                             </span>
                         </th>

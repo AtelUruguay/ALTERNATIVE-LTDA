@@ -312,9 +312,9 @@ class AccountMove(models.Model):
 
 
     # se redefine para que imprima la e-factura desde Enviar e Imprimir
-    def action_invoice_print(self):
-        if any(not move.is_invoice(include_receipts=True) for move in self):
-            raise UserError(_("Only invoices could be printed."))
-        self.filtered(lambda inv: not inv.invoice_sent).write({'invoice_sent': True})
-        return self.env.ref('magna_factura_electronica.action_fe_invoice_report').report_action(self)
+    # def action_invoice_sent(self):
+    #     if any(not move.is_invoice(include_receipts=True) for move in self):
+    #         raise UserError(_("Only invoices could be printed."))
+    #     # self.filtered(lambda inv: not inv.invoice_sent).write({'invoice_sent': True})
+    #     return self.env.ref('magna_factura_electronica.action_fe_invoice_report').report_action(self)
 
