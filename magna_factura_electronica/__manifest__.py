@@ -18,6 +18,7 @@
         'views/taxes_view.xml',
         'report/magna_fe_invoice_report.xml',
         'report/magna_fe_invoice_report_tmpl.xml',
+        'data/fe_mail_template_data.xml',
 
     ],
     'demo': [],
