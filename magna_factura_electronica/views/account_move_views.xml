@@ -6,22 +6,14 @@
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//h1//field[@name='name']" position="after">
-                    <div class="oe_right oe_button_box" name="buttons" style="width: 350px; margin-top: -17px; margin-right: -14px;">
-                        <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', False)]}" icon="fa-bolt" string="CFE Activa"></button>-->
-                        <!--<button class="oe_inline oe_stat_button" type="object" name="get_cfe_status" attrs="{'invisible': [('fe_activa', '=', True)]}" icon="fa fa-exclamation-triangle" string="CFE Desactivada"></button>-->
-                        <group col="5" invisible="state == 'draft'">
-                            <div/>
-                            <group col="3" colspan="1">
-                                <div/>
-                                <field invisible="fe_Serie == False" name="fe_Serie" nolabel="1" readonly="1"/>
-                                <field invisible="fe_DocNro == False" name="fe_DocNro" nolabel="1" readonly="1"/>
-                            </group>
-                            <div/>
-                        </group>
-                        <!--<field name="fe_activa" invisible="1" nolabel="1"/>-->
-                    </div>
-                </xpath>
+                
+                <xpath expr="//h1//field[@name='name']" position="replace">
+                    <field name="name" invisible="name == '/' and not posted_before and not quick_edit_mode" readonly="state != 'draft'" placeholder="Draft" class="oe_inline"/>
+                    <span class="oe_inline">    </span>
+                    <field name="fe_Serie" invisible="not fe_Serie"  readonly="True" class="oe_inline"/>
+                    <field name="fe_DocNro" invisible="not fe_DocNro" readonly="True" class="oe_inline"/>
+                </xpath>                
+                
                 <button name="button_draft" position="attributes">
                     <attribute name="invisible">restrict_mode_hash_table == True or state not in ('posted', 'cancel') or fe_Estado == 'AS'</attribute>
                 </button>
