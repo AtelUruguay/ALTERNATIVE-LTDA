@@ -102,7 +102,7 @@ class ResPartner(models.Model):
                         raise UserError('La C.I. ingresada no es correcta')
                 if tipo_documento==2:
                     if len((numero))>= 11:
-                        if int(numero[:2]) not in range(1,22):
+                        if int(numero[:2]) not in range(1,23):
                             raise UserError('El RUT ingresado no es valido.')
                         if numero[2:8]=='000000':
                             raise UserError('El RUT ingresado no es valido.')
@@ -120,7 +120,7 @@ class ResPartner(models.Model):
 
 
     @api.constrains('fe_pais_documento','fe_tipo_documento')
-    def _check_tipo_documento(self):
+    def _check_tipo_documento_pais(self):
         for rec in self:
             if rec.fe_pais_documento and rec.fe_tipo_documento:
                 if (rec.fe_tipo_documento in ['2','3'] and rec.fe_pais_documento.code != 'UY') or \
