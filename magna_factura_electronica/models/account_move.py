@@ -8,6 +8,8 @@ from . import fe_xml_factory
 from odoo.exceptions import UserError
 import logging
 
+_logging = logging.getLogger(__name__)
+
 
 DOC_TYPE_DGI = [
     ('101', 'e-Ticket'),
@@ -58,22 +60,22 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     fe_tipo_comprobante = fields.Selection(DOC_TYPE_DGI, compute='_compute_doct_type_dgi', string='Tipo de factura DGI', store=True)
-    fe_Contingencia = fields.Boolean('Es Contingencia', default=False)
-    fe_SerieContingencia = fields.Char('Serie')
-    fe_DocNroContingencia = fields.Char(u'Número')
-    fe_Serie = fields.Char('Serie Factura')
-    fe_DocNro = fields.Char(u'Número Factura')
-    fe_FechaHoraFirma = fields.Char('Fecha/Hora de firma')
-    fe_Hash = fields.Char('Hash')
-    fe_Estado = fields.Char('Estado')
-    fe_URLParaVerificarQR = fields.Char(u'Código QR')
-    fe_URLParaVerificarTexto = fields.Char(u'Verificación')
-    fe_CAEDNro = fields.Integer('CAE Desde')
-    fe_CAEHNro = fields.Integer('CAE Hasta')
-    fe_CAENA = fields.Char(u'CAE Autorización')
-    fe_CAEFA = fields.Date(u'CAE Fecha de autorización')
-    fe_CAEFVD = fields.Date('CAE Vencimiento')
-    fe_DGIResolucion = fields.Char(u'DGI Resolución')
+    fe_Contingencia = fields.Boolean('Es Contingencia', default=False, copy=False)
+    fe_SerieContingencia = fields.Char('Serie', copy=False)
+    fe_DocNroContingencia = fields.Char(u'Número', copy=False)
+    fe_Serie = fields.Char('Serie Factura', copy=False)
+    fe_DocNro = fields.Char(u'Número Factura', copy=False)
+    fe_FechaHoraFirma = fields.Char('Fecha/Hora de firma', copy=False)
+    fe_Hash = fields.Char('Hash', copy=False)
+    fe_Estado = fields.Char('Estado', copy=False)
+    fe_URLParaVerificarQR = fields.Char(u'Código QR', copy=False)
+    fe_URLParaVerificarTexto = fields.Char(u'Verificación', copy=False)
+    fe_CAEDNro = fields.Integer('CAE Desde', copy=False)
+    fe_CAEHNro = fields.Integer('CAE Hasta', copy=False)
+    fe_CAENA = fields.Char(u'CAE Autorización', copy=False)
+    fe_CAEFA = fields.Date(u'CAE Fecha de autorización', copy=False)
+    fe_CAEFVD = fields.Date('CAE Vencimiento', copy=False)
+    fe_DGIResolucion = fields.Char(u'DGI Resolución', copy=False)
     fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True, default=False)
     forma_pago = fields.Selection([('1','Contado'),('2','Crédito')], compute='_compute_forma_pago', string='Forma de pago', default='1')
 
@@ -130,9 +132,14 @@ class AccountMove(models.Model):
 
     # se llama al post de super y luego se envía la información de FE
     def action_post(self):
+        _logging.info('Se contabiliza el movimiento %s', self.name)
         res = super(AccountMove, self).action_post()
+        
         if self.move_type in ('out_invoice', 'out_refund'):
+            _logging.info('Se envía la información de FE para el movimiento %s', self.name)
             self.invoice_send_fe_proinfo()
+        else:
+            _logging.info('No se envía la información de FE para el movimiento %s', self.name)
         return res
 
 
