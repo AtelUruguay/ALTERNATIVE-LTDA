@@ -156,8 +156,8 @@ class AccountMove(models.Model):
         fe_activa = self.env["ir.config_parameter"].sudo().get_param("magna_fe_activa")
         if fe_activa == 'True':
             for rec in self:
-                ws_location_url = self.get_fe_ws_url()
-                in_xml_entrada = self.gen_Inxmlentrada()
+                ws_location_url = rec.get_fe_ws_url()
+                in_xml_entrada = rec.gen_Inxmlentrada()
                 vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(ws_location_url, in_xml_entrada, rec.fe_tipo_comprobante)
                 rec.write(vals)
         return True
