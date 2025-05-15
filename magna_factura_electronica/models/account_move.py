@@ -132,14 +132,14 @@ class AccountMove(models.Model):
 
     # se llama al post de super y luego se envía la información de FE
     def action_post(self):
-        _logging.info('Se contabiliza el movimiento %s', self.id)
+        _logging.info('Se contabilizan los movimientos %s', self.ids)
         res = super(AccountMove, self).action_post()
-        
-        if self.move_type in ('out_invoice', 'out_refund'):
-            _logging.info('Se envía la información de FE para el movimiento %s', self.name)
-            self.invoice_send_fe_proinfo()
-        else:
-            _logging.info('No se envía la información de FE para el movimiento %s', self.name)
+        for rec in self:
+            if rec.move_type in ('out_invoice', 'out_refund'):
+                _logging.info('Se envía la información de FE para el movimiento %s', rec.name)
+                rec.invoice_send_fe_proinfo()
+            else:
+                _logging.info('No se envía la información de FE para el movimiento %s', rec.name)
         return res
 
 
