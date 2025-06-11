@@ -21,13 +21,13 @@
             <form string="Importar datos de Factura Electrónica">
                 <header>
                     <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'imported'" decoration-danger="state == 'error'"/>
-                    <button name="action_import_file" type="object" string="Importar" class="oe_highlight" states="draft"/>
-                    <button name="action_reset" type="object" string="Volver a borrador" class="oe_link" states="error"/>                                        
+                    <button name="action_import_file" type="object" string="Importar" class="oe_highlight" invisible="state != 'draft' or not filename"/>
+                    <button name="action_reset" type="object" string="Volver a borrador" class="oe_link" invisible="state != 'error'"/>                                        
                 </header>                
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button class="oe_stat_button" name="action_view_moves" type="object"
-                        icon="fa-bars" states="imported" invisible="move_ids_qty == 0">
+                        icon="fa-bars" invisible="move_ids_qty == 0 or state != 'imported'">
                             <div class="o_stat_info">
                                 <span class="o_stat_value">
                                     <field name="move_ids_qty"/>
@@ -38,7 +38,7 @@
                             </div>
                         </button>
 
-                        <button class="oe_stat_button" name="action_view_miss_move_ids" type="object" icon="fa-bars" states="imported" invisible="miss_move_ids_qty == 0">
+                        <button class="oe_stat_button" name="action_view_miss_move_ids" type="object" icon="fa-bars" invisible="miss_move_ids_qty == 0 or state != 'imported'">
                             <div class="o_stat_info">
                                 <span class="o_stat_value">
                                     <field name="miss_move_ids_qty"/>
@@ -54,12 +54,14 @@
                         <br/>
                         <br/>                        
                     </div>
-                    <div state="imported">
+                    <div invisible="state != 'imported' or miss_move_ids_qty == 0">
                         <div class="alert alert-info">
-                            <strong>Nota:</strong> En el botón Importados puede consultar los movimientos importados. En el botón Pendientes puede consultar los movimientos que faltan por importar (Son facturas que tienen problemas en odoo y que no estaban presente en el fichero de ProInfo).
+                            <strong>Nota:</strong>
+                            <p>* En el botón Importados puede consultar los movimientos importados.</p>
+                            <p>* En el botón Pendientes puede consultar los movimientos que faltan por importar (Son facturas que tienen problemas en odoo y que no estaban presente en el fichero de ProInfo).</p>
                         </div>
                     </div>
-                    <field name="file_data" placeholder="Fichero a importar..." filename="filename"/>
+                    <field name="file_data" placeholder="Fichero a importar..." filename="filename" readonly="state != 'draft'"/>
                     <field name="filename" invisible="1"/>
                     
                 </sheet>
@@ -82,7 +84,7 @@
 
     <!-- Action magna_import_fe_from_proinfo -->
     <record id="action_magna_import_fe_from_proinfo" model="ir.actions.act_window">
-        <field name="name">Magna_import_fe_from_proinfo</field>
+        <field name="name">Importar datos de Factura Electrónica</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">magna_import_fe_from_proinfo</field>
         <field name="view_mode">tree,form</field>

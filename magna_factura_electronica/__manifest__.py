@@ -17,8 +17,7 @@
         "views/company_view.xml",
         "views/magna_import_fe_from_proinfo_views.xml",
         "views/partner_view.xml",
-        "views/taxes_view.xml",
-        "wizards/magna_import_fe_wizard.xml",
+        "views/taxes_view.xml",        
         "report/magna_fe_invoice_report_tmpl.xml",
         "report/magna_fe_invoice_report.xml"
     ],

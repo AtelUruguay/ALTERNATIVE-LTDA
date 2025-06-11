@@ -18,11 +18,11 @@ class Magna_import_fe_from_proinfo(models.Model):
     _description = 'Importa datos de FE desde Proinfo'
     rec_name = 'filename'
 
-    filename = fields.Char('File Name', required=True)
-    file_data = fields.Binary('File Data', required=True)
-    move_ids = fields.Many2many('account.move', string='Movimientos importados', required=False)
+    filename = fields.Char('Fichero', required=True)
+    file_data = fields.Binary('Datos del fichero', required=True)
+    move_ids = fields.Many2many('account.move', relation='magna_import_fe_from_proinfo_move_rel', string='Movimientos importados', required=False)
     move_ids_qty = fields.Integer(compute='_compute_move_ids_qty', string='Cantidad de movimientos importados', readonly=True)
-    miss_move_ids = fields.Many2many('account.move', string='Movimientos no encontrados en el fichero', required=False)
+    miss_move_ids = fields.Many2many('account.move', relation='magna_import_fe_from_proinfo_miss_move_rel', string='Movimientos no encontrados en el fichero', required=False)
     miss_move_ids_qty = fields.Integer(compute='_compute_miss_move_ids_qty', string='Cantidad de movimientos no encontrados en el fichero', readonly=True)
     state = fields.Selection([
         ('draft', 'Borrador'),
@@ -104,7 +104,7 @@ class Magna_import_fe_from_proinfo(models.Model):
 
 
     def action_view_moves(self, miss_moves=False):                
-        action = self.env['ir.actions.act_window'].for_xml_id('account', 'action_move_out_refund_type')
+        action = self.env['ir.actions.act_window']._for_xml_id('account.action_move_out_refund_type')
         action['domain'] = [('id', 'in', self.move_ids.ids if not miss_moves else self.miss_move_ids.ids)]
         action['context'] = {'create': False, 'edit': False}
         return action
