@@ -5,3 +5,4 @@ from . import account_move
 from . import partner
 from . import company
 from . import taxes
+from . import magna_import_fe_from_proinfo

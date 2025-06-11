@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View magna_import_fe_from_proinfo View Tree -->
+    <record id="view_magna_import_fe_from_proinfo_tree" model="ir.ui.view">
+        <field name="name">view.magna_import_fe_from_proinfo.tree</field>
+        <field name="model">magna_import_fe_from_proinfo</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="filename"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'imported'" decoration-danger="state == 'error'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- View magna_import_fe_from_proinfo form -->
+    <record id="view_magna_import_fe_from_proinfo_form" model="ir.ui.view">
+        <field name="name">view.magna_import_fe_from_proinfo.form</field>
+        <field name="model">magna_import_fe_from_proinfo</field>
+        <field name="arch" type="xml">
+            <form string="Importar datos de Factura Electrónica">
+                <header>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'imported'" decoration-danger="state == 'error'"/>
+                    <button name="action_import_file" type="object" string="Importar" class="oe_highlight" states="draft"/>
+                    <button name="action_reset" type="object" string="Volver a borrador" class="oe_link" states="error"/>                                        
+                </header>                
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_view_moves" type="object"
+                        icon="fa-bars" states="imported" invisible="move_ids_qty == 0">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="move_ids_qty"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Importados
+                                </span>
+                            </div>
+                        </button>
+
+                        <button class="oe_stat_button" name="action_view_miss_move_ids" type="object" icon="fa-bars" states="imported" invisible="miss_move_ids_qty == 0">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="miss_move_ids_qty"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Pendientes
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        Importar datos de FE desde fichero de ProInfo
+                        <br/>
+                        <br/>                        
+                    </div>
+                    <div state="imported">
+                        <div class="alert alert-info">
+                            <strong>Nota:</strong> En el botón Importados puede consultar los movimientos importados. En el botón Pendientes puede consultar los movimientos que faltan por importar (Son facturas que tienen problemas en odoo y que no estaban presente en el fichero de ProInfo).
+                        </div>
+                    </div>
+                    <field name="file_data" placeholder="Fichero a importar..." filename="filename"/>
+                    <field name="filename" invisible="1"/>
+                    
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- View magna_import_fe_from_proinfo search -->
+    <record id="view_magna_import_fe_from_proinfo_search" model="ir.ui.view">
+        <field name="name">view.magna_import_fe_from_proinfo.search</field>
+        <field name="model">magna_import_fe_from_proinfo</field>
+        <field name="arch" type="xml">
+            <search>
+                <group expand="1" string="Group By">
+                    <filter string="Name" name="filename" domain="[]" context="{'group_by':'filename'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action magna_import_fe_from_proinfo -->
+    <record id="action_magna_import_fe_from_proinfo" model="ir.actions.act_window">
+        <field name="name">Magna_import_fe_from_proinfo</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">magna_import_fe_from_proinfo</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                No se ha realizado ninguna importación de datos de Factura Electrónica desde ProInfo.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu item for magna_import_fe_from_proinfo -->
+    <menuitem id="menu_magna_import_fe_from_proinfo"
+        name="Importar Factura Electrónica"
+        action="action_magna_import_fe_from_proinfo"
+        groups="base.group_no_one"
+        parent="account.account_management_menu"
+        sequence="100"/>
+
+</odoo>
