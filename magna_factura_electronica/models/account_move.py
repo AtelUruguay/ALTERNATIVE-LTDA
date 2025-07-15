@@ -128,18 +128,16 @@ class AccountMove(models.Model):
                 rec.forma_pago = '1'
             else:
                 rec.forma_pago = '2'
-
-
-    # se llama al post de super y luego se envía la información de FE
-    def action_post(self):
+    
+    def _post(self, soft=True):
         _logging.info('Se contabilizan los movimientos %s', self.ids)
-        res = super(AccountMove, self).action_post()
-        for rec in self:
-            if rec.move_type in ('out_invoice', 'out_refund'):
-                _logging.info('Se envía la información de FE para el movimiento %s', rec.name)
-                rec.invoice_send_fe_proinfo()
+        res = super(AccountMove, self)._post(soft)
+        for move in self:
+            if move.move_type in ('out_invoice', 'out_refund'):
+                _logging.info('Se envía la información de FE para el movimiento %s', move.name)
+                move.invoice_send_fe_proinfo()
             else:
-                _logging.info('No se envía la información de FE para el movimiento %s', rec.name)
+                _logging.info('No se envía la información de FE para el movimiento %s', move.name)
         return res
 
 
