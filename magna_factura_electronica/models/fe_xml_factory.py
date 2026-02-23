@@ -107,6 +107,9 @@ class cfeFactoryOptions():
     _referenciaSerie = ''
     _referenciaNumeroCFE = ''
     _referenciaFechaCFE = ''
+    _referenciaMntCFEref = 0
+    _referenciaTpoMonedaRef = ''
+    _referenciaTpoCambioRef = 0
 
 
     def __init__(self):
@@ -217,6 +220,15 @@ class CfeFactory():
             self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoDocRef', str(self.opt._referenciaTipoDocumento))
             self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFSerie', self.opt._referenciaSerie)
             self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFNroCFERef', self.opt._referenciaNumeroCFE)
+            
+            if self.opt._referenciaMntCFEref:
+                # Entra si es una NC con referencia a CFE
+                self._set_fe_node_data(doc, xml_referencia_item_doc, 'FEMntCFEref',
+                                       str(self.opt._referenciaMntCFEref))
+                self._set_fe_node_data(doc, xml_referencia_item_doc, 'FETpoMonedaRef',
+                                       str(self.opt._referenciaTpoMonedaRef))
+                self._set_fe_node_data(doc, xml_referencia_item_doc, 'FETpoCambioRef',
+                                       str("{0:.3f}".format(self.opt._referenciaTpoCambioRef)))
 
 
         # NODO ADICIONAL

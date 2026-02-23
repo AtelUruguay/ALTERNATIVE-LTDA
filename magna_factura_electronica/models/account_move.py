@@ -297,6 +297,10 @@ class AccountMove(models.Model):
                 options._referenciaSerie = self.reversed_entry_id.fe_Serie
                 options._referenciaNumeroCFE = self.reversed_entry_id.fe_DocNro
                 options._referenciaTipoDocumento = self.reversed_entry_id.fe_tipo_comprobante
+                
+                options._referenciaMntCFEref = self.reversed_entry_id.amount_total
+                options._referenciaTpoMonedaRef = self.reversed_entry_id.currency_id.name
+                options._referenciaTpoCambioRef = self.reversed_entry_id.currency_id.with_context(date=self.reversed_entry_id.invoice_date).inverse_rate
 
             xml_factory = fe_xml_factory.CfeFactory(options=options)
             XML = xml_factory.get_data_XML()

@@ -2,6 +2,59 @@
 <odoo>
     <data>
 
+         <!-- Plantilla para la sección de Referencias -->
+        <template id="magna_factura_electronica.referencias_section">
+            <t t-if="o.reversed_entry_id">
+                <div style="border: 2px solid black; padding: 10px; margin-bottom: 10px;">
+                    <p align="center">
+                        <strong>REFERENCIAS</strong>
+                    </p>
+                    <table cellspacing="10" style="border-collapse: collapse; width: 100%;" class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">Nro</th>
+                                <th style="text-align: center;">Serie CFE</th>
+                                <th style="text-align: center;">Nro CFE</th>
+                                <th style="text-align: center;">Tipo Doc</th>
+                                <th style="text-align: center;">Fecha CFE</th>
+                                <th style="text-align: center;">Moneda</th>
+                                <th style="text-align: center;">Tipo Cambio</th>
+                                <th style="text-align: right;">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: center;">
+                                    <span t-field="o.reversed_entry_id.fe_Serie"/>
+                                </td>
+                                <td style="text-align: center;">
+                                    <span t-esc="int(o.reversed_entry_id.fe_DocNro)"/>
+                                </td>
+                                <td style="text-align: center;">
+                                    <span t-field="o.reversed_entry_id.fe_tipo_comprobante"/>
+                                </td>
+                                <td style="text-align: center;">
+                                    <span t-field="o.reversed_entry_id.invoice_date"/>
+                                </td>
+                                <td style="text-align: center;">
+                                    <span t-field="o.reversed_entry_id.currency_id.name"/>
+                                </td>
+                                <td style="text-align: center;">
+                                    <t t-set="get_currency_value_ref" t-value="(o.reversed_entry_id.currency_id.inverse_rate)"/>
+                                    <span><t t-esc="get_currency_value_ref"/></span>
+                                </td>
+                                <td style="text-align: right;">
+                                    <span t-field="o.reversed_entry_id.amount_total" t-field-options="{'widget':'monetary', 'display_currency': 'o.reversed_entry_id.currency_id'}"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br/>
+            </t>
+        </template>
+
         <template id="magna_factura_electronica.fe_invoice_report">
             <t t-call="web.html_container">
                  
@@ -338,6 +391,9 @@
                     <br />
                     <br />
                     <div style="border-top: 1px solid black;" />
+                    <!-- Llamada a la plantilla de Referencias -->
+                    <t t-call="magna_factura_electronica.referencias_section"/>
+                    
                     <p align="center">
                         <strong>ADENDA</strong>
                     </p>
