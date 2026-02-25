@@ -223,11 +223,11 @@ class CfeFactory():
             
             if self.opt._referenciaMntCFEref:
                 # Entra si es una NC con referencia a CFE
-                self._set_fe_node_data(doc, SubZonaReferencia, 'FEMntCFEref',
+                self._set_fe_node_data(doc, SubZonaReferencia, 'MontoCFE',
                                        str(self.opt._referenciaMntCFEref))
-                self._set_fe_node_data(doc, SubZonaReferencia, 'FETpoMonedaRef',
+                self._set_fe_node_data(doc, SubZonaReferencia, 'MonedaCFE',
                                        str(self.opt._referenciaTpoMonedaRef))
-                self._set_fe_node_data(doc, SubZonaReferencia, 'FETpoCambioRef',
+                self._set_fe_node_data(doc, SubZonaReferencia, 'TipoCambioCFE',
                                        str("{0:.3f}".format(self.opt._referenciaTpoCambioRef)))
 
 
