@@ -197,7 +197,7 @@ class AccountMove(models.Model):
 
             # TOTALES
             options._tipoMonedaTransaccion = rec.currency_id.name
-            options._tipoCambio = rec.currency_id.inverse_rate
+            options._tipoCambio = rec.currency_id.with_context(date=rec.invoice_date).inverse_rate
 
             account_tax_iva_minima_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
                                                                          ('fe_tax_codigo_dgi.code', '=', '2'),
