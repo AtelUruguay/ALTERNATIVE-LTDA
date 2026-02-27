@@ -45,7 +45,7 @@
                                     <span><t t-esc="'%.2f' % (int(get_currency_value_ref * 100) / 100.0)"/></span>
                                 </td>
                                 <td style="text-align: right;">
-                                    <span t-field="o.reversed_entry_id.amount_total" t-field-options="{'widget':'monetary', 'display_currency': 'o.reversed_entry_id.currency_id'}"/>
+                                    <span t-field="o.amount_total" t-field-options="{'widget':'monetary', 'display_currency': 'o.reversed_entry_id.currency_id'}"/>
                                 </td>                                
                             </tr>
                         </tbody>
