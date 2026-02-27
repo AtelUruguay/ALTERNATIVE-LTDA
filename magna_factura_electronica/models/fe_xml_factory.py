@@ -201,7 +201,7 @@ class CfeFactory():
             ZonaDetalle.appendChild(SubZonaItem)
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETNroLinDet', str(nroSecuencial))
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETIndFact', linea._indicadorFacturacion)
-            self._set_fe_node_data(doc, SubZonaItem, 'FEDETNomItem', linea._nombreItem)
+            self._set_fe_node_data(doc, SubZonaItem, 'FEDETNomItem', linea._nombreItem[:80])
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETCantidad', str(linea._cantidad))
             if linea._unidadMedidad:
                 self._set_fe_node_data(doc, SubZonaItem, 'FEDETUniMed', linea._unidadMedidad)
