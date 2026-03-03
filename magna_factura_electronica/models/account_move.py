@@ -197,7 +197,7 @@ class AccountMove(models.Model):
 
             # TOTALES
             options._tipoMonedaTransaccion = rec.currency_id.name
-            options._tipoCambio = rec.currency_id.inverse_rate
+            options._tipoCambio = rec.currency_id.with_context(date=rec.invoice_date).inverse_rate
 
             account_tax_iva_minima_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
                                                                          ('fe_tax_codigo_dgi.code', '=', '2'),
@@ -297,6 +297,10 @@ class AccountMove(models.Model):
                 options._referenciaSerie = self.reversed_entry_id.fe_Serie
                 options._referenciaNumeroCFE = self.reversed_entry_id.fe_DocNro
                 options._referenciaTipoDocumento = self.reversed_entry_id.fe_tipo_comprobante
+                
+                options._referenciaMntCFEref = self.amount_total
+                options._referenciaTpoMonedaRef = self.reversed_entry_id.currency_id.name
+                options._referenciaTpoCambioRef = self.reversed_entry_id.currency_id.with_context(date=self.reversed_entry_id.invoice_date).inverse_rate
 
             xml_factory = fe_xml_factory.CfeFactory(options=options)
             XML = xml_factory.get_data_XML()

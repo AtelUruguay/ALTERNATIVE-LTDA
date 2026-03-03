@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CFE_Adenda xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://cfe.dgi.gub.uy">
+    <CFE xmlns="http://cfe.dgi.gub.uy" version="1.0">
+        <eFact>
+            <Encabezado>
+                <IdDoc>
+                    <TipoCFE/>
+                    <Serie/>
+                    <Nro/>
+                    <NroInterno/>
+                    <FchEmis/>
+                    <!--                    <FchValor/>-->
+                    <!--                    <TipoTraslado/>-->
+                    <!--                    IndPropiedad-->
+                    <!--                    TipoDocProp-->
+                    <!--                    CodPaisProp-->
+                    <!--                    DocProp-->
+                    <!--                    DocPropExt-->
+                    <!--                    RznSocProp-->
+                    <!--                    PeriodoDesde-->
+                    <!--                    PeriodoHasta-->
+                    <MntBruto/>
+                    <FmaPago/>
+                    <FchVenc/>
+                    <!--                    <ClauVenta/>-->
+                    <!--                    <ModVenta/>-->
+                    <!--                    <ViaTransp/>-->
+                    <!--                    <InfoAdicionalDoc/>-->
+                    <!--                    <IVAalDia/>-->
+                    <!--                    <SecProf/>-->
+                    <!--                    <IndPagCta3ros/>-->
+                    <!--                    <IndCobPropia/>-->
+                    <!--                    <IndCompraMEReventa/>-->
+                </IdDoc>
+                <Emisor>
+                    <RUCEmisor/>
+                    <RznSoc/>
+                    <NomComercial/>
+                    <!--                    <GiroEmis/>-->
+                    <!--                    <Telefono/>-->
+                    <!--                    <CorreoEmisor/>-->
+                    <!--                    <EmiSucursal/>-->
+                    <CdgDGISucur/>
+                    <DomFiscal/>
+                    <Ciudad/>
+                    <Departamento/>
+                    <!--                    <InfoAdicionalEmisor/>-->
+                </Emisor>
+                <Receptor>
+                    <TipoDocRecep/>
+                    <CodPaisRecep/>
+                    <DocRecep/>
+                    <DocRecepExt/>
+                    <RznSocRecep/>
+                    <DirRecep/>
+                    <CiudadRecep/>
+                    <DeptoRecep/>
+                    <PaisRecep/>
+                    <!--                    <CP/>-->
+                    <!--                    <InfoAdicional/>-->
+                    <LugarDestEnt/>
+                    <CompraID/>
+                </Receptor>
+                <Totales>
+                    <TpoMoneda/>
+                    <TpoCambio/>
+                    <MntNoGrv/>
+                    <!--                    <MntExpoyAsim/>-->
+                    <!--                    <MntImpuestoPerc/>-->
+                    <!--                    <MntIVaenSusp/>-->
+                    <MntNetoIvaTasaMin/>
+                    <MntNetoIVATasaBasica/>
+                    <MntNetoIVAOtra/>
+                    <IVATasaMin/>
+                    <IVATasaBasica/>
+                    <MntIVATasaMin/>
+                    <MntIVATasaBasica/>
+                    <!--                    <MntIVAOtra/>-->
+                    <!--                    <MntTotCredFisc/>-->
+                    <MntTotal/>
+                    <!--                    <MntTotRetenido/>-->
+                    <CantLinDet/>
+                    <!--                    <RetencPercep>-->
+                    <!--                        <CodRet/>-->
+                    <!--                        <ValRetPerc/>-->
+                    <!--                    </RetencPercep>-->
+                    <!--                    <MontoNF/>-->
+                    <MntPagar/>
+                </Totales>
+            </Encabezado>
+            <Detalle>
+                <Item>
+                    <NroLinDet/>
+                    <!--                    <CodItem>-->
+                    <!--                        <TpoCod/>-->
+                    <!--                        <Cod/>-->
+                    <!--                    </CodItem>-->
+                    <IndFact/>
+                    <!--                    <IndAgenteResp/>-->
+                    <NomItem/>
+                    <!--                    <NCM/>-->
+                    <!--                    <DscItem/>-->
+                    <Cantidad/>
+                    <UniMed/>
+                    <PrecioUnitario/>
+                    <!--                    <DescuentoPct/> todo ver incidencia con la isla-->
+                    <DescuentoMonto/>
+                    <!--                    <SubDescuento>-->
+                    <!--                        <DescTipo/>-->
+                    <!--                        <DescTDescValipo/>-->
+                    <!--                    </SubDescuento>-->
+                    <!--                    <RecargoPct/>-->
+                    <!--                    <RecargoMnt/>-->
+                    <!--                    <SubRecargo>-->
+                    <!--                        <RecargoTipo/>-->
+                    <!--                        <RecargoVal/>-->
+                    <!--                    </SubRecargo>-->
+                    <!--                    <RetencPercep>-->
+                    <!--                        <CodRet/>-->
+                    <!--                        <Tasa/>-->
+                    <!--                        <MntSujetoaRet/>-->
+                    <!--                        <InfoAdicionalRet/>-->
+                    <!--                        <ValRetPerc/>-->
+                    <!--                    </RetencPercep>-->
+                    <MontoItem/>
+                </Item>
+            </Detalle>
+            <!--            <SubTotInfo>-->
+            <!--                <STI_Item>-->
+            <!--                    <NroSTI/>-->
+            <!--                    <GlosaSTI/>-->
+            <!--                    <OrdenSTI/>-->
+            <!--                    <ValSubtotSTI/>-->
+            <!--                </STI_Item>-->
+            <!--            </SubTotInfo>-->
+            <DscRcgGlobal>
+                <DRG_Item>
+                    <NroLinDR/>
+                    <TpoMovDR/>
+                    <TpoDR/>
+                    <!--                    <CodDR/>-->
+                    <GlosaDR/>
+                    <ValorDR/>
+                    <IndFactDR/>
+                </DRG_Item>
+            </DscRcgGlobal>
+            <MediosPago>
+                <MedioPago>
+                    <NroLinMP/>
+                    <CodMP/>
+                    <GlosaMP/>
+                    <OrdenMP/>
+                    <ValorPago/>
+                </MedioPago>
+            </MediosPago>
+            <Referencia>
+                <Referencia>
+                    <NroLinRef/>
+                    <!--                    <IndGlobal/>-->
+                    <TpoDocRef/>
+                    <Serie/>
+                    <NroCFERef/>
+                    <!--                    <RazonRef/>-->
+                    <!--                    <FechaCFEref/>-->
+                    <!-- Si es una NC con referencia entonces hay que incluir el MntCFEref,TpoMonedaRef,TpoCambioRef -->
+                    <MntCFEref/>
+                    <TpoMonedaRef/>
+                    <TpoCambioRef/>
+                </Referencia>
+            </Referencia>
+            <CAEData>
+                <CAE_ID/>
+                <DNro/>
+                <HNro/>
+                <FecVenc/>
+                <CAEEspecial/>
+                <CausalCAEEsp/>
+            </CAEData>
+            <!--            <Compl_Fiscal>-->
+            <!--                <Compl_Fiscal_Data>-->
+            <!--                    <RUCEmisor/>-->
+            <!--                    <TipoDocMdte/>-->
+            <!--                    <Pais/>-->
+            <!--                    <DocMdte/>-->
+            <!--                    <NombreMdte/>-->
+            <!--                </Compl_Fiscal_Data>-->
+            <!--            </Compl_Fiscal>-->
+        </eFact>
+        <!--        <Adenda>-->
+        <!--            <AdendaSicfe>-->
+        <!--                <IdCaja/>-->
+        <!--                <IdUsuario/>-->
+        <!--            </AdendaSicfe>-->
+        <!--        </Adenda>-->
+    </CFE>
+</CFE_Adenda>

@@ -107,6 +107,9 @@ class cfeFactoryOptions():
     _referenciaSerie = ''
     _referenciaNumeroCFE = ''
     _referenciaFechaCFE = ''
+    _referenciaMntCFEref = 0
+    _referenciaTpoMonedaRef = ''
+    _referenciaTpoCambioRef = 0
 
 
     def __init__(self):
@@ -198,7 +201,7 @@ class CfeFactory():
             ZonaDetalle.appendChild(SubZonaItem)
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETNroLinDet', str(nroSecuencial))
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETIndFact', linea._indicadorFacturacion)
-            self._set_fe_node_data(doc, SubZonaItem, 'FEDETNomItem', linea._nombreItem)
+            self._set_fe_node_data(doc, SubZonaItem, 'FEDETNomItem', linea._nombreItem[:80])
             self._set_fe_node_data(doc, SubZonaItem, 'FEDETCantidad', str(linea._cantidad))
             if linea._unidadMedidad:
                 self._set_fe_node_data(doc, SubZonaItem, 'FEDETUniMed', linea._unidadMedidad)
@@ -217,6 +220,15 @@ class CfeFactory():
             self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoDocRef', str(self.opt._referenciaTipoDocumento))
             self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFSerie', self.opt._referenciaSerie)
             self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFNroCFERef', self.opt._referenciaNumeroCFE)
+            
+            if self.opt._referenciaMntCFEref:
+                # Entra si es una NC con referencia a CFE con monto de referencia (caso NC con referencia a CFE con monto o caso NC con referencia a CFE sin monto pero con indicador global 2 o 3)                
+                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFMntCFEref',
+                                       "{0:.3f}".format(self.opt._referenciaMntCFEref).replace(".", ".").replace('-',''))                
+                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoMonedaRef',
+                                       str(self.opt._referenciaTpoMonedaRef))
+                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoCambioRef',
+                                       str("{0:.3f}".format(self.opt._referenciaTpoCambioRef)))
 
 
         # NODO ADICIONAL
