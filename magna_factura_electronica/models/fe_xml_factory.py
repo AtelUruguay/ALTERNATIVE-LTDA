@@ -211,24 +211,31 @@ class CfeFactory():
 
 
         # NODO REFERENCIA
-        if self.opt._referenciaIndicadorGlobal > 0:
+        if self.opt._tipoComprobante in ['102', '112']:
             ZonaReferencia = doc.createElement("FEReferencias")
             XMLEntradaNodoCFE.appendChild(ZonaReferencia)
             SubZonaReferencia = doc.createElement("FEReferencia")
             ZonaReferencia.appendChild(SubZonaReferencia)
-            self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFNroLinRef', str(self.opt._referenciaNumeroLinea))
-            self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoDocRef', str(self.opt._referenciaTipoDocumento))
-            self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFSerie', self.opt._referenciaSerie)
-            self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFNroCFERef', self.opt._referenciaNumeroCFE)
-            
-            if self.opt._referenciaMntCFEref:
-                # Entra si es una NC con referencia a CFE con monto de referencia (caso NC con referencia a CFE con monto o caso NC con referencia a CFE sin monto pero con indicador global 2 o 3)                
-                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFMntCFEref',
-                                       "{0:.3f}".format(self.opt._referenciaMntCFEref).replace(".", ".").replace('-',''))                
-                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoMonedaRef',
-                                       str(self.opt._referenciaTpoMonedaRef))
-                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoCambioRef',
-                                       str("{0:.3f}".format(self.opt._referenciaTpoCambioRef)))
+            if self.opt._referenciaIndicadorGlobal == 0:
+                
+                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFNroLinRef', str(self.opt._referenciaNumeroLinea))
+                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoDocRef', str(self.opt._referenciaTipoDocumento))
+                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFSerie', self.opt._referenciaSerie)
+                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFNroCFERef', self.opt._referenciaNumeroCFE)
+                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFFchCFERef', self.opt._referenciaFechaCFE)
+                
+                if self.opt._referenciaMntCFEref:
+                    # Entra si es una NC con referencia a CFE con monto de referencia (caso NC con referencia a CFE con monto o caso NC con referencia a CFE sin monto pero con indicador global 2 o 3)                
+                    self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFMntCFEref',
+                                        "{0:.3f}".format(self.opt._referenciaMntCFEref).replace(".", ".").replace('-',''))                
+                    self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoMonedaRef',
+                                        str(self.opt._referenciaTpoMonedaRef))
+                    self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoCambioRef',
+                                        str("{0:.3f}".format(self.opt._referenciaTpoCambioRef)))
+            else:
+                # Entra si es una NC con referencia a CFE sin monto de referencia (caso NC con referencia a CFE sin monto pero con indicador global 2 o 3)
+                self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEREFIndicadorGlobal', str(self.opt._referenciaIndicadorGlobal))
+                self._set_fe_node_data(doc, XMLEntradaNodoCFE, 'FEREFRazon', self.opt._referenciaRazon or 'N/A')
 
 
         # NODO ADICIONAL
