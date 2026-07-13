@@ -216,9 +216,10 @@ class CfeFactory():
             XMLEntradaNodoCFE.appendChild(ZonaReferencia)
             SubZonaReferencia = doc.createElement("FEReferencia")
             ZonaReferencia.appendChild(SubZonaReferencia)
-            if self.opt._referenciaIndicadorGlobal == 0:
+            self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFNroLinRef', str(self.opt._referenciaNumeroLinea))
+            
+            if self.opt._referenciaIndicadorGlobal == 0:                
                 
-                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFNroLinRef', str(self.opt._referenciaNumeroLinea))
                 self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoDocRef', str(self.opt._referenciaTipoDocumento))
                 self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFSerie', self.opt._referenciaSerie)
                 self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFNroCFERef', self.opt._referenciaNumeroCFE)
