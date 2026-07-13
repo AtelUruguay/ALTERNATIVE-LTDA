@@ -303,6 +303,7 @@ class AccountMove(models.Model):
                 options._referenciaTpoCambioRef = self.reversed_entry_id.currency_id.with_context(date=self.reversed_entry_id.invoice_date).inverse_rate
             elif rec.move_type == 'out_refund' and not self.reversed_entry_id:
                 options._referenciaIndicadorGlobal = 1
+                options._referenciaNumeroLinea = 1
                 options._referenciaRazon = self.ref
 
             xml_factory = fe_xml_factory.CfeFactory(options=options)
