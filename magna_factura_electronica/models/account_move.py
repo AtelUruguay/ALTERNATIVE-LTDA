@@ -290,10 +290,10 @@ class AccountMove(models.Model):
             options._montoTotalAPagar = rec.amount_total
 
             if rec.move_type == 'out_refund' and self.reversed_entry_id:
-                options._referenciaIndicadorGlobal = 1
+                options._referenciaIndicadorGlobal = 0
                 options._referenciaRazon = self.ref
                 options._referenciaNumeroLinea = 1
-                # options._referenciaFechaCFE = self.reversed_entry_id.invoice_date.strftime('%Y-%m-%d')
+                options._referenciaFechaCFE = self.reversed_entry_id.invoice_date.strftime('%Y-%m-%d')
                 options._referenciaSerie = self.reversed_entry_id.fe_Serie
                 options._referenciaNumeroCFE = self.reversed_entry_id.fe_DocNro
                 options._referenciaTipoDocumento = self.reversed_entry_id.fe_tipo_comprobante
@@ -301,6 +301,10 @@ class AccountMove(models.Model):
                 options._referenciaMntCFEref = self.amount_total
                 options._referenciaTpoMonedaRef = self.reversed_entry_id.currency_id.name
                 options._referenciaTpoCambioRef = self.reversed_entry_id.currency_id.with_context(date=self.reversed_entry_id.invoice_date).inverse_rate
+            elif rec.move_type == 'out_refund' and not self.reversed_entry_id:
+                options._referenciaIndicadorGlobal = 1
+                options._referenciaNumeroLinea = 1
+                options._referenciaRazon = self.ref
 
             xml_factory = fe_xml_factory.CfeFactory(options=options)
             XML = xml_factory.get_data_XML()
