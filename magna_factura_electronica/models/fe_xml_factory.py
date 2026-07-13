@@ -236,7 +236,7 @@ class CfeFactory():
             else:
                 # Entra si es una NC con referencia a CFE sin monto de referencia (caso NC con referencia a CFE sin monto pero con indicador global 2 o 3)
                 self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFIndGlobal', str(self.opt._referenciaIndicadorGlobal))
-                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFRazon', self.opt._referenciaRazon or 'N/A')
+                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFRazonRef', self.opt._referenciaRazon or 'N/A')
 
 
         # NODO ADICIONAL
