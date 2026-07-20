@@ -1,4 +1,4 @@
-[submodule "sale-workflow"]
-	path = sale-workflow
+[submodule "SUBMODULE/sale-workflow"]
+	path = SUBMODULE/sale-workflow
 	url = https://github.com/OCA/sale-workflow.git
 	branch = 17.0
