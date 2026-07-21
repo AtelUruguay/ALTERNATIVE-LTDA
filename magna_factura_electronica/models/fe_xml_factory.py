@@ -223,7 +223,7 @@ class CfeFactory():
                 self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFTpoDocRef', str(self.opt._referenciaTipoDocumento))
                 self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFSerie', self.opt._referenciaSerie)
                 self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFNroCFERef', self.opt._referenciaNumeroCFE)
-                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFFchCFERef', self.opt._referenciaFechaCFE)
+                self._set_fe_node_data(doc, SubZonaReferencia, 'FEREFFechaCFEref', self.opt._referenciaFechaCFE)
                 
                 if self.opt._referenciaMntCFEref:
                     # Entra si es una NC con referencia a CFE con monto de referencia (caso NC con referencia a CFE con monto o caso NC con referencia a CFE sin monto pero con indicador global 2 o 3)                
