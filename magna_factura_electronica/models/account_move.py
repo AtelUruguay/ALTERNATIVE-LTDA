@@ -3,6 +3,7 @@
 import qrcode
 import base64
 from io import BytesIO
+from datetime import timedelta
 from odoo import api, fields, models, _
 from . import fe_xml_factory
 from odoo.exceptions import UserError
@@ -78,6 +79,7 @@ class AccountMove(models.Model):
     fe_DGIResolucion = fields.Char(u'DGI Resolución', copy=False)
     fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True, default=False)
     forma_pago = fields.Selection([('1','Contado'),('2','Crédito')], compute='_compute_forma_pago', string='Forma de pago', default='1')
+    currency_rate = fields.Float('Tipo de Cambio', digits=(12, 4), copy=False)
 
 
     @api.depends('fe_URLParaVerificarQR')
@@ -133,12 +135,24 @@ class AccountMove(models.Model):
         _logging.info('Se contabilizan los movimientos %s', self.ids)
         res = super(AccountMove, self)._post(soft)
         for move in self:
+            rate_date = move.invoice_date or move.date
+            move.currency_rate = move.currency_id.with_context(date=rate_date).inverse_rate
             if move.move_type in ('out_invoice', 'out_refund'):
                 _logging.info('Se envía la información de FE para el movimiento %s', move.name)
                 move.invoice_send_fe_proinfo()
             else:
                 _logging.info('No se envía la información de FE para el movimiento %s', move.name)
         return res
+
+
+    def _get_fe_currency_rate(self):
+        """Tipo de cambio a usar en la FE para este movimiento: el guardado en
+        currency_rate si existe, o si no el vigente al día anterior a su fecha de factura."""
+        self.ensure_one()
+        if self.currency_rate:
+            return self.currency_rate
+        rate_date = self.invoice_date - timedelta(days=1)
+        return self.currency_id.with_context(date=rate_date).inverse_rate
 
 
     def get_fe_ws_url(self):
@@ -197,7 +211,10 @@ class AccountMove(models.Model):
 
             # TOTALES
             options._tipoMonedaTransaccion = rec.currency_id.name
-            options._tipoCambio = rec.currency_id.with_context(date=rec.invoice_date).inverse_rate
+            if rec.move_type == 'out_refund' and rec.reversed_entry_id:
+                options._tipoCambio = rec.reversed_entry_id._get_fe_currency_rate()
+            else:
+                options._tipoCambio = rec.currency_id.with_context(date=rec.invoice_date).inverse_rate
 
             account_tax_iva_minima_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
                                                                          ('fe_tax_codigo_dgi.code', '=', '2'),
@@ -300,7 +317,7 @@ class AccountMove(models.Model):
                 
                 options._referenciaMntCFEref = self.amount_total
                 options._referenciaTpoMonedaRef = self.reversed_entry_id.currency_id.name
-                options._referenciaTpoCambioRef = self.reversed_entry_id.currency_id.with_context(date=self.reversed_entry_id.invoice_date).inverse_rate
+                options._referenciaTpoCambioRef = self.reversed_entry_id._get_fe_currency_rate()
             elif rec.move_type == 'out_refund' and not self.reversed_entry_id:
                 options._referenciaIndicadorGlobal = 1
                 options._referenciaNumeroLinea = 1
