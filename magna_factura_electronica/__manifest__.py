@@ -8,7 +8,7 @@
     'category': 'Localizacion',
     'author': 'Quanam',
     'website': 'https://www.quanam.com',
-    'depends' : ['base','account','web','account_invoice_show_currency_rate'],
+    'depends' : ['base','account','web'],
     'data': [
         'security/ir.model.access.csv',
         'data/fe_data.xml',

@@ -80,6 +80,7 @@ class AccountMove(models.Model):
     fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True, default=False)
     forma_pago = fields.Selection([('1','Contado'),('2','Crédito')], compute='_compute_forma_pago', string='Forma de pago', default='1')
     currency_rate = fields.Float('Tipo de Cambio', digits=(12, 4), copy=False)
+    show_currency_rate = fields.Boolean(compute='_compute_show_currency_rate')
 
 
     @api.depends('fe_URLParaVerificarQR')
@@ -118,6 +119,12 @@ class AccountMove(models.Model):
                 elif invoice_type == 'out_refund':  # NC de cliente
                     value = '112'
             rec.fe_tipo_comprobante = value
+
+
+    @api.depends('currency_id', 'company_id')
+    def _compute_show_currency_rate(self):
+        for rec in self:
+            rec.show_currency_rate = rec.currency_id and rec.currency_id != rec.company_id.currency_id
 
 
     @api.depends('invoice_payment_term_id','invoice_date_due')
