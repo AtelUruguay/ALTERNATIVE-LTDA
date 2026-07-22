@@ -127,6 +127,15 @@ class AccountMove(models.Model):
             rec.show_currency_rate = rec.currency_id and rec.currency_id != rec.company_id.currency_id
 
 
+    @api.onchange('invoice_date', 'currency_id')
+    def _onchange_currency_rate_date(self):
+        for move in self:
+            if move.state != 'draft':
+                continue
+            rate_date = move.invoice_date or fields.Date.context_today(move)
+            move.currency_rate = move.currency_id.with_context(date=rate_date).inverse_rate
+
+
     @api.depends('invoice_payment_term_id','invoice_date_due')
     def _compute_forma_pago(self):
         for rec in self:
