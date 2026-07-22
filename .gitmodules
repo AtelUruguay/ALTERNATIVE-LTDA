@@ -6,3 +6,7 @@
 	path = SUBMODULE/server-ux
 	url = https://github.com/OCA/server-ux.git
 	branch = 17.0
+[submodule "SUBMODULE/account-invoicing"]
+	path = SUBMODULE/account-invoicing
+	url = https://github.com/OCA/account-invoicing.git
+	branch = 17.0
