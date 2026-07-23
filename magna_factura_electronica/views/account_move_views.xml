@@ -17,6 +17,10 @@
                 <button name="button_draft" position="attributes">
                     <attribute name="invisible">restrict_mode_hash_table == True or state not in ('posted', 'cancel') or fe_Estado == 'AS'</attribute>
                 </button>
+                <xpath expr="//div[@name='journal_div']" position="after">
+                    <field name="show_currency_rate" invisible="1"/>
+                    <field name="currency_rate" readonly="True" string="Tipo de Cambio" groups="base.group_multi_currency" digits="[12,4]" invisible="not show_currency_rate"/>
+                </xpath>
                 <notebook position="inside">
                     <page invisible="state == 'draft'" string="Factura Electrónica">
                         <group>
