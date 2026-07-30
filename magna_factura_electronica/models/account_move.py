@@ -173,9 +173,12 @@ class AccountMove(models.Model):
 
     def get_fe_ws_url(self):
         self.ensure_one()
-        # ********* PROD **********
-        ws_location_url = self.env["ir.config_parameter"].sudo().get_param("magna_fe_ws_location_prod")
-        # ********* PROD **********
+        config_parameter = self.env["ir.config_parameter"].sudo()
+        if config_parameter.get_param("database.is_neutralized"):
+            # Base neutralizada por Odoo.sh (staging/dev clonado de prod): usar el WS de test
+            ws_location_url = config_parameter.get_param("magna_fe_ws_location_test")
+        else:
+            ws_location_url = config_parameter.get_param("magna_fe_ws_location_prod")
         logging.info('ws_location_url: %s', ws_location_url)
         return ws_location_url
 
