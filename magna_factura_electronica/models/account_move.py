@@ -277,7 +277,7 @@ class AccountMove(models.Model):
             monto_neto_iva_tasa_minima = 0
             monto_iva_tasa_basica = 0
             monto_iva_tasa_minima = 0
-            for line in rec.invoice_line_ids:
+            for line in rec.invoice_line_ids.filtered(lambda l: not l.display_type):
                 line_aux = fe_xml_factory.cfeFactoryOptionsProductLineDetail()
                 line_aux._cantidad = line.quantity
                 line_aux._nombreItem = line.product_id.name
