@@ -77,6 +77,8 @@ class AccountMove(models.Model):
     fe_CAEFA = fields.Date(u'CAE Fecha de autorización', copy=False)
     fe_CAEFVD = fields.Date('CAE Vencimiento', copy=False)
     fe_DGIResolucion = fields.Char(u'DGI Resolución', copy=False)
+    fe_xml_enviado = fields.Text(u'Sobre enviado a DGI', copy=False)
+    fe_xml_respuesta = fields.Text(u'Respuesta recibida de DGI', copy=False)
     fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True, default=False)
     forma_pago = fields.Selection([('1','Contado'),('2','Crédito')], compute='_compute_forma_pago', string='Forma de pago', default='1')
     currency_rate = fields.Float('Tipo de Cambio', digits=(12, 4), copy=False)
@@ -173,9 +175,12 @@ class AccountMove(models.Model):
 
     def get_fe_ws_url(self):
         self.ensure_one()
-        # ********* PROD **********
-        ws_location_url = self.env["ir.config_parameter"].sudo().get_param("magna_fe_ws_location_prod")
-        # ********* PROD **********
+        config_parameter = self.env["ir.config_parameter"].sudo()
+        if config_parameter.get_param("database.is_neutralized"):
+            # Base neutralizada por Odoo.sh (staging/dev clonado de prod): usar el WS de test
+            ws_location_url = config_parameter.get_param("magna_fe_ws_location_test")
+        else:
+            ws_location_url = config_parameter.get_param("magna_fe_ws_location_prod")
         logging.info('ws_location_url: %s', ws_location_url)
         return ws_location_url
 
@@ -186,6 +191,7 @@ class AccountMove(models.Model):
             for rec in self:
                 ws_location_url = rec.get_fe_ws_url()
                 in_xml_entrada = rec.gen_Inxmlentrada()
+                rec.fe_xml_enviado = in_xml_entrada
                 vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(ws_location_url, in_xml_entrada, rec.fe_tipo_comprobante)
                 rec.write(vals)
         return True
@@ -226,11 +232,8 @@ class AccountMove(models.Model):
             options._receptorDepartamento = rec.partner_id.state_id and rec.partner_id.state_id.name or False
 
             # TOTALES
-            options._tipoMonedaTransaccion = rec.currency_id.name
-            if rec.move_type == 'out_refund' and rec.reversed_entry_id:
-                options._tipoCambio = rec.reversed_entry_id._get_fe_currency_rate()
-            else:
-                options._tipoCambio = rec.currency_id.with_context(date=rec.invoice_date).inverse_rate
+            options._tipoMonedaTransaccion = rec.currency_id.name            
+            options._tipoCambio = rec.currency_id.with_context(date=rec.invoice_date).inverse_rate
 
             account_tax_iva_minima_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
                                                                          ('fe_tax_codigo_dgi.code', '=', '2'),
@@ -274,7 +277,7 @@ class AccountMove(models.Model):
             monto_neto_iva_tasa_minima = 0
             monto_iva_tasa_basica = 0
             monto_iva_tasa_minima = 0
-            for line in rec.invoice_line_ids:
+            for line in rec.invoice_line_ids.filtered(lambda l: l.display_type not in ('line_section', 'line_note')):
                 line_aux = fe_xml_factory.cfeFactoryOptionsProductLineDetail()
                 line_aux._cantidad = line.quantity
                 line_aux._nombreItem = line.product_id.name

@@ -336,7 +336,7 @@ class CfeFactory():
 
 
     def ws_procesar_respuesta(self, response_xml):
-        vals = {}
+        vals = {'fe_xml_respuesta': response_xml}
         doc = parseString(response_xml)
         nodos = doc.getElementsByTagName("FEXMLSalida")
         for nodo in nodos:
