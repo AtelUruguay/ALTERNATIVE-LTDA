@@ -229,11 +229,8 @@ class AccountMove(models.Model):
             options._receptorDepartamento = rec.partner_id.state_id and rec.partner_id.state_id.name or False
 
             # TOTALES
-            options._tipoMonedaTransaccion = rec.currency_id.name
-            if rec.move_type == 'out_refund' and rec.reversed_entry_id:
-                options._tipoCambio = rec.reversed_entry_id._get_fe_currency_rate()
-            else:
-                options._tipoCambio = rec.currency_id.with_context(date=rec.invoice_date).inverse_rate
+            options._tipoMonedaTransaccion = rec.currency_id.name            
+            options._tipoCambio = rec.currency_id.with_context(date=rec.invoice_date).inverse_rate
 
             account_tax_iva_minima_id = account_tax_obj.search([('company_id', '=', rec.company_id.id),
                                                                          ('fe_tax_codigo_dgi.code', '=', '2'),
