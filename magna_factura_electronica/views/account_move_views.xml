@@ -45,6 +45,14 @@
                                 <field invisible="fe_qr_img == False" name="fe_qr_img" nolabel="1" style="width:130px;height:130px;" widget="image"/>
                             </group>
                         </group>
+                        <notebook>
+                            <page string="Sobre enviado a DGI" invisible="not fe_xml_enviado">
+                                <field name="fe_xml_enviado" readonly="1" nolabel="1"/>
+                            </page>
+                            <page string="Respuesta de DGI" invisible="not fe_xml_respuesta">
+                                <field name="fe_xml_respuesta" readonly="1" nolabel="1"/>
+                            </page>
+                        </notebook>
                     </page>
                 </notebook></field>
         </record>

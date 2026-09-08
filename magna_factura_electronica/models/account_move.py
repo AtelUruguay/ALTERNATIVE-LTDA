@@ -77,6 +77,8 @@ class AccountMove(models.Model):
     fe_CAEFA = fields.Date(u'CAE Fecha de autorización', copy=False)
     fe_CAEFVD = fields.Date('CAE Vencimiento', copy=False)
     fe_DGIResolucion = fields.Char(u'DGI Resolución', copy=False)
+    fe_xml_enviado = fields.Text(u'Sobre enviado a DGI', copy=False)
+    fe_xml_respuesta = fields.Text(u'Respuesta recibida de DGI', copy=False)
     fe_qr_img = fields.Binary('Imagen QR', compute='_generate_qr_code', store=True, default=False)
     forma_pago = fields.Selection([('1','Contado'),('2','Crédito')], compute='_compute_forma_pago', string='Forma de pago', default='1')
     currency_rate = fields.Float('Tipo de Cambio', digits=(12, 4), copy=False)
@@ -189,6 +191,7 @@ class AccountMove(models.Model):
             for rec in self:
                 ws_location_url = rec.get_fe_ws_url()
                 in_xml_entrada = rec.gen_Inxmlentrada()
+                rec.fe_xml_enviado = in_xml_entrada
                 vals = fe_xml_factory.CfeFactory().invocar_generar_y_firmar_doc(ws_location_url, in_xml_entrada, rec.fe_tipo_comprobante)
                 rec.write(vals)
         return True
