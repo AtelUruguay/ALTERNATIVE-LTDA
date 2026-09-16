@@ -1,0 +1,178 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* magna_credit_note_return_control
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-09-16 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: magna_credit_note_return_control
+#: model:ir.module.module,shortdesc:magna_credit_note_return_control.module_meta_information
+msgid "Credit Note Return Control"
+msgstr "Control de notas de crédito por devolución"
+
+#. module: magna_credit_note_return_control
+#: model:ir.module.module,summary:magna_credit_note_return_control.module_meta_information
+msgid "Require a validated return receipt before posting goods-return credit notes"
+msgstr "Exige un remito de devolución validado antes de confirmar notas de crédito por devolución de mercadería"
+
+#. module: magna_credit_note_return_control
+#: model:res.groups,name:magna_credit_note_return_control.group_credit_note_return_exception
+msgid "Credit Note Return Control Exception"
+msgstr "Excepción al control de notas de crédito por devolución"
+
+#. module: magna_credit_note_return_control
+#: model:ir.model.fields,field_description:magna_credit_note_return_control.field_account_move__credit_note_reason
+#: model:ir.model.fields,field_description:magna_credit_note_return_control.field_account_move_reversal__credit_note_reason
+msgid "Credit Note Reason"
+msgstr "Motivo de la nota de crédito"
+
+#. module: magna_credit_note_return_control
+#: model:ir.model.fields,field_description:magna_credit_note_return_control.field_account_move__return_picking_id
+#: model:ir.model.fields,field_description:magna_credit_note_return_control.field_account_move_reversal__return_picking_id
+msgid "Return Receipt"
+msgstr "Remito de devolución"
+
+#. module: magna_credit_note_return_control
+#: model:ir.model.fields,field_description:magna_credit_note_return_control.field_account_move__available_return_picking_ids
+#: model:ir.model.fields,field_description:magna_credit_note_return_control.field_account_move_reversal__available_return_picking_ids
+msgid "Available Return Receipts"
+msgstr "Remitos de devolución disponibles"
+
+#. module: magna_credit_note_return_control
+#: model:ir.model.fields,field_description:magna_credit_note_return_control.field_account_move__return_control_exception_reason
+msgid "Return Control Exception"
+msgstr "Excepción al control de devolución"
+
+#. module: magna_credit_note_return_control
+#: model:ir.model.fields,field_description:magna_credit_note_return_control.field_stock_picking__credit_note_ids
+msgid "Credit Notes"
+msgstr "Notas de crédito"
+
+#. module: magna_credit_note_return_control
+#: model:ir.model.fields,field_description:magna_credit_note_return_control.field_stock_picking__credit_note_count
+msgid "Credit Notes Count"
+msgstr "Cantidad de notas de crédito"
+
+#. module: magna_credit_note_return_control
+#: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move__credit_note_reason__goods_return
+msgid "Goods Return"
+msgstr "Devolución de mercadería"
+
+#. module: magna_credit_note_return_control
+#: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move__credit_note_reason__price_adjustment
+msgid "Price Adjustment / Discount"
+msgstr "Ajuste de precio / bonificación"
+
+#. module: magna_credit_note_return_control
+#: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move__credit_note_reason__invoicing_error
+msgid "Invoicing Error"
+msgstr "Error de facturación"
+
+#. module: magna_credit_note_return_control
+#: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move__credit_note_reason__cancellation
+msgid "Cancellation"
+msgstr "Anulación"
+
+#. module: magna_credit_note_return_control
+#: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move__credit_note_reason__other
+msgid "Other"
+msgstr "Otro"
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "The reason is missing on credit note %s. Please set it before posting the credit note."
+msgstr "Falta el motivo en la nota de crédito %s. Debe indicarlo antes de confirmarla."
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "Credit note %(move)s is issued for a goods return but the returned goods cannot be traced back to a valid receipt:"
+msgstr "La nota de crédito %(move)s se emite por devolución de mercadería, pero la mercadería devuelta no puede trazarse a un remito válido:"
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "No return receipt is referenced."
+msgstr "No se indicó ningún remito de devolución."
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "Transfer %s is not a receipt."
+msgstr "La transferencia %s no es una recepción."
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "Return receipt %(picking)s is not done yet (current status: %(state)s)."
+msgstr "El remito de devolución %(picking)s no está en estado Hecho (estado actual: %(state)s)."
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "Return receipt %(picking)s belongs to %(picking_partner)s instead of %(partner)s."
+msgstr "El remito de devolución %(picking)s corresponde a %(picking_partner)s y no a %(partner)s."
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "no customer"
+msgstr "sin cliente"
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "Return receipt %(picking)s already backs the posted credit note(s) %(credit_notes)s."
+msgstr "El remito de devolución %(picking)s ya respalda la/s nota/s de crédito confirmada/s %(credit_notes)s."
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "Fill in the return control exception to post it anyway; the justification will be logged in the chatter."
+msgstr "Complete la excepción al control de devolución para confirmarla de todos modos; la justificación quedará registrada en el chatter."
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "Return control bypassed by %s."
+msgstr "Control de devolución omitido por %s."
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "Justification: %s"
+msgstr "Justificación: %s"
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "A return receipt may only be set on a customer credit note."
+msgstr "Solo puede indicarse un remito de devolución en una nota de crédito de cliente."
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "Transfer %s is not a receipt and cannot back a credit note."
+msgstr "La transferencia %s no es una recepción y no puede respaldar una nota de crédito."
+
+#. module: magna_credit_note_return_control
+#: code:addons/magna_credit_note_return_control/models/account_move.py:0
+#, python-format
+msgid "Return receipt %(picking)s does not belong to %(partner)s."
+msgstr "El remito de devolución %(picking)s no corresponde a %(partner)s."
+
+#. module: magna_credit_note_return_control
+#: model_terms:ir.ui.view,arch_db:magna_credit_note_return_control.view_move_form
+msgid "Justify posting this credit note without a valid return receipt..."
+msgstr "Justifique la confirmación de esta nota de crédito sin un remito de devolución válido..."
