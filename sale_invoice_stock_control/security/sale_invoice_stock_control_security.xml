@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_invoice_without_stock" model="res.groups">
+        <field name="name">Can invoice without stock</field>
+        <field name="category_id" ref="base.module_category_sales_sales"/>
+        <field name="comment">Allowed to invoice a sales order even when the flagged
+            lines cannot be reserved in full, provided a justification is given. The
+            bypass is logged in the order chatter.</field>
+    </record>
+
+</odoo>

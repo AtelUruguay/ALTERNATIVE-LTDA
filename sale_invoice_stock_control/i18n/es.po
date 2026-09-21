@@ -1,0 +1,83 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_invoice_stock_control
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-09-21 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: sale_invoice_stock_control
+#: model:ir.module.module,shortdesc:sale_invoice_stock_control.module_meta_information
+msgid "Stock Control Before Invoicing"
+msgstr "Control de stock al facturar"
+
+#. module: sale_invoice_stock_control
+#: model:ir.module.module,summary:sale_invoice_stock_control.module_meta_information
+msgid "Block invoicing a sales order without stock, and reserve the goods when invoicing"
+msgstr "Bloquea la facturación de un pedido de venta sin stock y reserva la mercadería al facturar"
+
+#. module: sale_invoice_stock_control
+#: model:res.groups,name:sale_invoice_stock_control.group_invoice_without_stock
+msgid "Can invoice without stock"
+msgstr "Puede facturar sin stock"
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_product_product__check_stock_before_invoice
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_product_template__check_stock_before_invoice
+msgid "Requires stock to invoice"
+msgstr "Requiere stock para facturar"
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_sale_order__stock_control_override_reason
+msgid "Stock Control Exception"
+msgstr "Excepción al control de stock"
+
+#. module: sale_invoice_stock_control
+#: model_terms:ir.ui.view,arch_db:sale_invoice_stock_control.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:sale_invoice_stock_control.view_order_form
+msgid "Stock Control"
+msgstr "Control de stock"
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/sale_order.py:0
+#, python-format
+msgid "The order %s cannot be invoiced: there is not enough stock to reserve the full quantity of these lines."
+msgstr "No se puede facturar el pedido %s: no hay stock suficiente para reservar la cantidad completa de estas líneas."
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/sale_order.py:0
+#, python-format
+msgid "%(product)s: %(demand)s needed, %(reserved)s reserved, %(missing)s missing (%(uom)s)"
+msgstr "%(product)s: se necesitan %(demand)s, se reservaron %(reserved)s, faltan %(missing)s (%(uom)s)"
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/sale_order.py:0
+#, python-format
+msgid "Adjust the quantities on the sales order, or ask for an authorisation to invoice without stock."
+msgstr "Ajuste las cantidades del pedido de venta, o solicite una autorización para facturar sin stock."
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/sale_order.py:0
+#, python-format
+msgid "Stock control bypassed by %s when creating the invoice."
+msgstr "Control de stock omitido por %s al crear la factura."
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/sale_order.py:0
+#, python-format
+msgid "Justification: %s"
+msgstr "Justificación: %s"
+
+#. module: sale_invoice_stock_control
+#: model_terms:ir.ui.view,arch_db:sale_invoice_stock_control.view_order_form
+msgid "Justify invoicing this order without enough stock..."
+msgstr "Justifique la facturación de este pedido sin stock suficiente..."
