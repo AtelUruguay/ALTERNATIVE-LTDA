@@ -32,10 +32,13 @@ class TestSaleInvoiceStockControl(TestSaleCommon):
         cls.authorised_user = cls.env['res.users'].create({
             'name': "Sales Supervisor",
             'login': 'stock_control_supervisor',
+            # Needed to post the audit message in the chatter.
+            'email': 'supervisor@example.com',
             'company_id': cls.company.id,
             'company_ids': [Command.set(cls.company.ids)],
             'groups_id': [Command.set([
-                cls.env.ref('sales_team.group_sale_salesman').id,
+                # A supervisor works on every order, not only on their own.
+                cls.env.ref('sales_team.group_sale_salesman_all_leads').id,
                 cls.env.ref('account.group_account_invoice').id,
                 cls.env.ref('stock.group_stock_user').id,
                 cls.env.ref(
@@ -201,6 +204,10 @@ class TestSaleInvoiceStockControl(TestSaleCommon):
         return order, invoice
 
     def _reversal_wizard(self, invoice, **values):
+        # Keep the test independent from other modules that require a reason
+        # on customer credit notes (e.g. magna_credit_note_return_control).
+        if 'credit_note_reason' in self.env['account.move.reversal']._fields:
+            values.setdefault('credit_note_reason', 'invoicing_error')
         return self.env['account.move.reversal'].with_context(
             active_model='account.move', active_ids=invoice.ids,
         ).create({'journal_id': invoice.journal_id.id, **values})
