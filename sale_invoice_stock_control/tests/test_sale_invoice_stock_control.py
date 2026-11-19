@@ -148,8 +148,13 @@ class TestSaleInvoiceStockControl(TestSaleCommon):
 
     def test_authorised_user_without_justification_is_still_blocked(self):
         order = self._confirmed_order()
-        with self.assertRaises(UserError):
+        with self.assertRaisesRegex(UserError, "Stock Control Exception"):
             order.with_user(self.authorised_user)._create_invoices()
+
+    def test_unauthorised_user_is_asked_for_an_authorisation(self):
+        order = self._confirmed_order()
+        with self.assertRaisesRegex(UserError, "ask for an authorisation"):
+            order._create_invoices()
 
     def test_authorised_user_bypasses_and_leaves_an_audit_trail(self):
         order = self._confirmed_order()
@@ -183,3 +188,75 @@ class TestSaleInvoiceStockControl(TestSaleCommon):
         })
         wizard.create_invoices()
         self.assertTrue(order.invoice_ids, "a down payment must not hit the control")
+
+    # ------------------------------------------------------------------
+    # CREDIT NOTE: RELEASE OF THE RESERVATION
+    # ------------------------------------------------------------------
+
+    def _posted_invoice(self, quantity=5.0):
+        self._set_stock(self.controlled_product, quantity)
+        order = self._confirmed_order(quantity=quantity)
+        invoice = order._create_invoices()
+        invoice.action_post()
+        return order, invoice
+
+    def _reversal_wizard(self, invoice, **values):
+        return self.env['account.move.reversal'].with_context(
+            active_model='account.move', active_ids=invoice.ids,
+        ).create({'journal_id': invoice.journal_id.id, **values})
+
+    def _post_credit_note(self, credit_note):
+        # Keep the test independent from other modules that require a reason
+        # on customer credit notes (e.g. magna_credit_note_return_control).
+        if 'credit_note_reason' in credit_note._fields:
+            credit_note.credit_note_reason = 'invoicing_error'
+        credit_note.action_post()
+
+    def _reserved(self, order):
+        return sum(order.picking_ids.move_ids.mapped('quantity'))
+
+    def test_wizard_shows_the_reserved_goods(self):
+        order, invoice = self._posted_invoice()
+        wizard = self._reversal_wizard(invoice)
+        self.assertEqual(wizard.reserved_stock_move_ids, order.picking_ids.move_ids)
+
+    def test_credit_note_requires_an_answer_when_goods_are_reserved(self):
+        _order, invoice = self._posted_invoice()
+        wizard = self._reversal_wizard(invoice)
+        with self.assertRaisesRegex(UserError, "reservation must be released"):
+            wizard.refund_moves()
+
+    def test_credit_note_releases_the_reservation_when_posted(self):
+        order, invoice = self._posted_invoice()
+        wizard = self._reversal_wizard(invoice, release_stock_reservation='yes')
+        wizard.refund_moves()
+        credit_note = wizard.new_move_ids
+        self.assertTrue(credit_note.release_stock_reservation)
+        # Nothing happens while the credit note is a draft.
+        self.assertEqual(self._reserved(order), 5.0)
+
+        self._post_credit_note(credit_note)
+        self.assertEqual(self._reserved(order), 0.0)
+        self.assertIn("Stock reservation released", order.message_ids[0].body)
+
+    def test_credit_note_keeps_the_reservation_when_asked(self):
+        order, invoice = self._posted_invoice()
+        wizard = self._reversal_wizard(invoice, release_stock_reservation='no')
+        wizard.refund_moves()
+        self._post_credit_note(wizard.new_move_ids)
+        self.assertEqual(self._reserved(order), 5.0)
+
+    def test_partial_credit_note_releases_only_the_credited_quantity(self):
+        order, invoice = self._posted_invoice()
+        wizard = self._reversal_wizard(invoice, release_stock_reservation='yes')
+        wizard.refund_moves()
+        credit_note = wizard.new_move_ids
+        credit_note.invoice_line_ids.quantity = 2.0
+        self._post_credit_note(credit_note)
+        self.assertEqual(self._reserved(order), 3.0)
+
+    def test_reverse_and_create_invoice_keeps_the_reservation(self):
+        order, invoice = self._posted_invoice()
+        wizard = self._reversal_wizard(invoice)
+        wizard.modify_moves()
+        self.assertEqual(self._reserved(order), 5.0)
