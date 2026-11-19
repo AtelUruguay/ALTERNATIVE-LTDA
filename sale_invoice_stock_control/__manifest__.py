@@ -19,10 +19,16 @@ a justification, which is logged in the order chatter.
 Down payment invoices are not affected: the advance payment wizard builds them
 without going through the sales order invoicing method.
 
-Implemented by inheritance of ``sale.order`` and ``product.template``; no
-standard model, view or flow is modified.
+When a customer invoice is reversed with a credit note, the wizard asks
+whether the goods reserved for it must be released. If so, the reservation of
+the credited quantities is released when the credit note is posted, and the
+release is logged on the credit note and on the sales order.
+
+Implemented by inheritance of ``sale.order``, ``product.template``,
+``account.move`` and the ``account.move.reversal`` wizard; no standard flow
+is replaced.
 """,
-    'version': '17.0.1.0.0',
+    'version': '17.0.1.1.0',
     'category': 'Sales/Sales',
     'author': "Quanam",
     'website': "https://www.quanam.com",
@@ -34,6 +40,10 @@ standard model, view or flow is modified.
         'security/sale_invoice_stock_control_security.xml',
         'views/product_views.xml',
         'views/sale_order_views.xml',
+        'views/account_move_views.xml',
+        'wizard/account_move_reversal_views.xml',
     ],
     'installable': True,
+    'application': False,
+    'auto_install': False,
 }

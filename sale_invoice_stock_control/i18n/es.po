@@ -81,3 +81,77 @@ msgstr "Justificación: %s"
 #: model_terms:ir.ui.view,arch_db:sale_invoice_stock_control.view_order_form
 msgid "Justify invoicing this order without enough stock..."
 msgstr "Justifique la facturación de este pedido sin stock suficiente..."
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/sale_order.py:0
+#, python-format
+msgid "You are allowed to invoice without stock: fill in the justification in the \"Stock Control Exception\" field, in the \"Other Information\" tab of the sales order, and create the invoice again."
+msgstr "Usted puede facturar sin stock: complete la justificación en el campo \"Excepción al control de stock\", en la pestaña \"Otra información\" del pedido de venta, y vuelva a crear la factura."
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_account_move__release_stock_reservation
+msgid "Release Stock Reservation"
+msgstr "Anular reserva de mercadería"
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,help:sale_invoice_stock_control.field_account_move__release_stock_reservation
+msgid "When this credit note is posted, release the stock reserved for the credited quantities in the pending deliveries of the sales order."
+msgstr "Al publicar esta nota de crédito, se anula la reserva de las cantidades acreditadas en las entregas pendientes del pedido de venta."
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_account_move_reversal__reserved_stock_move_ids
+msgid "Reserved Goods"
+msgstr "Mercadería reservada"
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,help:sale_invoice_stock_control.field_account_move_reversal__reserved_stock_move_ids
+msgid "Goods reserved for the invoices being reversed, in pending deliveries."
+msgstr "Mercadería reservada para las facturas que se revierten, en entregas pendientes."
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_account_move_reversal__release_stock_reservation
+msgid "Release Stock Reservation?"
+msgstr "¿Anular la reserva de mercadería?"
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,help:sale_invoice_stock_control.field_account_move_reversal__release_stock_reservation
+msgid "Only applies to credit notes (Reverse button). The reservation is released when the credit note is posted."
+msgstr "Solo aplica a notas de crédito (botón Revertir). La reserva se anula al publicar la nota de crédito."
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields.selection,name:sale_invoice_stock_control.selection__account_move_reversal__release_stock_reservation__yes
+msgid "Yes, release the reservation"
+msgstr "Sí, anular la reserva"
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields.selection,name:sale_invoice_stock_control.selection__account_move_reversal__release_stock_reservation__no
+msgid "No, keep the reservation"
+msgstr "No, mantener la reserva"
+
+#. module: sale_invoice_stock_control
+#: model_terms:ir.ui.view,arch_db:sale_invoice_stock_control.view_account_move_reversal
+msgid "The invoice has goods reserved in pending deliveries. If it was issued by mistake, the reservation can be released when the credit note is posted. Do you want to release it?"
+msgstr "La factura tiene mercadería reservada en entregas pendientes. Si se emitió por error, la reserva puede anularse al publicar la nota de crédito. ¿Desea anularla?"
+
+#. module: sale_invoice_stock_control
+#: model_terms:ir.ui.view,arch_db:sale_invoice_stock_control.view_account_move_reversal
+msgid "Reserved"
+msgstr "Reservado"
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/wizard/account_move_reversal.py:0
+#, python-format
+msgid "The invoices being reversed have goods reserved in pending deliveries. Please indicate whether the reservation must be released."
+msgstr "Las facturas que se revierten tienen mercadería reservada en entregas pendientes. Indique si se debe anular la reserva."
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/account_move.py:0
+#, python-format
+msgid "Stock reservation released by %(user)s when posting credit note %(credit_note)s."
+msgstr "Reserva de mercadería anulada por %(user)s al publicar la nota de crédito %(credit_note)s."
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/account_move.py:0
+#, python-format
+msgid "%(product)s: %(quantity)s %(uom)s released (%(pickings)s)"
+msgstr "%(product)s: %(quantity)s %(uom)s liberadas (%(pickings)s)"

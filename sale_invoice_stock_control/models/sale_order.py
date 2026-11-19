@@ -153,8 +153,24 @@ class SaleOrder(models.Model):
             )
             message += "\n\n" + "\n".join(
                 "- %s" % line for line in order._format_stock_shortages(shortages))
-            message += "\n\n" + _(
-                "Adjust the quantities on the sales order, or ask for an "
-                "authorisation to invoice without stock."
-            )
+            message += "\n\n" + order._get_stock_control_hint()
             raise UserError(message)
+
+    def _get_stock_control_hint(self):
+        """Tell the user how to get past the block, according to their rights.
+
+        Users allowed to bypass the check only need to fill in the
+        justification; everybody else has to fix the quantities or ask for
+        an authorisation.
+        """
+        if self.env.user.has_group(BYPASS_GROUP):
+            return _(
+                "You are allowed to invoice without stock: fill in the "
+                "justification in the \"Stock Control Exception\" field, "
+                "in the \"Other Information\" tab of the sales order, "
+                "and create the invoice again."
+            )
+        return _(
+            "Adjust the quantities on the sales order, or ask for an "
+            "authorisation to invoice without stock."
+        )
