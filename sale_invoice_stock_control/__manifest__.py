@@ -24,8 +24,9 @@ whether the goods reserved for it must be released. If so, the reservation of
 the credited quantities is released when the credit note is posted, and the
 release is logged on the credit note and on the sales order.
 
-Implemented by inheritance of ``sale.order`` and ``product.template``; no
-standard model, view or flow is modified.
+Implemented by inheritance of ``sale.order``, ``product.template``,
+``account.move`` and the ``account.move.reversal`` wizard; no standard flow
+is replaced.
 """,
     'version': '17.0.1.1.0',
     'category': 'Sales/Sales',
@@ -43,4 +44,6 @@ standard model, view or flow is modified.
         'wizard/account_move_reversal_views.xml',
     ],
     'installable': True,
+    'application': False,
+    'auto_install': False,
 }
