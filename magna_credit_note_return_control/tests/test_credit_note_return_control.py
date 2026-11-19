@@ -1,4 +1,4 @@
-from odoo import Command
+from odoo import Command, fields
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 from odoo.exceptions import ValidationError
 from odoo.tests import tagged
@@ -21,6 +21,7 @@ class TestCreditNoteReturnControl(AccountTestInvoicingCommon):
         cls.supervisor = cls.env['res.users'].create({
             'name': "Credit Note Supervisor",
             'login': 'cn_supervisor',
+            'email': 'cn_supervisor@example.com',
             'company_id': cls.company.id,
             'company_ids': [Command.set(cls.company.ids)],
             'groups_id': [Command.set([
@@ -61,17 +62,23 @@ class TestCreditNoteReturnControl(AccountTestInvoicingCommon):
         return picking
 
     def _create_credit_note(self, reason=None, picking=None, partner=None):
-        credit_note = self.init_invoice(
-            'out_refund',
-            partner=partner or self.partner_a,
-            products=self.storable_product,
-            company=self.company,
-        )
-        credit_note.write({
+        # Created through the ORM instead of ``init_invoice``: the latter goes
+        # through ``Form``, which enforces the view-level ``required`` on
+        # ``credit_note_reason`` and would make the tests that check the
+        # backend control (missing reason, etc.) impossible to write.
+        return self.env['account.move'].create({
+            'move_type': 'out_refund',
+            'partner_id': (partner or self.partner_a).id,
+            'invoice_date': fields.Date.today(),
+            'company_id': self.company.id,
             'credit_note_reason': reason,
             'return_picking_id': picking.id if picking else False,
+            'invoice_line_ids': [Command.create({
+                'product_id': self.storable_product.id,
+                'quantity': 1.0,
+                'price_unit': 100.0,
+            })],
         })
-        return credit_note
 
     # ------------------------------------------------------------------
     # REASON
