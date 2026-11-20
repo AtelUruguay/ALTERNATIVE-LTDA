@@ -7,6 +7,7 @@ class SalesDiscountLimit(models.Model):
     """Configuration for Set Sale Discount Limit."""
 
     _name = "sales.discount.limit"
+    _description = "Sale Discount Limit"
     _rec_name = "group_id"
     _order = "discount desc"
     _sql_constraints = [

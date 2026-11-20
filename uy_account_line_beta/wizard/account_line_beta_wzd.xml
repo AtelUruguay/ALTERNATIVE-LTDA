@@ -19,21 +19,21 @@
                         <label for="month" style="font-weight: bold;">
                             Month
                         </label>
-                        <field name="month" style="width: 130px !important; margin-right: 30px;"/>
+                        <field name="month" readonly="state != 'init'" style="width: 130px !important; margin-right: 30px;"/>
                         <label for="year" style="font-weight: bold;">
                             Year
                         </label>
-                        <field name="year" style="width: 130px !important; margin-right: 30px;"/>
+                        <field name="year" readonly="state != 'init'" style="width: 130px !important; margin-right: 30px;"/>
                         <label for="file_format" style="font-weight: bold;">
                             File format
                         </label>
-                        <field name="file_format" style="width: 130px !important; margin-right: 30px;"/>
+                        <field name="file_format" readonly="state != 'init'" style="width: 130px !important; margin-right: 30px;"/>
                         <br/>
                         <br/>
                         <label for="tax_ids" style="font-weight: bold;">
                             Taxes
                         </label>
-                        <field name="tax_ids" options="{'no_create': True}" style="width: 450px !important; margin-right: 20px;" widget="many2many_tags"/>
+                        <field name="tax_ids" readonly="state != 'init'" options="{'no_create': True}" style="width: 450px !important; margin-right: 20px;" widget="many2many_tags"/>
                         <!--<label for="show_all" style="font-weight: bold;">Show all</label>
                         <field name="show_all" />-->
                         <!--
