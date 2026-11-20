@@ -28,7 +28,7 @@ Implemented by inheritance of ``sale.order``, ``product.template``,
 ``account.move`` and the ``account.move.reversal`` wizard; no standard flow
 is replaced.
 """,
-    'version': '17.0.1.1.0',
+    'version': '17.0.1.1.1',
     'category': 'Sales/Sales',
     'author': "Quanam",
     'website': "https://www.quanam.com",
