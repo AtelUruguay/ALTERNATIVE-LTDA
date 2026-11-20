@@ -16,7 +16,7 @@ class AccountMoveReversal(models.TransientModel):
             ('yes', "Yes, release the reservation"),
             ('no', "No, keep the reservation"),
         ],
-        string="Release Stock Reservation?",
+        string="Release Stock Reservation",
         help="Only applies to credit notes (Reverse button). The reservation is "
              "released when the credit note is posted.",
     )
