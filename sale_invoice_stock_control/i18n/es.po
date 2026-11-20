@@ -1,0 +1,153 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_invoice_stock_control
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-09-21 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: sale_invoice_stock_control
+#: model:ir.module.module,shortdesc:sale_invoice_stock_control.module_meta_information
+msgid "Stock Control Before Invoicing"
+msgstr "Control de stock al facturar"
+
+#. module: sale_invoice_stock_control
+#: model:ir.module.module,summary:sale_invoice_stock_control.module_meta_information
+msgid "Block invoicing a sales order without stock, and reserve the goods when invoicing"
+msgstr "Bloquea la facturación de un pedido de venta sin stock y reserva la mercadería al facturar"
+
+#. module: sale_invoice_stock_control
+#: model:res.groups,name:sale_invoice_stock_control.group_invoice_without_stock
+msgid "Can invoice without stock"
+msgstr "Puede facturar sin stock"
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_product_product__check_stock_before_invoice
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_product_template__check_stock_before_invoice
+msgid "Requires stock to invoice"
+msgstr "Requiere stock para facturar"
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_sale_order__stock_control_override_reason
+msgid "Stock Control Exception"
+msgstr "Excepción al control de stock"
+
+#. module: sale_invoice_stock_control
+#: model_terms:ir.ui.view,arch_db:sale_invoice_stock_control.product_template_form_view
+#: model_terms:ir.ui.view,arch_db:sale_invoice_stock_control.view_order_form
+msgid "Stock Control"
+msgstr "Control de stock"
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/sale_order.py:0
+#, python-format
+msgid "The order %s cannot be invoiced: there is not enough stock to reserve the full quantity of these lines."
+msgstr "No se puede facturar el pedido %s: no hay stock suficiente para reservar la cantidad completa de estas líneas."
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/sale_order.py:0
+#, python-format
+msgid "%(product)s: %(demand)s needed, %(reserved)s reserved, %(missing)s missing (%(uom)s)"
+msgstr "%(product)s: se necesitan %(demand)s, se reservaron %(reserved)s, faltan %(missing)s (%(uom)s)"
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/sale_order.py:0
+#, python-format
+msgid "Adjust the quantities on the sales order, or ask for an authorisation to invoice without stock."
+msgstr "Ajuste las cantidades del pedido de venta, o solicite una autorización para facturar sin stock."
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/sale_order.py:0
+#, python-format
+msgid "Stock control bypassed by %s when creating the invoice."
+msgstr "Control de stock omitido por %s al crear la factura."
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/sale_order.py:0
+#, python-format
+msgid "Justification: %s"
+msgstr "Justificación: %s"
+
+#. module: sale_invoice_stock_control
+#: model_terms:ir.ui.view,arch_db:sale_invoice_stock_control.view_order_form
+msgid "Justify invoicing this order without enough stock..."
+msgstr "Justifique la facturación de este pedido sin stock suficiente..."
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/sale_order.py:0
+#, python-format
+msgid "You are allowed to invoice without stock: fill in the justification in the \"Stock Control Exception\" field, in the \"Other Information\" tab of the sales order, and create the invoice again."
+msgstr "Usted puede facturar sin stock: complete la justificación en el campo \"Excepción al control de stock\", en la pestaña \"Otra información\" del pedido de venta, y vuelva a crear la factura."
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_account_move__release_stock_reservation
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_account_move_reversal__release_stock_reservation
+msgid "Release Stock Reservation"
+msgstr "Anular reserva de mercadería"
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,help:sale_invoice_stock_control.field_account_move__release_stock_reservation
+msgid "When this credit note is posted, release the stock reserved for the credited quantities in the pending deliveries of the sales order."
+msgstr "Al publicar esta nota de crédito, se anula la reserva de las cantidades acreditadas en las entregas pendientes del pedido de venta."
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_account_move_reversal__reserved_stock_move_ids
+msgid "Reserved Goods"
+msgstr "Mercadería reservada"
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,help:sale_invoice_stock_control.field_account_move_reversal__reserved_stock_move_ids
+msgid "Goods reserved for the invoices being reversed, in pending deliveries."
+msgstr "Mercadería reservada para las facturas que se revierten, en entregas pendientes."
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields,help:sale_invoice_stock_control.field_account_move_reversal__release_stock_reservation
+msgid "Only applies to credit notes (Reverse button). The reservation is released when the credit note is posted."
+msgstr "Solo aplica a notas de crédito (botón Revertir). La reserva se anula al publicar la nota de crédito."
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields.selection,name:sale_invoice_stock_control.selection__account_move_reversal__release_stock_reservation__yes
+msgid "Yes, release the reservation"
+msgstr "Sí, anular la reserva"
+
+#. module: sale_invoice_stock_control
+#: model:ir.model.fields.selection,name:sale_invoice_stock_control.selection__account_move_reversal__release_stock_reservation__no
+msgid "No, keep the reservation"
+msgstr "No, mantener la reserva"
+
+#. module: sale_invoice_stock_control
+#: model_terms:ir.ui.view,arch_db:sale_invoice_stock_control.view_account_move_reversal
+msgid "The invoice has goods reserved in pending deliveries. If it was issued by mistake, the reservation can be released when the credit note is posted. Do you want to release it?"
+msgstr "La factura tiene mercadería reservada en entregas pendientes. Si se emitió por error, la reserva puede anularse al publicar la nota de crédito. ¿Desea anularla?"
+
+#. module: sale_invoice_stock_control
+#: model_terms:ir.ui.view,arch_db:sale_invoice_stock_control.view_account_move_reversal
+msgid "Reserved"
+msgstr "Reservado"
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/wizard/account_move_reversal.py:0
+#, python-format
+msgid "The invoices being reversed have goods reserved in pending deliveries. Please indicate whether the reservation must be released."
+msgstr "Las facturas que se revierten tienen mercadería reservada en entregas pendientes. Indique si se debe anular la reserva."
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/account_move.py:0
+#, python-format
+msgid "Stock reservation released by %(user)s when posting credit note %(credit_note)s."
+msgstr "Reserva de mercadería anulada por %(user)s al publicar la nota de crédito %(credit_note)s."
+
+#. module: sale_invoice_stock_control
+#: code:addons/sale_invoice_stock_control/models/account_move.py:0
+#, python-format
+msgid "%(product)s: %(quantity)s %(uom)s released (%(pickings)s)"
+msgstr "%(product)s: %(quantity)s %(uom)s liberadas (%(pickings)s)"

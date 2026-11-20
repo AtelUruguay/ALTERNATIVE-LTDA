@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_line_beta_wzd_invoice,account.line.beta.wzd invoice,model_account_line_beta_wzd,account.group_account_invoice,1,1,1,0
+access_account_line_beta_wzd_readonly,account.line.beta.wzd readonly,model_account_line_beta_wzd,account.group_account_readonly,1,1,1,0

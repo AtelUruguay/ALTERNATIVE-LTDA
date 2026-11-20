@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_move_reversal" model="ir.ui.view">
+        <field name="name">account.move.reversal.form.inherit.credit.note.return.control</field>
+        <field name="model">account.move.reversal</field>
+        <field name="inherit_id" ref="account.view_account_move_reversal"/>
+        <field name="arch" type="xml">
+            <field name="reason" position="after">
+                <field name="available_return_picking_ids" invisible="1"/>
+                <field name="credit_note_reason"
+                       invisible="move_type not in ('out_invoice', 'out_receipt')"
+                       required="move_type in ('out_invoice', 'out_receipt')"/>
+                <field name="return_picking_id"
+                       invisible="move_type not in ('out_invoice', 'out_receipt') or credit_note_reason != 'goods_return'"
+                       domain="[('id', 'in', available_return_picking_ids)]"
+                       options="{'no_create': True}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

@@ -13,27 +13,27 @@
                                 No hay resultado, por favor verfique el mes, año y valor de la línea beta de cada cuenta de impuestos utilizada.
                             </span>
                         </div>
-                        <div class="oe_right fa fa-close" onclick="javascript:$($.find('.show_error')).slideUp();" style="font-weight: bold !important; cursor: pointer; color: #DD0000;"/>
+                        <div class="oe_right fa fa-close" title="Cerrar" onclick="javascript:$($.find('.show_error')).slideUp();" style="font-weight: bold !important; cursor: pointer; color: #DD0000;"/>
                     </div>
                     <div style="margin-bottom: 50px;">
                         <label for="month" style="font-weight: bold;">
                             Month
                         </label>
-                        <field name="month" style="width: 130px !important; margin-right: 30px;"/>
+                        <field name="month" readonly="state != 'init'" style="width: 130px !important; margin-right: 30px;"/>
                         <label for="year" style="font-weight: bold;">
                             Year
                         </label>
-                        <field name="year" style="width: 130px !important; margin-right: 30px;"/>
+                        <field name="year" readonly="state != 'init'" style="width: 130px !important; margin-right: 30px;"/>
                         <label for="file_format" style="font-weight: bold;">
                             File format
                         </label>
-                        <field name="file_format" style="width: 130px !important; margin-right: 30px;"/>
+                        <field name="file_format" readonly="state != 'init'" style="width: 130px !important; margin-right: 30px;"/>
                         <br/>
                         <br/>
                         <label for="tax_ids" style="font-weight: bold;">
                             Taxes
                         </label>
-                        <field name="tax_ids" options="{'no_create': True}" style="width: 450px !important; margin-right: 20px;" widget="many2many_tags"/>
+                        <field name="tax_ids" readonly="state != 'init'" options="{'no_create': True}" style="width: 450px !important; margin-right: 20px;" widget="many2many_tags"/>
                         <!--<label for="show_all" style="font-weight: bold;">Show all</label>
                         <field name="show_all" />-->
                         <!--
@@ -43,8 +43,8 @@
 -->
                     </div>
                     <div>
-                        <span class="fa fa-file-excel-o" invisible="file_format != 'csv' or file_name == False" style="width: 40px; font-size: 28px;"/>
-                        <span class="fa fa-file-text-o" invisible="file_format != 'txt' or file_name == False" style="width: 40px; font-size: 28px;"/>
+                        <span class="fa fa-file-excel-o" title="Archivo CSV" invisible="file_format != 'csv' or file_name == False" style="width: 40px; font-size: 28px;"/>
+                        <span class="fa fa-file-text-o" title="Archivo TXT" invisible="file_format != 'txt' or file_name == False" style="width: 40px; font-size: 28px;"/>
                         <span style="font-size: 20px;">
                             <field invisible="1" name="file_name"/>
                             <field filename="file_name" invisible="state not in ['exported']" name="file" nolabel="1" readonly="1"/>

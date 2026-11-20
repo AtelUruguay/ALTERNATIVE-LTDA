@@ -14,7 +14,7 @@
     'website': "http://www.aktivsoftware.com",
     'license': "AGPL-3",
     'category': 'Sales',
-    'version': '17.0.1.0.0',
+    'version': '17.0.1.0.1',
     'depends': ['sale_management'],
     'data': [
         'security/ir.model.access.csv',

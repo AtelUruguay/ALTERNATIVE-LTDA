@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_move_reversal" model="ir.ui.view">
+        <field name="name">account.move.reversal.form.inherit.invoice.stock.control</field>
+        <field name="model">account.move.reversal</field>
+        <field name="inherit_id" ref="account.view_account_move_reversal"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/group" position="after">
+                <div class="alert alert-warning" role="alert"
+                     invisible="not reserved_stock_move_ids">
+                    The invoice has goods reserved in pending deliveries. If it was issued by mistake, the reservation can be released when the credit note is posted. Do you want to release it?
+                </div>
+                <group invisible="not reserved_stock_move_ids">
+                    <field name="release_stock_reservation" widget="radio"/>
+                    <field name="reserved_stock_move_ids" nolabel="1" colspan="2" readonly="1">
+                        <tree>
+                            <field name="picking_id"/>
+                            <field name="product_id"/>
+                            <field name="quantity" string="Reserved"/>
+                            <field name="product_uom" groups="uom.group_uom"/>
+                        </tree>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
