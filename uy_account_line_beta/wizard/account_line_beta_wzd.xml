@@ -13,7 +13,7 @@
                                 No hay resultado, por favor verfique el mes, año y valor de la línea beta de cada cuenta de impuestos utilizada.
                             </span>
                         </div>
-                        <div class="oe_right fa fa-close" onclick="javascript:$($.find('.show_error')).slideUp();" style="font-weight: bold !important; cursor: pointer; color: #DD0000;"/>
+                        <div class="oe_right fa fa-close" title="Cerrar" onclick="javascript:$($.find('.show_error')).slideUp();" style="font-weight: bold !important; cursor: pointer; color: #DD0000;"/>
                     </div>
                     <div style="margin-bottom: 50px;">
                         <label for="month" style="font-weight: bold;">
@@ -43,8 +43,8 @@
 -->
                     </div>
                     <div>
-                        <span class="fa fa-file-excel-o" invisible="file_format != 'csv' or file_name == False" style="width: 40px; font-size: 28px;"/>
-                        <span class="fa fa-file-text-o" invisible="file_format != 'txt' or file_name == False" style="width: 40px; font-size: 28px;"/>
+                        <span class="fa fa-file-excel-o" title="Archivo CSV" invisible="file_format != 'csv' or file_name == False" style="width: 40px; font-size: 28px;"/>
+                        <span class="fa fa-file-text-o" title="Archivo TXT" invisible="file_format != 'txt' or file_name == False" style="width: 40px; font-size: 28px;"/>
                         <span style="font-size: 20px;">
                             <field invisible="1" name="file_name"/>
                             <field filename="file_name" invisible="state not in ['exported']" name="file" nolabel="1" readonly="1"/>
