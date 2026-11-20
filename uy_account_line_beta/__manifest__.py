@@ -22,7 +22,7 @@
 
 {
     'name': 'Account Invoice Line Beta',
-    'version': '17.0.1.0.1',
+    'version': '17.0.1.0.2',
     'category': 'Accounting & Finance',
     # 'sequence': 7,
     'summary': 'Account Invoice Line Beta',
@@ -31,6 +31,7 @@
     'depends': ['account', 'magna_factura_electronica'],
     'website': '',
     'data': [
+        'security/ir.model.access.csv',
         'views/account_view.xml',
         'wizard/account_line_beta_wzd.xml'
     ],
