@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Cotizaciones Banco Central del Uruguay",
-    "version": "17.0.1.0.0",
+    "version": "17.0.1.0.1",
     "description": """
     Permite establecer las cotizaciones que se quieren actualizar desde el BCU.
 
