@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_credit_note_return_exception" model="res.groups">
+        <field name="name">Credit Note Return Control Exception</field>
+        <field name="category_id" ref="base.module_category_usability"/>
+        <field name="comment">Allowed to post a goods-return credit note without a valid
+            return receipt, provided a justification is given. The bypass is logged in the
+            credit note chatter.</field>
+    </record>
+
+</odoo>

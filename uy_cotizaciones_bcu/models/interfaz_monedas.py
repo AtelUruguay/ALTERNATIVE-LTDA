@@ -6,7 +6,7 @@ class InterfazMonedas(models.Model):
     _name = 'interfaz.monedas'
     _description = "Interfaz Monedas"
 
-    codigo_bcu = fields.Char(u"Código moneda BCU", size=4, required=True, select=True,
+    codigo_bcu = fields.Char(u"Código moneda BCU", size=4, required=True, index=True,
                              help=u"Se debe colocar el código de 4 digitos de la moneda que se muestra en el archivo oficial del BCU.")
     currency_id = fields.Many2one('res.currency', 'Moneda', required=True, ondelete="cascade")
     company_id = fields.Many2one('res.company', u'Compañía Moneda', required=True)

@@ -22,3 +22,6 @@ openerp/addons/base/maintenance
 *.bak
 
 # Distribution / packaging
+
+# macOS
+.DS_Store

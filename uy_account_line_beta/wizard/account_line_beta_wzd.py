@@ -33,6 +33,7 @@ from odoo import fields, models
 
 class account_line_beta_wzd(models.TransientModel):
     _name = 'account.line.beta.wzd'
+    _description = 'Formulario 2/181 - Líneas Beta'
     _rec_name = 'month'
 
     def get_account_tax_id(self, tax_line):
@@ -222,17 +223,14 @@ class account_line_beta_wzd(models.TransientModel):
                               ('09', 'September'),
                               ('10', 'October'),
                               ('11', 'November'),
-                              ('12', 'December')], string='Mes', required=True, readonly=True,
-                             states={'init': [('readonly', False)]},
+                              ('12', 'December')], string='Mes', required=True,
                              default=ustr(date.today().month) if date.today().month >= 10 else '0' + ustr(
                                  date.today().month))
-    year = fields.Selection(_get_years, string='Year', required=True, readonly=True,
-                            states={'init': [('readonly', False)]}, default=ustr(date.today().year))
+    year = fields.Selection(_get_years, string='Year', required=True, default=ustr(date.today().year))
     file_format = fields.Selection([('txt', 'File (.txt)'), ('csv', 'File (.csv)')], 'File format', required=True,
-                                   readonly=True, states={'init': [('readonly', False)]}, default='txt')
+                                   default='txt')
     tax_ids = fields.Many2many('account.tax', 'account_line_beta_tax_code_wzd_rel', 'wzd_id', 'tax_id',
-                               string='Account Taxes', domain=[('line_beta', '!=', False)], required=True,
-                               readonly=True, states={'init': [('readonly', False)]})
+                               string='Account Taxes', domain=[('line_beta', '!=', False)], required=True)
     file_name = fields.Char('File name', size=128)
     file = fields.Binary('File')
     state = fields.Selection([('init', 'Init'), ('exported', 'Exported')], 'State', default='init')

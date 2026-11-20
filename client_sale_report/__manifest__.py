@@ -12,6 +12,7 @@
     'category': 'Accounting/Accounting',
     'version': '17.0.1.0.0',
     'depends': ['account', 'sale'],
+    'license': 'LGPL-3',
 
     # always loaded
     'data': [

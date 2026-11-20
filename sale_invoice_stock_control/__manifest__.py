@@ -1,0 +1,49 @@
+{
+    'name': "Stock Control Before Invoicing",
+    'summary': "Block invoicing a sales order without stock, and reserve the goods when invoicing",
+    'description': """
+Stock Control Before Invoicing
+==============================
+
+Prevents invoicing a sales order when there is not enough stock to cover the
+lines that require it, and reserves the goods at that exact moment.
+
+The check runs when the invoice is created from the sales order, both from the
+*Create Invoice* button and from the invoicing wizard. Only lines whose product
+is flagged with *Requires stock to invoice* are evaluated, and each line is
+required in full: a partial reservation blocks the invoice.
+
+Users in the *Can invoice without stock* group may invoice anyway by filling in
+a justification, which is logged in the order chatter.
+
+Down payment invoices are not affected: the advance payment wizard builds them
+without going through the sales order invoicing method.
+
+When a customer invoice is reversed with a credit note, the wizard asks
+whether the goods reserved for it must be released. If so, the reservation of
+the credited quantities is released when the credit note is posted, and the
+release is logged on the credit note and on the sales order.
+
+Implemented by inheritance of ``sale.order``, ``product.template``,
+``account.move`` and the ``account.move.reversal`` wizard; no standard flow
+is replaced.
+""",
+    'version': '17.0.1.1.1',
+    'category': 'Sales/Sales',
+    'author': "Quanam",
+    'website': "https://www.quanam.com",
+    'license': 'LGPL-3',
+    'depends': [
+        'sale_stock',
+    ],
+    'data': [
+        'security/sale_invoice_stock_control_security.xml',
+        'views/product_views.xml',
+        'views/sale_order_views.xml',
+        'views/account_move_views.xml',
+        'wizard/account_move_reversal_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+}
