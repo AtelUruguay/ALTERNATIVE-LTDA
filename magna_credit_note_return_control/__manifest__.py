@@ -20,7 +20,7 @@ Implemented entirely by inheritance of ``account.move``,
 ``account.move.reversal`` and ``stock.picking``: no standard model, view or flow
 is modified.
 """,
-    'version': '17.0.1.0.0',
+    'version': '17.0.1.0.1',
     'category': 'Accounting/Accounting',
     'author': "Quanam",
     'website': "https://www.quanam.com",

@@ -90,6 +90,7 @@ msgstr "Usted puede facturar sin stock: complete la justificación en el campo \
 
 #. module: sale_invoice_stock_control
 #: model:ir.model.fields,field_description:sale_invoice_stock_control.field_account_move__release_stock_reservation
+#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_account_move_reversal__release_stock_reservation
 msgid "Release Stock Reservation"
 msgstr "Anular reserva de mercadería"
 
@@ -107,11 +108,6 @@ msgstr "Mercadería reservada"
 #: model:ir.model.fields,help:sale_invoice_stock_control.field_account_move_reversal__reserved_stock_move_ids
 msgid "Goods reserved for the invoices being reversed, in pending deliveries."
 msgstr "Mercadería reservada para las facturas que se revierten, en entregas pendientes."
-
-#. module: sale_invoice_stock_control
-#: model:ir.model.fields,field_description:sale_invoice_stock_control.field_account_move_reversal__release_stock_reservation
-msgid "Release Stock Reservation?"
-msgstr "¿Anular la reserva de mercadería?"
 
 #. module: sale_invoice_stock_control
 #: model:ir.model.fields,help:sale_invoice_stock_control.field_account_move_reversal__release_stock_reservation

@@ -65,26 +65,31 @@ msgstr "Cantidad de notas de crédito"
 
 #. module: magna_credit_note_return_control
 #: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move__credit_note_reason__goods_return
+#: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move_reversal__credit_note_reason__goods_return
 msgid "Goods Return"
 msgstr "Devolución de mercadería"
 
 #. module: magna_credit_note_return_control
 #: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move__credit_note_reason__price_adjustment
+#: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move_reversal__credit_note_reason__price_adjustment
 msgid "Price Adjustment / Discount"
 msgstr "Ajuste de precio / bonificación"
 
 #. module: magna_credit_note_return_control
 #: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move__credit_note_reason__invoicing_error
+#: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move_reversal__credit_note_reason__invoicing_error
 msgid "Invoicing Error"
 msgstr "Error de facturación"
 
 #. module: magna_credit_note_return_control
 #: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move__credit_note_reason__cancellation
+#: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move_reversal__credit_note_reason__cancellation
 msgid "Cancellation"
 msgstr "Anulación"
 
 #. module: magna_credit_note_return_control
 #: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move__credit_note_reason__other
+#: model:ir.model.fields.selection,name:magna_credit_note_return_control.selection__account_move_reversal__credit_note_reason__other
 msgid "Other"
 msgstr "Otro"
 
